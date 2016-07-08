@@ -1,0 +1,39 @@
+
+/* 
+
+    paletton base 265B6A
+    triad 17degrees
+    
+
+
+
+*/
+
+body{
+    background-color: #6C929F;
+}
+
+.highlight-box {
+    background-color: red;
+}
+
+.res-itemgroup{
+    margin-left: 3em;
+}
+
+#timeline {
+  position: relative;
+  padding: 2em 0;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+#timeline::before {
+  /* this is the vertical line */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 18px;
+  height: 100%;
+  width: 4px;
+  background: #d7e4ed;
+}

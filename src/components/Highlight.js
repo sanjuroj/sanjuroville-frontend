@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
 
-export default class Title extends Component {
+export default class Highlight extends Component {
     
     
     render() {
         return (
             <div>
-                {this.props.title}
+                {this.props.highlight}
             </div>
         );
     }

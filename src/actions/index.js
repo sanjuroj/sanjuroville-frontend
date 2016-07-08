@@ -50,14 +50,14 @@ export function fetchData () {
         fetch('http://127.0.0.1:8000/resume/api/?format=json')
         .then(
             response => {
-                console.log('here');
+                //console.log('here');
                 return response.json();
             },
             reject => dispatch(dataError(reject))
         )
         .then(
             json => {
-                console.log('there',json);
+                //console.log('there',json);
                 dispatch(receiveData(json));
             }
         )
