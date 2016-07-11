@@ -8,16 +8,19 @@ export default function getRData(store=defaultStore, action) {
     //console.log('receivedata action type =',RECEIVE_DATA);
     switch (action.type) {
         case RECEIVE_DATA:
-            //console.log('receiving');
-            return Object.assign({}, store, {resumeData: action.data});
+        
+        let data = Object.assign({}, store, {resumeData: action.data});
+        data.highlights = null;
+        data.groupFlag = null;
+        return data;
 
         case DATA_ERROR: 
-            return Object.assign({},{resumeData: 'error'}) 
+        return Object.assign({},{resumeData: 'error'}) 
 
     }
 
 
 
-    return {'resumeData': {'jobs': [], 'education': []}};
+    return {'resumeData': {'job': [], 'education': []}};
 
 }

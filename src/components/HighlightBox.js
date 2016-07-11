@@ -5,7 +5,12 @@ export default class HighlightBox extends Component {
     
     makeHighlights(){
         const highlightArray = this.props.highlights.map( (hLight, key) => {
-            return (<Highlight highlight={hLight} key={key}/>);
+            return (
+                <li key={key}>
+                    <Highlight highlight={hLight}/>
+                </li>
+            );
+
         });
         return highlightArray;
     }
@@ -14,7 +19,9 @@ export default class HighlightBox extends Component {
         if (this.props.highlights !== undefined){
             return (
                 <div className={'highlight-box'}>
-                    {this.makeHighlights()}
+                    <ul>
+                        {this.makeHighlights()}
+                    </ul>
                 </div>
             );
         }

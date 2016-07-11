@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import Title from './Title';
-import Summary from './Summary';
+import SimpleText from './SimpleText';
 
 export default class TitleCard extends Component {
     
     
     render() {
-        //console.log('render props',this.props);
+        //console.log('titlecard props',this.props);
         return (
-            <div>
-                <Title title={this.props.data.title} />
-                <Summary summary={this.props.data.summary} />
+            <div className={'title-card'}>
+                <div className={'title'}>
+                    <SimpleText text={this.props.data.title} />
+                </div>
+                <div className={'summary'}>
+                    <SimpleText text={this.props.data.summary} />
+                </div>
             </div>
         );
     }

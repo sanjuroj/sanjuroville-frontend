@@ -2,32 +2,41 @@ import React, { Component } from 'react';
 import ResumeItemGroup from '../components/ResumeItemGroup.js';
 import { connect } from 'react-redux';
 import { fetchData } from '../actions/';
+import {sortResData, flattenData } from '../utils/reshapeData';
 
 
 
 
 class ResumeContainer extends Component {
     
-    getDatedData(rData){
-        const { education, job } = rData;
-        var itemList = [];
-        //console.log('get edu=', education)
-        for (var edukey in education) {
-            const item = education[edukey];
-            //console.log('item=',item)
-            item.title = `${item.degreeType} in ${item.major}; ${item.institution}`;
-            itemList.push(item);
-        }
+    getDatedData(){
 
-        for (var jobkey in job) {
-            const item = job[jobkey];
-            //console.log('item=',item)
-            item.title = `${item.position}; ${item.company}`;
-            itemList.push(item);
-        }
+        console.log('rc rdata=',this.props);
+        if (this.props.groupFlag == true || this.props.groupFlag == null){
 
-        //console.log('ilist',itemList)
-        return itemList;
+            
+            
+            const { education, job } = this.props.resumeData;
+            var itemList = [];
+            //console.log('get edu=', education)
+            for (var jobkey in job) {
+                const item = job[jobkey];
+                //console.log('item=',item)
+                item.title = `${item.position}; ${item.company}`;
+                itemList.push(item);
+            }
+
+            for (var edukey in education) {
+                const item = education[edukey];
+                //console.log('item=',item)
+                item.title = `${item.degreeType} in ${item.major}; ${item.institution}`;
+                itemList.push(item);
+            }
+
+            
+            //console.log('ilist',itemList)
+            return itemList;
+        }
     }
 
 
@@ -51,7 +60,7 @@ class ResumeContainer extends Component {
 
     render(){
         //console.log('render props', this.props)
-        const datedData = this.getDatedData(this.props.resumeData);
+        const datedData = this.getDatedData();
         //console.log('datedlist=',datedData);
         const positionList = this.buildPositionList(datedData);
         //console.log('poslist=',positionList);
@@ -71,7 +80,7 @@ class ResumeContainer extends Component {
 
 const mapStateToProps = (state) => {
     //console.log('state=',state);
-    return( {'resumeData': state.resumeData} );
+    return(state);
 };
 
 export default connect(mapStateToProps)(ResumeContainer);
