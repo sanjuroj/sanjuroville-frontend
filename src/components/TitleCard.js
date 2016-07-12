@@ -9,10 +9,10 @@ export default class TitleCard extends Component {
         return (
             <div className={'title-card'}>
                 <div className={'title'}>
-                    <SimpleText text={this.props.data.title} />
+                    <SimpleText text={this.props.title} />
                 </div>
                 <div className={'summary'}>
-                    <SimpleText text={this.props.data.summary} />
+                    <SimpleText text={this.props.summary} />
                 </div>
             </div>
         );
