@@ -6,24 +6,22 @@ export default class ResumeItemGroup extends Component {
 
     render() {
         console.log('rig props', this.props);
-        
-        console.log('test', this.props.highlightTracker === this.title)
-        console.log('prop=', this.props.highlightTracker)
-        console.log('title=', this.title)
+        //console.log('prop=', this.props.highlightTracker)
+        //console.log('title=', this.title)
         if (this.props.highlightTracker === this.props.title){
-            console.log('here');
+            //console.log('here');
             return(
-                <div className={'res-itemgroup'}>
-                    <TitleCard {...this.props} className="title-card"/>
+                <div className='res-itemgroup'>
+                    <TitleCard {...this.props} />
                     <HighlightBox highlights={this.props.highlights} className="highlight-box" />
                 </div>
             );
         }
         else{
-            console.log('there');
+            //console.log('there');
             return(
-                <div className={'res-itemgroup'}>
-                    <TitleCard {...this.props} className="title-card"/>
+                <div className='res-itemgroup'>
+                    <TitleCard {...this.props} />
                 </div>
             );  
         }

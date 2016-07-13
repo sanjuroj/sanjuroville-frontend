@@ -9,8 +9,27 @@
 
 */
 
-body{
+body {
     background-color: #6C929F;
+}
+
+.category-title {
+  margin-left: .5em;
+  margin-bottom: 2em;
+  margin-top: 2.5em;
+  font-weight: bold;
+
+}
+
+
+
+.title-card{
+  margin-bottom: 1em;
+  cursor: default;
+}
+
+.titlecard-has-highlights{
+  cursor: pointer;
 }
 
 .title {
@@ -20,27 +39,42 @@ body{
 .summary {
   margin-left: .5em;
 }
+
 .highlight-box {
   background-color: #498292;
 }
 
-.res-itemgroup{
-    margin-left: 3em;
+.highlight {
+  margin-bottom: .5em;
 }
 
+.has-highlights {
+  border-bottom-style: solid;
+  border-bottom-width: 4px;
+  border-bottom-color: #498292;
+}
+.res-itemgroup {
+    margin-left: 2em;
+}
+/*
 #timeline {
   position: relative;
   padding: 2em 0;
   margin-top: 2em;
   margin-bottom: 2em;
 }
+*/
+
+ /* this is the vertical line */
+ /*
 #timeline::before {
-  /* this is the vertical line */
+ 
   content: '';
   position: absolute;
   top: 0;
   left: 18px;
   height: 100%;
-  width: 4px;
+  width: 5px;
   background: #d7e4ed;
 }
+*/

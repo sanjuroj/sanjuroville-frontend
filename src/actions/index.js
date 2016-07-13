@@ -1,31 +1,13 @@
 import fetch from 'isomorphic-fetch';
 
-// const rData = 
-//     {       
-//         'group1': {
-//             'item1': {
-//                 content: 'item1Text',
-//                 order: 1
-//             },
-//             'item2': {
-//                 content: 'item2Text',
-//                 order: 3
-//             }
-//         },
-//         'group2': {
-//             'item3': {
-//                 content: 'item3Text',
-//                 order: 2
-//             },
-//             'item4': {
-//                 content: 'item4Text',
-//                 order: 4
-//             }
-//         }
-//     };
+
 
 export const RECEIVE_DATA = 'RECEIVE_DATA';
 export const DATA_ERROR = 'DATA_ERROR';
+
+export const HIGHLIGHTS = 'HIGHLIGHTS';
+
+
 
 function receiveData (json) {
     return {

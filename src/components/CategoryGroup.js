@@ -3,15 +3,13 @@ import ResumeItemGroup from './ResumeItemGroup';
 
 export default class CategoryGroup extends Component {
 
-    makeRIGItems(){
-        console.log('catgroup props',this.props)
+    makeRIGItems() {
+        //console.log('catgroup props',this.props)
         return this.props.data.map(function(item, key){
         
             return (
-                <div className={'res-itemgroup'} key={key}>
-                    <ResumeItemGroup {...item} highlightTracker={this.props.highlightTracker} className="title-card"/>
-                </div>
-            )
+                <ResumeItemGroup {...item} dispatch={this.props.dispatch} highlightTracker={this.props.highlightTracker} className="title-card"/>
+            );
             
         }, this);
         
@@ -23,7 +21,7 @@ export default class CategoryGroup extends Component {
         
         return (
             <div className={'category-group'}>
-                CATEGORY = {this.props.category_title}
+                <p className={'category-title'}>{this.props.category_title.toUpperCase()}</p>
                 {this.makeRIGItems()}
             </div>
         )

@@ -20,14 +20,14 @@ class ResumeContainer extends Component {
     
     getDatedData(){
         
-        console.log('rc rdata=',this.props);
+        //console.log('rc rdata=',this.props);
         let datedCategories = ['job', 'education'];
         
         let returnData = [];
         let groupFlag = this.props.groupFlag;
         //groupFlag = false;
         for (let cat of datedCategories) {
-            console.log('getdated this', this);
+            //console.log('getdated this', this);
             let catObj = {};
             var catData = this.props.resumeData[cat];
             if (cat == 'job'){
@@ -35,6 +35,7 @@ class ResumeContainer extends Component {
                     item.title = `${item.position}, ${item.company}`;
                     return (item);
                 });
+                catObj.category_title = "Work Experience";
             }
             if (cat == 'education'){
                 catObj.data = catData.map(function(item){
@@ -50,25 +51,8 @@ class ResumeContainer extends Component {
             });
 
 
-            // catData = catData.map((item)=>{
-            //     if (cat == 'job'){
-            //         item.title = `${item.position}, ${item.company}`;
-            //     }
-            //     else if (cat == 'education'){
-            //         item.title = `${item.degreeType} in ${item.major}, ${item.institution}`;
-            //     }
-                
-            //     return (item);
-            // });
-
             if (groupFlag == true || groupFlag == null){
-                if (cat == 'education'){
-                    catObj.category_title = "Education";
-                }
-                if (cat == 'job'){
-                    catObj.category_title = "Work Experience";
-                    catObj.icon = 'job';       
-                }
+
                 returnData.push(catObj);    
             }
             else {
@@ -84,23 +68,9 @@ class ResumeContainer extends Component {
         
             
 
-            // //console.log('get edu=', education)
-            // for (var jobkey in job) {
-            //     const item = job[jobkey];
-            //     //console.log('item=',item)
-            //     item.title = `${item.position}, ${item.company}`;
-            //     itemList.push(item);
-            // }
-
-            // for (var edukey in education) {
-            //     const item = education[edukey];
-            //     //console.log('item=',item)
-            //     item.title = `${item.degreeType} in ${item.major}, ${item.institution}`;
-            //     itemList.push(item);
-            // }
         }
         
-        console.log('returndata',returnData)
+        //console.log('returndata',returnData)
         return returnData;
     }
 
@@ -108,7 +78,7 @@ class ResumeContainer extends Component {
 
 
 
-    componentWillMount(){
+    componentWillMount() {
         //console.log('didmount',this.props);
         var { dispatch } = this.props;
         //console.log('isfunc',dispatch);
@@ -117,10 +87,10 @@ class ResumeContainer extends Component {
 
     buildCategoryList(posData){
         //console.log('bpl postdata=',posData);
+        //console.log('rc props in build', this.props);
         const posList = posData.map( (item, key) => {
-            //return (<CategoryGroup {...item} highlightTracker={this.props.highlights} key={key}/>);
-            return (<CategoryGroup {...item} highlightTracker={'Faculty Research Assistant, Oregon State University'} key={key}/>);
-        });
+            return (<CategoryGroup {...item} dispatch={this.props.dispatch} highlightTracker={this.props.highlights} key={key}/>);
+        }, this);
         //console.log('poslist', posList);
         return posList;
         
@@ -128,10 +98,10 @@ class ResumeContainer extends Component {
     }
 
     render(){
-        console.log('render this', this)
+        //console.log('render this', this)
         //console.log('render props', this.props)
         const datedData = this.getDatedData();
-        console.log('datedlist=',datedData);
+        //console.log('datedlist=',datedData);
         const categoryList = this.buildCategoryList(datedData);
         //console.log('poslist=',positionList);
 
