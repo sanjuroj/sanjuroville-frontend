@@ -15,20 +15,20 @@ body {
 
 .category-title {
   margin-left: .5em;
-  margin-bottom: 2em;
-  margin-top: 2.5em;
+  margin-bottom: 1.5em;
+  margin-top: 3em;
   font-weight: bold;
 
 }
 
 
 
-.title-card{
+.title-card {
   margin-bottom: 1em;
   cursor: default;
 }
 
-.titlecard-has-highlights{
+.title-card.titlecard-has-highlights {
   cursor: pointer;
 }
 

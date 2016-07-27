@@ -5,7 +5,7 @@ import HighlightBox from './HighlightBox';
 export default class ResumeItemGroup extends Component {
 
     render() {
-        console.log('rig props', this.props);
+        //console.log('rig props', this.props);
         //console.log('prop=', this.props.highlightTracker)
         //console.log('title=', this.title)
         if (this.props.highlightTracker === this.props.title){

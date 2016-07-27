@@ -12,7 +12,7 @@ export default class TitleCard extends Component {
     }
 
     render() {
-        console.log('titlecard props',this.props);
+        //console.log('titlecard props',this.props);
         if (this.props.summary) {
             return (
                 <div className={

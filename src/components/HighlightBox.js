@@ -4,15 +4,20 @@ import Highlight from './Highlight';
 export default class HighlightBox extends Component {
     
     makeHighlights(){
-        const highlightArray = this.props.highlights.map( (hLight, key) => {
-            return (
-                <li className={'highlight'} key={key}>
-                    <Highlight highlight={hLight} />
-                </li>
-            );
+        if(this.props.highlights.length > 1){
+            const highlightArray = this.props.highlights.map( (hLight, key) => {
+                return (
+                    <li className={'highlight'} key={key}>
+                        <Highlight highlight={hLight} />
+                    </li>
+                );
 
-        });
-        return highlightArray;
+            });
+            return highlightArray;
+        }
+        else {
+            return(<Highlight highlight={this.props.highlights[0]} />);
+        }
     }
     
     render() {

@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 import CategoryGroup from '../components/CategoryGroup.js';
 import { connect } from 'react-redux';
 import { fetchData } from '../actions/';
+import { getDatedData } from '../utils/getResData';
+import NameLevelBlurbList from '../components/NameLevelBlurbList';
 
 
-
+// TODO: move css from React to Django
+// TODO: sort categories by date
+// TODO: strip extra spaces off 
+// TODO: sort skills and lang by best-> worst
+// TODO: include dates on chronological items
 
 class ResumeContainer extends Component {
     
@@ -18,65 +24,7 @@ class ResumeContainer extends Component {
     }
 
     
-    getDatedData(){
-        
-        //console.log('rc rdata=',this.props);
-        let datedCategories = ['job', 'education'];
-        
-        let returnData = [];
-        let groupFlag = this.props.groupFlag;
-        //groupFlag = false;
-        for (let cat of datedCategories) {
-            //console.log('getdated this', this);
-            let catObj = {};
-            var catData = this.props.resumeData[cat];
-            if (cat == 'job'){
-                catObj.data = catData.map(function(item){
-                    item.title = `${item.position}, ${item.company}`;
-                    return (item);
-                });
-                catObj.category_title = "Work Experience";
-            }
-            if (cat == 'education'){
-                catObj.data = catData.map(function(item){
-                    //item.title = this.makeTitle(item.degreeType, item.major, item.institution);
-                    item.title = `${item.degreeType} in ${item.major}, ${item.institution}`;
-                    return (item);
-                });
-                catObj.category_title = "Education";
-            }
-            catObj.data = catObj.data.map(function(item){
-                item.icon = cat;
-                return item;
-            });
-
-
-            if (groupFlag == true || groupFlag == null){
-
-                returnData.push(catObj);    
-            }
-            else {
-                catObj.category_title = "All Work/Education/Volunteering";
-                try{
-                    let priorData = returnData[0].data;
-                    returnData.data = priorData.concat(catObj.data);
-                }
-                catch(err){
-                    returnData.push(catObj);
-                }
-            }
-        
-            
-
-        }
-        
-        //console.log('returndata',returnData)
-        return returnData;
-    }
-
-    
-
-
+   
 
     componentWillMount() {
         //console.log('didmount',this.props);
@@ -97,20 +45,41 @@ class ResumeContainer extends Component {
         
     }
 
+    getTitle(section) {
+        let titles = {
+            language: "This", 
+            skills: "that"
+        };
+        return(titles[section]);
+    }
+
     render(){
-        //console.log('render this', this)
+        //console.log('container props', this.props);
         //console.log('render props', this.props)
-        const datedData = this.getDatedData();
+        const datedData = getDatedData(this.props.resumeData, this.props.groupFlag);
         //console.log('datedlist=',datedData);
         const categoryList = this.buildCategoryList(datedData);
         //console.log('poslist=',positionList);
 
+
         if (categoryList !== 'undefined') {
             return(
-                <section id="timeline" style={require('../../assets/styles.css')}>
-                    {categoryList}
-                </section>
+                 <div className="resume-data">
+                    <section id="timeline" style={require('../../assets/styles.css')} >
+                        {categoryList}
+                    </section>
+                    <section id="skilz" className="skilz-card" >
+                        <NameLevelBlurbList data={this.props.resumeData.skill} heading="Skills" />
+                    </section>
+                    <section id="languages" className="lang-card" >
+                        <NameLevelBlurbList data={this.props.resumeData.language} heading="Language" />
+                    </section>
+                    
+                </div>
             );
+        }
+        else {
+            return (<div>No Data Found</div>);
         }
         
     }

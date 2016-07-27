@@ -28,6 +28,12 @@ export default function getRData(store=defaultStore, action) {
 
 
 
-    return {'resumeData': {'job': [], 'education': []}};
+    return {'resumeData': {
+        'job': [],
+        'education': [],
+        'volunteer': [],
+        'skill': [],
+        'language': []
+    }};
 
 }
