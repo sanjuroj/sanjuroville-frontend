@@ -17,10 +17,17 @@ export default class NameLevelBlurbList extends Component {
     render() {
         //console.log('nlbl props', this.props)
         return (
-            
-            <ul>
-                {this.makeList()}
-            </ul>
+            <div>
+                <p className="category-title">{this.props.heading}</p>
+                {this.props.subtitle !== 'undefined' ? (
+                        <div className="category-subtitle">{this.props.subtitle}</div>
+                    ) : none
+                }
+                
+                <ul>
+                    {this.makeList()}
+                </ul>
+            </div>
         );
     
     }

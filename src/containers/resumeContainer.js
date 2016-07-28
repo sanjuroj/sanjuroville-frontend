@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fetchData } from '../actions/';
 import { getDatedData } from '../utils/getResData';
 import NameLevelBlurbList from '../components/NameLevelBlurbList';
+import ControlBar from '../components/ControlBar';
 
 
 // TODO: move css from React to Django
@@ -33,6 +34,14 @@ class ResumeContainer extends Component {
         dispatch(fetchData());
     }
 
+    getSubheading(type){
+        let textObj = {
+            skills: "Estimated skill level in parenthesis on a scale of 1 to 10"
+        };
+        
+        return(textObj[type]);
+    }
+
     buildCategoryList(posData){
         //console.log('bpl postdata=',posData);
         //console.log('rc props in build', this.props);
@@ -45,12 +54,11 @@ class ResumeContainer extends Component {
         
     }
 
-    getTitle(section) {
-        let titles = {
-            language: "This", 
-            skills: "that"
+    getSubTitle(section) {
+        let subTitles = {
+            skills: "Self-estimated skill levels are shown in parenthesis"
         };
-        return(titles[section]);
+        return(subTitles[section]);
     }
 
     render(){
@@ -65,14 +73,18 @@ class ResumeContainer extends Component {
         if (categoryList !== 'undefined') {
             return(
                  <div className="resume-data">
+                    <ControlBar {...this.props} />
                     <section id="timeline" style={require('../../assets/styles.css')} >
                         {categoryList}
                     </section>
                     <section id="skilz" className="skilz-card" >
-                        <NameLevelBlurbList data={this.props.resumeData.skill} heading="Skills" />
+                        <NameLevelBlurbList 
+                            data={this.props.resumeData.skill} 
+                            heading="SKILLS" 
+                            subtitle={this.getSubTitle('skills')}/>
                     </section>
                     <section id="languages" className="lang-card" >
-                        <NameLevelBlurbList data={this.props.resumeData.language} heading="Language" />
+                        <NameLevelBlurbList data={this.props.resumeData.language} heading="LANGUAGES" />
                     </section>
                     
                 </div>

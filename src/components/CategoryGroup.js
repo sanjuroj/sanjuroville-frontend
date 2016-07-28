@@ -24,7 +24,7 @@ export default class CategoryGroup extends Component {
                 <p className={'category-title'}>{this.props.category_title.toUpperCase()}</p>
                 {this.makeRIGItems()}
             </div>
-        )
+        );
         
     }
 
