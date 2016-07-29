@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --content-base build/ --config webpack.config.dev.js --color --watch",
+    "watch": "webpack --content-base build/ --config webpack.config.dev.js --watch",
     "build": "webpack --config webpack.config.dev.js"
   },
   "keywords": [],
@@ -29,6 +30,7 @@
     "eslint": "^2.10.2",
     "eslint-plugin-react": "^5.1.1",
     "webpack": "^1.13.1",
+    "webpack-bundle-tracker": "0.0.93",
     "webpack-dev-server": "^1.14.1"
   }
 }

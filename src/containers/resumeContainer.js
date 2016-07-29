@@ -12,6 +12,7 @@ import ControlBar from '../components/ControlBar';
 // TODO: strip extra spaces off 
 // TODO: sort skills and lang by best-> worst
 // TODO: include dates on chronological items
+// TODO: accent on resume
 
 class ResumeContainer extends Component {
     
@@ -74,7 +75,7 @@ class ResumeContainer extends Component {
             return(
                  <div className="resume-data">
                     <ControlBar {...this.props} />
-                    <section id="timeline" style={require('../../assets/styles.css')} >
+                    <section id="timeline" >
                         {categoryList}
                     </section>
                     <section id="skilz" className="skilz-card" >
