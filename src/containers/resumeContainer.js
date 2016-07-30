@@ -13,6 +13,7 @@ import ControlBar from '../components/ControlBar';
 // TODO: sort skills and lang by best-> worst
 // TODO: include dates on chronological items
 // TODO: accent on resume
+// TODO: remove periods from ends of sentances
 
 class ResumeContainer extends Component {
     
@@ -73,21 +74,31 @@ class ResumeContainer extends Component {
 
         if (categoryList !== 'undefined') {
             return(
-                 <div className="resume-data">
-                    <ControlBar {...this.props} />
-                    <section id="timeline" >
-                        {categoryList}
-                    </section>
-                    <section id="skilz" className="skilz-card" >
-                        <NameLevelBlurbList 
-                            data={this.props.resumeData.skill} 
-                            heading="SKILLS" 
-                            subtitle={this.getSubTitle('skills')}/>
-                    </section>
-                    <section id="languages" className="lang-card" >
-                        <NameLevelBlurbList data={this.props.resumeData.language} heading="LANGUAGES" />
-                    </section>
-                    
+                <div className="resume-body">
+                    <ControlBar {...this.props} style={require('../../assets/resume-styles.css')} />
+                    <div className="resume-heading">
+                        An interactive version of my resume is displayed below.  It loads in a 
+                        condensed form with expandable items highlighted by a bottom border. 
+                        The control buttons just above can be used to collapse and expand all items,
+                        or change how some of the information is viewed.  For an explanation of
+                        how this page was built, please go to the About page.
+                    </div>
+                    <div className="resume-data">
+                        <section id="timeline" >
+                            {categoryList}
+                        </section>
+                        <section id="skilz" className="skilz-card" >
+                            <NameLevelBlurbList 
+                                data={this.props.resumeData.skill} 
+                                heading="SKILLS" 
+                                subtitle={this.getSubTitle('skills')}/>
+                        </section>
+                        <section id="languages" className="lang-card" >
+                            <NameLevelBlurbList data={this.props.resumeData.language} heading="LANGUAGES" />
+                        </section>
+                        
+                    </div>
+                
                 </div>
             );
         }

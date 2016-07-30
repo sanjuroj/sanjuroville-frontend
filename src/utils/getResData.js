@@ -35,7 +35,7 @@ export function getDatedData(resumeData, groupFlag){
             returnData.push(catObj);    
         }
         else {
-            catObj.category_title = "All Work/Education/Volunteering";
+            catObj.category_title = "All Work, Education, and Volunteering";
             try{
                 let priorData = returnData[0].data;
                 returnData.data = priorData.concat(catObj.data);
