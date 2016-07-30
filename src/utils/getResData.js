@@ -49,6 +49,6 @@ export function getDatedData(resumeData, groupFlag){
 
     }
     
-    //console.log('returndata',returnData)
+    //console.log('getresdata returndata',returnData)
     return returnData;
 }

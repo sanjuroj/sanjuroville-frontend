@@ -46,9 +46,9 @@ class ResumeContainer extends Component {
 
     buildCategoryList(posData){
         //console.log('bpl postdata=',posData);
-        //console.log('rc props in build', this.props);
+        console.log('rc props in build', this.props);
         const posList = posData.map( (item, key) => {
-            return (<CategoryGroup {...item} dispatch={this.props.dispatch} highlightTracker={this.props.highlights} key={key}/>);
+            return (<CategoryGroup {...item} dispatch={this.props.dispatch} highlightTracker={this.props.highlightTracker} key={key}/>);
         }, this);
         //console.log('poslist', posList);
         return posList;
@@ -70,6 +70,7 @@ class ResumeContainer extends Component {
         //console.log('datedlist=',datedData);
         const categoryList = this.buildCategoryList(datedData);
         //console.log('poslist=',positionList);
+        //console.log('container props2', this.props);
 
 
         if (categoryList !== 'undefined') {

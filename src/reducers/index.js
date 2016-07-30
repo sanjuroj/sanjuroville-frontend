@@ -10,30 +10,38 @@ const defaultStore = {
         'skill': [],
         'language': []
     },
-    'groupFlag': false
+    'groupFlag': false,
+    'highlightTracker': {}
 };
-export default function getRData(store=defaultStore, action) {
+export default function getRData(store, action) {
     //console.log('reducer action=',action);
-    //console.log('receivedata action type =',RECEIVE_DATA);
+    //console.log('reducer action type =', action);
+    //console.log('reducer store =', store);
+
     switch (action.type) {
     
-    case RECEIVE_DATA:    
+    case RECEIVE_DATA:
+        //console.log('reducer receive store', store)
         let data = Object.assign({}, store, {resumeData: action.data});
-        data.highlights = null;
         data.groupFlag = false;
+        console.log('in receive data', data)
         return data;
 
     case DATA_ERROR: 
         return Object.assign({},{resumeData: 'error'});
 
     case HIGHLIGHTS:
-        console.log('highlights store', store);
-        if (action.title == store.highlights) {
-            return Object.assign({}, store);   
+        //console.log('reducer highlights store', store);
+        let newTracker = Object.assign({}, store.highlightTracker);
+        if (newTracker[action.title] == true) {
+            newTracker[action.title] = false;
         }
         else {
-            return Object.assign({}, store, {highlights: action.title});
+            newTracker[action.title] = true;
         }
+        
+        return Object.assign({}, store, {highlightTracker: newTracker});
+        
     
     case TOGGLE_GROUP: 
         if (store.groupFlag == true) {

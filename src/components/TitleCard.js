@@ -5,7 +5,7 @@ import { HIGHLIGHTS } from '../actions/';
 export default class TitleCard extends Component {
 
     clickAction() {
-        console.log('clicked highlights')
+        //console.log('clicked highlights')
         this.props.dispatch({
             type: HIGHLIGHTS,
             title: this.props.title
