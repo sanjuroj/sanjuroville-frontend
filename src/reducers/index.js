@@ -24,7 +24,6 @@ export default function getRData(store, action) {
         //console.log('reducer receive store', store)
         let data = Object.assign({}, store, {resumeData: action.data});
         data.groupFlag = false;
-        console.log('in receive data', data)
         return data;
 
     case DATA_ERROR: 

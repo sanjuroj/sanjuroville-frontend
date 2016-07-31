@@ -107,3 +107,27 @@ input.cmn-toggle-round:checked + label:after {
   margin-left: 20px;
 }
 
+
+
+
+#timeline {
+  position: relative;
+  padding: 2em 0;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+*/
+
+ /* this is the vertical line */
+ 
+#timeline::before {
+ 
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 18px;
+  height: 100%;
+  width: 5px;
+  background: #d7e4ed;
+}
+

@@ -26,6 +26,9 @@ export function getDatedData(resumeData, groupFlag){
         }
         catObj.data = catObj.data.map(function(item){
             item.icon = cat;
+            //console.log('grd endate parse', Date.prototype.toString(Date.parse(item.endDate)));
+            item.endDate = new Date(item.endDate);
+            item.startDate = new Date(item.startDate);
             return item;
         });
 
@@ -35,20 +38,26 @@ export function getDatedData(resumeData, groupFlag){
             returnData.push(catObj);    
         }
         else {
-            catObj.category_title = "All Work, Education, and Volunteering";
+            catObj.category_title = "Work, Education, and Volunteering";
             try{
-                let priorData = returnData[0].data;
-                returnData.data = priorData.concat(catObj.data);
+                returnData[0].data = returnData[0].data.concat(catObj.data);
             }
             catch(err){
                 returnData.push(catObj);
             }
         }
-    
-        
-
     }
-    
-    //console.log('getresdata returndata',returnData)
-    return returnData;
+
+    const sortedData = sortCategoryData(returnData);
+    // console.log('grd sorted', sortedData);
+    return sortedData;
+}
+
+export function sortCategoryData(catData) {
+    for(var cat of catData) {
+        cat.data.sort(function(a,b){
+            return b.endDate - a.endDate;
+        });
+    }
+    return catData;
 }

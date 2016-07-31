@@ -22722,7 +22722,6 @@
 	            //console.log('reducer receive store', store)
 	            var data = Object.assign({}, store, { resumeData: action.data });
 	            data.groupFlag = false;
-	            console.log('in receive data', data);
 	            return data;
 
 	        case _actions.DATA_ERROR:
@@ -23311,6 +23310,7 @@
 	// TODO: include dates on chronological items
 	// TODO: accent on resume
 	// TODO: remove periods from ends of sentances
+	// TOTO: make it impossible to expand items that have no highlights
 
 	var ResumeContainer = function (_Component) {
 	    _inherits(ResumeContainer, _Component);
@@ -23356,7 +23356,7 @@
 	            var _this2 = this;
 
 	            //console.log('bpl postdata=',posData);
-	            console.log('rc props in build', this.props);
+	            //console.log('rc props in build', this.props);
 	            var posList = posData.map(function (item, key) {
 	                return _react2.default.createElement(_CategoryGroup2.default, _extends({}, item, { dispatch: _this2.props.dispatch, highlightTracker: _this2.props.highlightTracker, key: key }));
 	            }, this);
@@ -23379,7 +23379,7 @@
 	            var datedData = (0, _getResData.getDatedData)(this.props.resumeData, this.props.groupFlag);
 	            //console.log('datedlist=',datedData);
 	            var categoryList = this.buildCategoryList(datedData);
-	            //console.log('poslist=',positionList);
+	            // console.log('catlist=',categoryList);
 	            //console.log('container props2', this.props);
 
 
@@ -40481,6 +40481,7 @@
 	    value: true
 	});
 	exports.getDatedData = getDatedData;
+	exports.sortCategoryData = sortCategoryData;
 	function getDatedData(resumeData, groupFlag) {
 
 	    //console.log('rc rdata=',this.props);
@@ -40517,6 +40518,9 @@
 	            }
 	            catObj.data = catObj.data.map(function (item) {
 	                item.icon = cat;
+	                //console.log('grd endate parse', Date.prototype.toString(Date.parse(item.endDate)));
+	                item.endDate = new Date(item.endDate);
+	                item.startDate = new Date(item.startDate);
 	                return item;
 	            });
 
@@ -40524,10 +40528,9 @@
 
 	                returnData.push(catObj);
 	            } else {
-	                catObj.category_title = "All Work, Education, and Volunteering";
+	                catObj.category_title = "Work, Education, and Volunteering";
 	                try {
-	                    var priorData = returnData[0].data;
-	                    returnData.data = priorData.concat(catObj.data);
+	                    returnData[0].data = returnData[0].data.concat(catObj.data);
 	                } catch (err) {
 	                    returnData.push(catObj);
 	                }
@@ -40539,8 +40542,6 @@
 
 	            _loop();
 	        }
-
-	        //console.log('getresdata returndata',returnData)
 	    } catch (err) {
 	        _didIteratorError = true;
 	        _iteratorError = err;
@@ -40556,7 +40557,40 @@
 	        }
 	    }
 
-	    return returnData;
+	    var sortedData = sortCategoryData(returnData);
+	    // console.log('grd sorted', sortedData);
+	    return sortedData;
+	}
+
+	function sortCategoryData(catData) {
+	    var _iteratorNormalCompletion2 = true;
+	    var _didIteratorError2 = false;
+	    var _iteratorError2 = undefined;
+
+	    try {
+	        for (var _iterator2 = catData[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	            var cat = _step2.value;
+
+	            cat.data.sort(function (a, b) {
+	                return b.endDate - a.endDate;
+	            });
+	        }
+	    } catch (err) {
+	        _didIteratorError2 = true;
+	        _iteratorError2 = err;
+	    } finally {
+	        try {
+	            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                _iterator2.return();
+	            }
+	        } finally {
+	            if (_didIteratorError2) {
+	                throw _iteratorError2;
+	            }
+	        }
+	    }
+
+	    return catData;
 	}
 
 /***/ },
@@ -40806,7 +40840,7 @@
 
 
 	// module
-	exports.push([module.id, "\n\n/* ============================================================\n  COMMON\n============================================================ */\n#wrapper {\n  min-width: 600px;\n}\n\n.control-bar {\n  display: table;\n  width: 100%;\n}\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n/* ============================================================\n  COMMON\n============================================================ */\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n", ""]);
+	exports.push([module.id, "\n\n/* ============================================================\n  COMMON\n============================================================ */\n#wrapper {\n  min-width: 600px;\n}\n\n.control-bar {\n  display: table;\n  width: 100%;\n}\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n/* ============================================================\n  COMMON\n============================================================ */\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n\n\n\n#timeline {\n  position: relative;\n  padding: 2em 0;\n  margin-top: 2em;\n  margin-bottom: 2em;\n}\n*/\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  left: 18px;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n", ""]);
 
 	// exports
 

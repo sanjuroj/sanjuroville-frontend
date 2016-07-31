@@ -14,6 +14,7 @@ import ControlBar from '../components/ControlBar';
 // TODO: include dates on chronological items
 // TODO: accent on resume
 // TODO: remove periods from ends of sentances
+// TOTO: make it impossible to expand items that have no highlights
 
 class ResumeContainer extends Component {
     
@@ -46,7 +47,7 @@ class ResumeContainer extends Component {
 
     buildCategoryList(posData){
         //console.log('bpl postdata=',posData);
-        console.log('rc props in build', this.props);
+        //console.log('rc props in build', this.props);
         const posList = posData.map( (item, key) => {
             return (<CategoryGroup {...item} dispatch={this.props.dispatch} highlightTracker={this.props.highlightTracker} key={key}/>);
         }, this);
@@ -69,7 +70,7 @@ class ResumeContainer extends Component {
         const datedData = getDatedData(this.props.resumeData, this.props.groupFlag);
         //console.log('datedlist=',datedData);
         const categoryList = this.buildCategoryList(datedData);
-        //console.log('poslist=',positionList);
+        // console.log('catlist=',categoryList);
         //console.log('container props2', this.props);
 
 
