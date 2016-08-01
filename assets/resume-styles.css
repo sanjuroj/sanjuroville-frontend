@@ -1,4 +1,56 @@
 
+/****** Resume Items Styling **********/
+
+
+.category-title {
+  margin-left: .5em;
+  margin-bottom: 1.5em;
+  margin-top: 3em;
+  font-weight: bold;
+
+}
+
+.title-card {
+  margin-bottom: 1em;
+  cursor: default;
+}
+
+.title-card.titlecard-has-highlights {
+  cursor: pointer;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.summary {
+  margin-left: .5em;
+}
+
+.highlight-box {
+  background-color: #498292;
+  padding: 10px 10px 10px 0px ;
+}
+
+.highlight-box ul {
+    color: #EDE1DB;
+    font-weight: 300;
+    font-size: .90em;
+}
+
+.highlight {
+  margin-bottom: .5em;
+}
+
+.has-highlights {
+  border-bottom-style: solid;
+  border-bottom-width: 4px;
+  border-bottom-color: #498292;
+}
+.res-itemgroup {
+    margin-left: 2em;
+}
+
 
 /* ============================================================
   COMMON
@@ -108,15 +160,17 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 
-
+/* ============================================================
+  Timeline
+============================================================ */
 
 #timeline {
   position: relative;
-  padding: 2em 0;
-  margin-top: 2em;
+  padding-bottom: 1em;
+  /*margin-top: 2em;*/
   margin-bottom: 2em;
 }
-*/
+
 
  /* this is the vertical line */
  
@@ -125,7 +179,6 @@ input.cmn-toggle-round:checked + label:after {
   content: '';
   position: absolute;
   top: 0;
-  left: 18px;
   height: 100%;
   width: 5px;
   background: #d7e4ed;

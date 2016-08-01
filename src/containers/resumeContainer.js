@@ -49,7 +49,11 @@ class ResumeContainer extends Component {
         //console.log('bpl postdata=',posData);
         //console.log('rc props in build', this.props);
         const posList = posData.map( (item, key) => {
-            return (<CategoryGroup {...item} dispatch={this.props.dispatch} highlightTracker={this.props.highlightTracker} key={key}/>);
+            return (<CategoryGroup {...item} 
+                        dispatch={this.props.dispatch} 
+                        highlightTracker={this.props.highlightTracker} 
+                        groupFlag={this.props.groupFlag}
+                        key={key}/>);
         }, this);
         //console.log('poslist', posList);
         return posList;
@@ -86,7 +90,7 @@ class ResumeContainer extends Component {
                         how this page was built, please go to the About page.
                     </div>
                     <div className="resume-data">
-                        <section id="timeline" >
+                        <section id="dated-items" >
                             {categoryList}
                         </section>
                         <section id="skilz" className="skilz-card" >

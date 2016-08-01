@@ -8,7 +8,14 @@ export default class CategoryGroup extends Component {
         return this.props.data.map(function(item, key){
         
             return (
-                <ResumeItemGroup key={key} {...item} dispatch={this.props.dispatch} highlightTracker={this.props.highlightTracker} className="title-card"/>
+                <ResumeItemGroup 
+                    key={key} 
+                    {...item} 
+                    dispatch={this.props.dispatch} 
+                    highlightTracker={this.props.highlightTracker} 
+                    className="title-card"
+                    groupFlag={this.props.groupFlag}
+                />
             );
             
         }, this);
@@ -21,8 +28,12 @@ export default class CategoryGroup extends Component {
         //console.log('catgroup rigitems', this.makeRIGItems())        
         return (
             <div className={'category-group'}>
-                <p className={'category-title'}>{this.props.category_title.toUpperCase()}</p>
-                {this.makeRIGItems()}
+                <div id="category-title">
+                    <p className={'category-title'}>{this.props.category_title.toUpperCase()}</p>
+                </div>
+                <div id={this.props.groupFlag == false ? "timeline" : null }> 
+                    {this.makeRIGItems()}
+                </div>
             </div>
         );
         

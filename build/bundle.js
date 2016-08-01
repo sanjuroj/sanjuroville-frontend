@@ -23358,7 +23358,11 @@
 	            //console.log('bpl postdata=',posData);
 	            //console.log('rc props in build', this.props);
 	            var posList = posData.map(function (item, key) {
-	                return _react2.default.createElement(_CategoryGroup2.default, _extends({}, item, { dispatch: _this2.props.dispatch, highlightTracker: _this2.props.highlightTracker, key: key }));
+	                return _react2.default.createElement(_CategoryGroup2.default, _extends({}, item, {
+	                    dispatch: _this2.props.dispatch,
+	                    highlightTracker: _this2.props.highlightTracker,
+	                    groupFlag: _this2.props.groupFlag,
+	                    key: key }));
 	            }, this);
 	            //console.log('poslist', posList);
 	            return posList;
@@ -23398,7 +23402,7 @@
 	                        { className: 'resume-data' },
 	                        _react2.default.createElement(
 	                            'section',
-	                            { id: 'timeline' },
+	                            { id: 'dated-items' },
 	                            categoryList
 	                        ),
 	                        _react2.default.createElement(
@@ -23481,7 +23485,14 @@
 	            //console.log('catgroup props',this.props)
 	            return this.props.data.map(function (item, key) {
 
-	                return _react2.default.createElement(_ResumeItemGroup2.default, _extends({ key: key }, item, { dispatch: this.props.dispatch, highlightTracker: this.props.highlightTracker, className: 'title-card' }));
+	                return _react2.default.createElement(_ResumeItemGroup2.default, _extends({
+	                    key: key
+	                }, item, {
+	                    dispatch: this.props.dispatch,
+	                    highlightTracker: this.props.highlightTracker,
+	                    className: 'title-card',
+	                    groupFlag: this.props.groupFlag
+	                }));
 	            }, this);
 	        }
 	    }, {
@@ -23493,11 +23504,19 @@
 	                'div',
 	                { className: 'category-group' },
 	                _react2.default.createElement(
-	                    'p',
-	                    { className: 'category-title' },
-	                    this.props.category_title.toUpperCase()
+	                    'div',
+	                    { id: 'category-title' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        { className: 'category-title' },
+	                        this.props.category_title.toUpperCase()
+	                    )
 	                ),
-	                this.makeRIGItems()
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: this.props.groupFlag == false ? "timeline" : null },
+	                    this.makeRIGItems()
+	                )
 	            );
 	        }
 	    }]);
@@ -23629,40 +23648,86 @@
 	            });
 	        }
 	    }, {
+	        key: 'buildElements',
+	        value: function buildElements() {
+	            var hasHighlights = this.props.highlights.length > 0 ? true : false;
+	            var titleSpanClasses = '';
+	            var summarySpanClasses = '';
+
+	            if (this.props.groupFlag == false && hasHighlights) {
+	                titleSpanClasses += "has-highlights";
+	            } else if (this.props.summary && hasHighlights) {
+	                summarySpanClasses = "has-highlights";
+	            }
+
+	            var titleComponent = _react2.default.createElement(_SimpleText2.default, { key: '1', text: this.props.title, spanClasses: titleSpanClasses, divClasses: 'title' });
+	            var summaryComponent = _react2.default.createElement(_SimpleText2.default, { key: '2', text: this.props.summary, spanClasses: summarySpanClasses, divClasses: 'summary' });
+
+	            if (this.props.summary && this.props.groupFlag) {
+	                return [titleComponent, summaryComponent];
+	            }
+	            if (this.props.summary && this.props.groupFlag == false && this.props.highlightTracker[this.props.title]) {
+	                console.log('passed');
+	                return [titleComponent, summaryComponent];
+	            } else {
+	                return [titleComponent];
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            //console.log('titlecard props',this.props);
-	            if (this.props.summary) {
-	                return _react2.default.createElement(
-	                    'div',
-	                    { className: 'title-card ' + (this.props.highlights.length > 0 ? 'titlecard-has-highlights' : ''), onClick: this.clickAction.bind(this) },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'title' },
-	                        _react2.default.createElement(_SimpleText2.default, { text: this.props.title })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'summary' },
-	                        _react2.default.createElement(_SimpleText2.default, { classes: this.props.highlights.length > 0 ? 'has-highlights' : '', text: this.props.summary })
-	                    )
-	                );
-	            } else {
-	                return _react2.default.createElement(
-	                    'div',
-	                    { className: 'title-card ' + (this.props.highlights.length > 0 ? 'titlecard-has-highlights' : ''), onClick: this.clickAction.bind(this) },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'title' },
-	                        _react2.default.createElement(_SimpleText2.default, { classes: this.props.highlights.length > 0 ? 'has-highlights' : '', text: this.props.title })
-	                    )
-	                );
-	            }
+	            //console.log('tc props', this.props)
+	            var hasHighlights = this.props.highlights.length > 0;
+	            var className = 'title-card';
+	            hasHighlights ? className += ' titlecard-has-highlights' : '';
+	            return _react2.default.createElement(
+	                'div',
+	                {
+	                    className: className,
+	                    onClick: hasHighlights ? this.clickAction.bind(this) : null
+	                },
+	                this.buildElements()
+	            );
 	        }
 	    }]);
 
 	    return TitleCard;
 	}(_react.Component);
+
+	/*
+	    render() {
+	        //console.log('titlecard props',this.props);
+	        if (this.props.summary) {
+	            return (
+	                <div className={
+	                        'title-card ' + 
+	                        (this.props.highlights.length > 0 ? 'titlecard-has-highlights' : '')
+	                    } onClick={this.clickAction.bind(this)}>
+	                    <div className={'title'}>
+	                        <SimpleText text={this.props.title} />
+	                    </div>
+	                    <div className={'summary'}>
+	                        <SimpleText classes={this.props.highlights.length > 0 ? 'has-highlights' : ''} text={this.props.summary} />
+	                    </div>
+	                </div>
+	            );    
+	        }
+	        else {
+	            return (
+	                <div className={
+	                        'title-card ' + 
+	                        (this.props.highlights.length > 0 ? 'titlecard-has-highlights' : '')
+	                    } onClick={this.clickAction.bind(this)}>
+	                    <div className={'title'}>
+	                        <SimpleText classes={this.props.highlights.length > 0 ? 'has-highlights' : ''} text={this.props.title} />
+	                    </div>
+	                    
+	                </div>
+	            );
+	        }
+	    }
+	*/
+
 
 	exports.default = TitleCard;
 
@@ -23703,9 +23768,13 @@
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                'span',
-	                { className: this.props.classes },
-	                this.props.text
+	                'div',
+	                { className: this.props.divClasses },
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: this.props.spanClasses },
+	                    this.props.text
+	                )
 	            );
 	        }
 	    }]);
@@ -40840,7 +40909,7 @@
 
 
 	// module
-	exports.push([module.id, "\n\n/* ============================================================\n  COMMON\n============================================================ */\n#wrapper {\n  min-width: 600px;\n}\n\n.control-bar {\n  display: table;\n  width: 100%;\n}\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n/* ============================================================\n  COMMON\n============================================================ */\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n\n\n\n#timeline {\n  position: relative;\n  padding: 2em 0;\n  margin-top: 2em;\n  margin-bottom: 2em;\n}\n*/\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  left: 18px;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n", ""]);
+	exports.push([module.id, "\n/****** Resume Items Styling **********/\n\n\n.category-title {\n  margin-left: .5em;\n  margin-bottom: 1.5em;\n  margin-top: 3em;\n  font-weight: bold;\n\n}\n\n.title-card {\n  margin-bottom: 1em;\n  cursor: default;\n}\n\n.title-card.titlecard-has-highlights {\n  cursor: pointer;\n}\n\n.title {\n  font-weight: bold;\n}\n\n.summary {\n  margin-left: .5em;\n}\n\n.highlight-box {\n  background-color: #498292;\n  padding: 10px 10px 10px 0px ;\n}\n\n.highlight-box ul {\n    color: #EDE1DB;\n    font-weight: 300;\n    font-size: .90em;\n}\n\n.highlight {\n  margin-bottom: .5em;\n}\n\n.has-highlights {\n  border-bottom-style: solid;\n  border-bottom-width: 4px;\n  border-bottom-color: #498292;\n}\n.res-itemgroup {\n    margin-left: 2em;\n}\n\n\n/* ============================================================\n  COMMON\n============================================================ */\n#wrapper {\n  min-width: 600px;\n}\n\n.control-bar {\n  display: table;\n  width: 100%;\n}\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n/* ============================================================\n  COMMON\n============================================================ */\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n#timeline {\n  position: relative;\n  padding-bottom: 1em;\n  /*margin-top: 2em;*/\n  margin-bottom: 2em;\n}\n\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n", ""]);
 
 	// exports
 

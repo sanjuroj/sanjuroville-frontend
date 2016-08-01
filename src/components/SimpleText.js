@@ -6,9 +6,11 @@ export default class Summary extends Component {
     
     render() {
         return (
-            <span className={this.props.classes}>
-                {this.props.text}
-            </span>
+            <div className={this.props.divClasses}>
+                <span className={this.props.spanClasses}>
+                    {this.props.text}
+                </span>
+            </div>
         );
     }
 
