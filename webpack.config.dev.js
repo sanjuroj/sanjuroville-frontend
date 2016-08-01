@@ -20,7 +20,8 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.css$/, loader: "style!css" },
-            { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
+            { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
+            { test: /\.(jpg|svg)$/, exclude: /node_modules/, loader: "url-loader" }
         ]
     }
 

@@ -13,16 +13,42 @@
 .title-card {
   margin-bottom: 1em;
   cursor: default;
+  position: relative;
 }
 
 .title-card.titlecard-has-highlights {
   cursor: pointer;
 }
 
+.job {
+  background-color: red;
+}
+
+.volunteer {
+  background-color: blue;
+}
+
+.education {
+  background-color: green;
+}
+
+.timeline-circle {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  margin-left: -5px;
+  margin-top: 5px;
+  border-radius: 50%;
+}
+
+
 .title {
   font-weight: bold;
 }
 
+.title-date {
+  padding-right: .35em;
+}
 .summary {
   margin-left: .5em;
 }

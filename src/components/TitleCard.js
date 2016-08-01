@@ -17,6 +17,15 @@ export default class TitleCard extends Component {
         const hasHighlights = this.props.highlights.length > 0 ? true : false;
         let titleSpanClasses = '';
         let summarySpanClasses = '';
+        let titleText = this.props.title;
+        titleText = 
+            <span>
+                <span className='title-date'>
+                    {this.props.startDate.getUTCFullYear()} - 
+                    {this.props.endDate.getUTCFullYear()}
+                </span>
+                <span className='title-text'>{titleText}</span>    
+            </span>;
 
         if (this.props.groupFlag == false && hasHighlights) {
             titleSpanClasses += "has-highlights";
@@ -25,34 +34,39 @@ export default class TitleCard extends Component {
             summarySpanClasses = "has-highlights";
         }
         
-        const titleComponent =  <SimpleText key='1' text={this.props.title} spanClasses={titleSpanClasses} divClasses="title"/>;
-        const summaryComponent = <SimpleText key='2' text={this.props.summary} spanClasses={summarySpanClasses} divClasses="summary"/>;
+        const titleComponent =  
+            <SimpleText 
+                key="1" text={titleText} 
+                spanClasses={titleSpanClasses} 
+                divClasses="title"
+            />;
+        const summaryComponent = 
+            <SimpleText 
+                key="2" 
+                text={this.props.summary} 
+                spanClasses={summarySpanClasses} 
+                divClasses="summary"
+            />;
 
-        if (this.props.summary && this.props.groupFlag) {
-            return ([
-                titleComponent,
-                summaryComponent
-            ]);
-        }
-        if(
+        let returnArray = [];
+        if ((this.props.summary && this.props.groupFlag) || 
+            (
             this.props.summary &&
             this.props.groupFlag == false &&
             this.props.highlightTracker[this.props.title]
-        )
+            )
+            )
         {
-            console.log('passed')
-            return ([
+            returnArray = [
                 titleComponent,
                 summaryComponent
-            ]);
+            ];
         }
-        
-        
         else {
-            return [titleComponent];
+            returnArray = [titleComponent];
         }
-
-
+        
+        return returnArray;
         
     }
 
@@ -73,40 +87,3 @@ export default class TitleCard extends Component {
 
 
 }
-
-/*
-    render() {
-        //console.log('titlecard props',this.props);
-        if (this.props.summary) {
-            return (
-                <div className={
-                        'title-card ' + 
-                        (this.props.highlights.length > 0 ? 'titlecard-has-highlights' : '')
-                    } onClick={this.clickAction.bind(this)}>
-                    <div className={'title'}>
-                        <SimpleText text={this.props.title} />
-                    </div>
-                    <div className={'summary'}>
-                        <SimpleText classes={this.props.highlights.length > 0 ? 'has-highlights' : ''} text={this.props.summary} />
-                    </div>
-                </div>
-            );    
-        }
-        else {
-            return (
-                <div className={
-                        'title-card ' + 
-                        (this.props.highlights.length > 0 ? 'titlecard-has-highlights' : '')
-                    } onClick={this.clickAction.bind(this)}>
-                    <div className={'title'}>
-                        <SimpleText classes={this.props.highlights.length > 0 ? 'has-highlights' : ''} text={this.props.title} />
-                    </div>
-                    
-                </div>
-            );
-        }
-    }
-*/
-
-
-

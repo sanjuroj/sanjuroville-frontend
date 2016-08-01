@@ -7,14 +7,12 @@ import NameLevelBlurbList from '../components/NameLevelBlurbList';
 import ControlBar from '../components/ControlBar';
 
 
-// TODO: move css from React to Django
-// TODO: sort categories by date
-// TODO: strip extra spaces off 
-// TODO: sort skills and lang by best-> worst
-// TODO: include dates on chronological items
-// TODO: accent on resume
+// TODO: strip extra spaces off text entries
 // TODO: remove periods from ends of sentances
-// TOTO: make it impossible to expand items that have no highlights
+// TODO: sort skills and lang by best-> worst
+// TODO: accent on resume
+// TODO: make it impossible to expand items that have no highlights
+// TDOO: improve the look of hovered menu items
 
 class ResumeContainer extends Component {
     
