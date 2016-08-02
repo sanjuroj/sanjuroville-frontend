@@ -4,7 +4,7 @@ import ResumeItemGroup from './ResumeItemGroup';
 export default class CategoryGroup extends Component {
 
     makeRIGItems() {
-        //console.log('catgroup props',this.props)
+        console.log('catgroup props',this.props)
         return this.props.data.map(function(item, key){
         
             return (

@@ -185,6 +185,20 @@ input.cmn-toggle-round:checked + label:after {
   margin-left: 20px;
 }
 
+/* ============================================================
+  Control Bar - Buttons
+============================================================ */
+
+.control-button-group {
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.control-button {
+  margin-left: 10px;
+  display: inline-block;
+}
+
 
 /* ============================================================
   Timeline

@@ -13,6 +13,8 @@ import ControlBar from '../components/ControlBar';
 // TODO: accent on resume
 // TODO: make it impossible to expand items that have no highlights
 // TDOO: improve the look of hovered menu items
+// TODO: rotate branding font
+// TODO: Add expand and compact buttons
 
 class ResumeContainer extends Component {
     
@@ -70,7 +72,7 @@ class ResumeContainer extends Component {
         //console.log('container props', this.props);
         //console.log('render props', this.props)
         const datedData = getDatedData(this.props.resumeData, this.props.groupFlag);
-        //console.log('datedlist=',datedData);
+        console.log('datedlist=',datedData);
         const categoryList = this.buildCategoryList(datedData);
         // console.log('catlist=',categoryList);
         //console.log('container props2', this.props);
@@ -79,7 +81,10 @@ class ResumeContainer extends Component {
         if (categoryList !== 'undefined') {
             return(
                 <div className="resume-body">
-                    <ControlBar {...this.props} style={require('../../assets/resume-styles.css')} />
+                    <ControlBar 
+                        {...this.props} 
+                        style={require('../../assets/resume-styles.css')} 
+                        expandable={datedData}/>
                     <div className="resume-heading">
                         An interactive version of my resume is displayed below.  It loads in a 
                         condensed form with expandable items highlighted by a bottom border. 

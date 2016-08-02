@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { toggle_grouped } from '../actions/';
+import { toggle_grouped, expand_all, compress_all } from '../actions/';
+import Button from './Button';
 
 
 export default class ControlBar extends Component {
@@ -15,6 +16,7 @@ export default class ControlBar extends Component {
     }
 
     render() {
+        console.log('controlbar props', this.props);
         return (
             <div className="control-bar">
                 <div className="grouped-switch">
@@ -35,34 +37,24 @@ export default class ControlBar extends Component {
                         Grouped
                     </div>
                 </div>
+                <div className="control-button-group">
+                    <div className="control-button">
+                        <Button 
+                            expandable={this.props.expandable} 
+                            action={expand_all} 
+                            text="Expand All" 
+                            dispatch={this.props.dispatch}/>
+                    </div>
+                    <div className="control-button">
+                        <Button 
+                            expandable={this.props.expandable} 
+                            action={compress_all} 
+                            text="Compress All" 
+                            dispatch={this.props.dispatch}/>
+                    </div>
+                </div>
             </div>
           
         );
     }
 }
-/*
-<div className="btn-toolbar" role="toolbar" aria-label="Control bar">
-                <div className="btn-group" role="group" aria-label="Chronological or Grouped">
-                    <label className="btn grouped active">
-                        <input 
-                            type="radio" 
-                            name="grouped" 
-                            id="chronological" 
-                            className={this.props.groupedFlag !== true ? "checked" : null} />
-                        Chronological
-                        
-                    </label>
-                    <label className="btn grouped active">
-                        <input 
-                            type="radio" 
-                            name="grouped" 
-                            id="grouped" 
-                            className={this.props.groupedFlag !== true ? null : "checked"} />
-                        Grouped
-                        
-                        
-                    </label>
-                </div>
-            </div>
-
-*/

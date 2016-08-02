@@ -6,6 +6,8 @@ export const RECEIVE_DATA = 'RECEIVE_DATA';
 export const DATA_ERROR = 'DATA_ERROR';
 export const HIGHLIGHTS = 'HIGHLIGHTS';
 export const TOGGLE_GROUP = 'TOGGLE_GROUP';
+export const EXPAND_ALL = 'EXPAND_ALL';
+export const COMPRESS_ALL = 'COMPRESS_ALL';
 
 
 
@@ -23,6 +25,25 @@ function dataError (err) {
     };
 }
 
+export function expand_all(expandable){
+    let expandList = [];
+    for (let cat of expandable){
+        for (let item of cat.data) {
+            expandList[item.title] = true;
+        }
+    }
+    console.log('actions expandable',expandList);
+    return {
+        type: EXPAND_ALL,
+        expandList
+    };
+}
+
+export function compress_all(){
+    return {
+        type: COMPRESS_ALL
+    };
+}
 
 export function toggle_grouped() {
     return{

@@ -1,5 +1,11 @@
 //import { combineReducers } from 'redux';
-import { RECEIVE_DATA, DATA_ERROR, HIGHLIGHTS, TOGGLE_GROUP} from '../actions/';
+import { RECEIVE_DATA, 
+    DATA_ERROR, 
+    HIGHLIGHTS, 
+    TOGGLE_GROUP,
+    EXPAND_ALL, 
+    COMPRESS_ALL
+    } from '../actions/';
 
 
 const defaultStore = {
@@ -49,7 +55,18 @@ export default function getRData(store, action) {
         else {
             return Object.assign({}, store, {groupFlag: true});   
         }
+    
+
+    case EXPAND_ALL:
+        console.log('reducer expandable', action.expandList) 
+        return Object.assign({}, store, {highlightTracker: action.expandList});   
+
+    case COMPRESS_ALL: 
+        return Object.assign({}, store, {highlightTracker: []});   
+        
     }
+
+
 
     return defaultStore;
 

@@ -38,10 +38,15 @@ export default class ResumeItemGroup extends Component {
     }
 
     render() {
-        console.log('rig props', this.props);
+        //console.log('rig props', this.props);
         //console.log('prop=', this.props.highlightTracker)
         //console.log('title=', this.title)
-        const inclHighlights = this.props.highlightTracker[this.props.title] ? true : false;
+        let inclHighlights = false;
+        if (this.props.highlightTracker[this.props.title] &&
+            this.props.highlights.length > 0){
+
+            inclHighlights = true;
+        }
         
         return(
             <div className="titleRow">
