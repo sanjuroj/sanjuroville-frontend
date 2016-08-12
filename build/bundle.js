@@ -62,7 +62,7 @@
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _resumeContainer = __webpack_require__(199);
+	var _resumeContainer = __webpack_require__(202);
 
 	var _resumeContainer2 = _interopRequireDefault(_resumeContainer);
 
@@ -23044,7 +23044,7 @@
 	});
 	exports.default = getRData;
 
-	var _actions = __webpack_require__(204);
+	var _actions = __webpack_require__(199);
 
 	var defaultStore = {
 	    'resumeData': {
@@ -23112,587 +23112,13 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _CategoryGroup = __webpack_require__(200);
-
-	var _CategoryGroup2 = _interopRequireDefault(_CategoryGroup);
-
-	var _reactRedux = __webpack_require__(175);
-
-	var _actions = __webpack_require__(204);
-
-	var _getResData = __webpack_require__(209);
-
-	var _NameLevelBlurbList = __webpack_require__(210);
-
-	var _NameLevelBlurbList2 = _interopRequireDefault(_NameLevelBlurbList);
-
-	var _ControlBar = __webpack_require__(211);
-
-	var _ControlBar2 = _interopRequireDefault(_ControlBar);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	// TODO: strip extra spaces off text entries
-	// TODO: remove periods from ends of sentances
-	// TODO: sort skills and lang by best-> worst
-	// TODO: accent on resume
-	// TODO: make it impossible to expand items that have no highlights
-	// TDOO: improve the look of hovered menu items
-	// TODO: rotate branding font
-	// TODO: Add expand and compact buttons
-
-	var ResumeContainer = function (_Component) {
-	    _inherits(ResumeContainer, _Component);
-
-	    function ResumeContainer() {
-	        _classCallCheck(this, ResumeContainer);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ResumeContainer).apply(this, arguments));
-	    }
-
-	    _createClass(ResumeContainer, [{
-	        key: 'makeTitle',
-	        value: function makeTitle(title, location) {
-	            var modifier = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
-
-	            if (modifier == null) {
-	                return title + ', ' + location;
-	            } else {
-	                return '(' + title + ' in ' + modifier + ', ' + location;
-	            }
-	        }
-	    }, {
-	        key: 'componentWillMount',
-	        value: function componentWillMount() {
-	            //console.log('didmount',this.props);
-	            var dispatch = this.props.dispatch;
-	            //console.log('isfunc',dispatch);
-
-	            dispatch((0, _actions.fetchData)());
-	        }
-	    }, {
-	        key: 'getSubheading',
-	        value: function getSubheading(type) {
-	            var textObj = {
-	                skills: "Estimated skill level in parenthesis on a scale of 1 to 10"
-	            };
-
-	            return textObj[type];
-	        }
-	    }, {
-	        key: 'buildCategoryList',
-	        value: function buildCategoryList(posData) {
-	            var _this2 = this;
-
-	            //console.log('bpl postdata=',posData);
-	            //console.log('rc props in build', this.props);
-	            var posList = posData.map(function (item, key) {
-	                return _react2.default.createElement(_CategoryGroup2.default, _extends({}, item, {
-	                    dispatch: _this2.props.dispatch,
-	                    highlightTracker: _this2.props.highlightTracker,
-	                    groupFlag: _this2.props.groupFlag,
-	                    key: key }));
-	            }, this);
-	            //console.log('poslist', posList);
-	            return posList;
-	        }
-	    }, {
-	        key: 'getSubTitle',
-	        value: function getSubTitle(section) {
-	            var subTitles = {
-	                skills: "Self-estimated skill levels are shown in parenthesis"
-	            };
-	            return subTitles[section];
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            //console.log('container props', this.props);
-	            //console.log('render props', this.props)
-	            var datedData = (0, _getResData.getDatedData)(this.props.resumeData, this.props.groupFlag);
-	            console.log('datedlist=', datedData);
-	            var categoryList = this.buildCategoryList(datedData);
-	            // console.log('catlist=',categoryList);
-	            //console.log('container props2', this.props);
-
-
-	            if (categoryList !== 'undefined') {
-	                return _react2.default.createElement(
-	                    'div',
-	                    { className: 'resume-body' },
-	                    _react2.default.createElement(_ControlBar2.default, _extends({}, this.props, {
-	                        style: __webpack_require__(213),
-	                        expandable: datedData })),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'resume-heading' },
-	                        'An interactive version of my resume is displayed below.  It loads in a condensed form with expandable items highlighted by a bottom border. The control buttons just above can be used to collapse and expand all items, or change how some of the information is viewed.  For an explanation of how this page was built, please go to the About page.'
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'resume-data' },
-	                        _react2.default.createElement(
-	                            'section',
-	                            { id: 'dated-items' },
-	                            categoryList
-	                        ),
-	                        _react2.default.createElement(
-	                            'section',
-	                            { id: 'skilz', className: 'skilz-card' },
-	                            _react2.default.createElement(_NameLevelBlurbList2.default, {
-	                                data: this.props.resumeData.skill,
-	                                heading: 'SKILLS',
-	                                subtitle: this.getSubTitle('skills') })
-	                        ),
-	                        _react2.default.createElement(
-	                            'section',
-	                            { id: 'languages', className: 'lang-card' },
-	                            _react2.default.createElement(_NameLevelBlurbList2.default, { data: this.props.resumeData.language, heading: 'LANGUAGES' })
-	                        )
-	                    )
-	                );
-	            } else {
-	                return _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    'No Data Found'
-	                );
-	            }
-	        }
-	    }]);
-
-	    return ResumeContainer;
-	}(_react.Component);
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    //console.log('state=',state);
-	    return state;
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ResumeContainer);
-
-/***/ },
-/* 200 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _ResumeItemGroup = __webpack_require__(201);
-
-	var _ResumeItemGroup2 = _interopRequireDefault(_ResumeItemGroup);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var CategoryGroup = function (_Component) {
-	    _inherits(CategoryGroup, _Component);
-
-	    function CategoryGroup() {
-	        _classCallCheck(this, CategoryGroup);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(CategoryGroup).apply(this, arguments));
-	    }
-
-	    _createClass(CategoryGroup, [{
-	        key: 'makeRIGItems',
-	        value: function makeRIGItems() {
-	            console.log('catgroup props', this.props);
-	            return this.props.data.map(function (item, key) {
-
-	                return _react2.default.createElement(_ResumeItemGroup2.default, _extends({
-	                    key: key
-	                }, item, {
-	                    dispatch: this.props.dispatch,
-	                    highlightTracker: this.props.highlightTracker,
-	                    className: 'title-card',
-	                    groupFlag: this.props.groupFlag
-	                }));
-	            }, this);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            //console.log('rig props', this.props);
-	            //console.log('catgroup rigitems', this.makeRIGItems())        
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'category-group' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: 'category-title' },
-	                    _react2.default.createElement(
-	                        'p',
-	                        { className: 'category-title' },
-	                        this.props.category_title.toUpperCase()
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: this.props.groupFlag == false ? "timeline" : null },
-	                    this.makeRIGItems()
-	                )
-	            );
-	        }
-	    }]);
-
-	    return CategoryGroup;
-	}(_react.Component);
-
-	exports.default = CategoryGroup;
-
-/***/ },
-/* 201 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _TitleCard = __webpack_require__(202);
-
-	var _TitleCard2 = _interopRequireDefault(_TitleCard);
-
-	var _HighlightBox = __webpack_require__(207);
-
-	var _HighlightBox2 = _interopRequireDefault(_HighlightBox);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ResumeItemGroup = function (_Component) {
-	    _inherits(ResumeItemGroup, _Component);
-
-	    function ResumeItemGroup() {
-	        _classCallCheck(this, ResumeItemGroup);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ResumeItemGroup).apply(this, arguments));
-	    }
-
-	    _createClass(ResumeItemGroup, [{
-	        key: 'getCircle',
-	        value: function getCircle() {
-	            if (this.props.groupFlag == false) {
-	                return _react2.default.createElement('div', { className: 'timeline-circle ' + this.props.icon });
-	            }
-	        }
-	        //     if(this.props.groupFlag == false) {
-	        //         return(
-	        //             <div key="1" className="position-icon-container">
-	        //                 <img 
-	        //                     className="position-icon"
-	        //                     src={require('../../assets/icons/noun_485413_cc_volunteer.svg')} 
-	        //                 />
-	        //             </div>
-	        //         );
-	        //     }
-	        //     else {
-	        //         return null;
-	        //     }
-
-	        // }
-
-	    }, {
-	        key: 'renderHighlights',
-	        value: function renderHighlights() {
-	            return _react2.default.createElement(_HighlightBox2.default, {
-	                highlights: this.props.highlights,
-	                className: 'highlight-box'
-	            });
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            //console.log('rig props', this.props);
-	            //console.log('prop=', this.props.highlightTracker)
-	            //console.log('title=', this.title)
-	            var inclHighlights = false;
-	            if (this.props.highlightTracker[this.props.title] && this.props.highlights.length > 0) {
-
-	                inclHighlights = true;
-	            }
-
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'titleRow' },
-	                this.getCircle(),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'res-itemgroup' },
-	                    _react2.default.createElement(_TitleCard2.default, this.props),
-	                    inclHighlights ? this.renderHighlights() : null
-	                )
-	            );
-	        }
-
-	        // render() {
-	        //     //console.log('rig props', this.props);
-	        //     //console.log('prop=', this.props.highlightTracker)
-	        //     //console.log('title=', this.title)
-	        //     if (this.props.highlightTracker[this.props.title]){
-	        //         //console.log('here');
-	        //         return(
-	        //             {this.getIcon()}
-	        //             <div className='res-itemgroup'>
-	        //                 <TitleCard {...this.props} />
-	        //                 <HighlightBox highlights={this.props.highlights} className="highlight-box" />
-	        //             </div>
-	        //         );
-	        //     }
-	        //     else{
-	        //         //console.log('there');
-	        //         return(
-	        //             {this.getIcon()}
-	        //             <div className='res-itemgroup'>
-	        //                 <TitleCard {...this.props} />
-	        //             </div>
-	        //         );  
-	        //     }
-
-	        // }
-
-	    }]);
-
-	    return ResumeItemGroup;
-	}(_react.Component);
-
-	exports.default = ResumeItemGroup;
-
-/***/ },
-/* 202 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _SimpleText = __webpack_require__(203);
-
-	var _SimpleText2 = _interopRequireDefault(_SimpleText);
-
-	var _actions = __webpack_require__(204);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var TitleCard = function (_Component) {
-	    _inherits(TitleCard, _Component);
-
-	    function TitleCard() {
-	        _classCallCheck(this, TitleCard);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(TitleCard).apply(this, arguments));
-	    }
-
-	    _createClass(TitleCard, [{
-	        key: 'clickAction',
-	        value: function clickAction() {
-	            //console.log('clicked highlights')
-	            this.props.dispatch({
-	                type: _actions.HIGHLIGHTS,
-	                title: this.props.title
-	            });
-	        }
-	    }, {
-	        key: 'buildElements',
-	        value: function buildElements() {
-	            var hasHighlights = this.props.highlights.length > 0 ? true : false;
-	            var titleSpanClasses = '';
-	            var summarySpanClasses = '';
-	            var titleText = this.props.title;
-	            titleText = _react2.default.createElement(
-	                'span',
-	                null,
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'title-date' },
-	                    this.props.startDate.getUTCFullYear(),
-	                    ' -',
-	                    this.props.endDate.getUTCFullYear()
-	                ),
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'title-text' },
-	                    titleText
-	                )
-	            );
-
-	            if (this.props.groupFlag == false && hasHighlights) {
-	                titleSpanClasses += "has-highlights";
-	            } else if (this.props.summary && hasHighlights) {
-	                summarySpanClasses = "has-highlights";
-	            }
-
-	            var titleComponent = _react2.default.createElement(_SimpleText2.default, {
-	                key: '1', text: titleText,
-	                spanClasses: titleSpanClasses,
-	                divClasses: 'title'
-	            });
-	            var summaryComponent = _react2.default.createElement(_SimpleText2.default, {
-	                key: '2',
-	                text: this.props.summary,
-	                spanClasses: summarySpanClasses,
-	                divClasses: 'summary'
-	            });
-
-	            var returnArray = [];
-	            if (this.props.summary && this.props.groupFlag || this.props.summary && this.props.groupFlag == false && this.props.highlightTracker[this.props.title]) {
-	                returnArray = [titleComponent, summaryComponent];
-	            } else {
-	                returnArray = [titleComponent];
-	            }
-
-	            return returnArray;
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            //console.log('tc props', this.props)
-	            var hasHighlights = this.props.highlights.length > 0;
-	            var className = 'title-card';
-	            hasHighlights ? className += ' titlecard-has-highlights' : '';
-	            return _react2.default.createElement(
-	                'div',
-	                {
-	                    className: className,
-	                    onClick: hasHighlights ? this.clickAction.bind(this) : null
-	                },
-	                this.buildElements()
-	            );
-	        }
-	    }]);
-
-	    return TitleCard;
-	}(_react.Component);
-
-	exports.default = TitleCard;
-
-/***/ },
-/* 203 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Summary = function (_Component) {
-	    _inherits(Summary, _Component);
-
-	    function Summary() {
-	        _classCallCheck(this, Summary);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Summary).apply(this, arguments));
-	    }
-
-	    _createClass(Summary, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: this.props.divClasses },
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: this.props.spanClasses },
-	                    this.props.text
-	                )
-	            );
-	        }
-	    }]);
-
-	    return Summary;
-	}(_react.Component);
-
-	exports.default = Summary;
-
-/***/ },
-/* 204 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
 	exports.COMPRESS_ALL = exports.EXPAND_ALL = exports.TOGGLE_GROUP = exports.HIGHLIGHTS = exports.DATA_ERROR = exports.RECEIVE_DATA = undefined;
 	exports.expand_all = expand_all;
 	exports.compress_all = compress_all;
 	exports.toggle_grouped = toggle_grouped;
 	exports.fetchData = fetchData;
 
-	var _isomorphicFetch = __webpack_require__(205);
+	var _isomorphicFetch = __webpack_require__(200);
 
 	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
@@ -23803,19 +23229,19 @@
 	}
 
 /***/ },
-/* 205 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// the whatwg-fetch polyfill installs the fetch() function
 	// on the global object (window or self)
 	//
 	// Return that as the export for use in Webpack, Browserify etc.
-	__webpack_require__(206);
+	__webpack_require__(201);
 	module.exports = self.fetch.bind(self);
 
 
 /***/ },
-/* 206 */
+/* 201 */
 /***/ function(module, exports) {
 
 	(function(self) {
@@ -24254,6 +23680,580 @@
 
 
 /***/ },
+/* 202 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _CategoryGroup = __webpack_require__(203);
+
+	var _CategoryGroup2 = _interopRequireDefault(_CategoryGroup);
+
+	var _reactRedux = __webpack_require__(175);
+
+	var _actions = __webpack_require__(199);
+
+	var _getResData = __webpack_require__(209);
+
+	var _NameLevelBlurbList = __webpack_require__(210);
+
+	var _NameLevelBlurbList2 = _interopRequireDefault(_NameLevelBlurbList);
+
+	var _ControlBar = __webpack_require__(211);
+
+	var _ControlBar2 = _interopRequireDefault(_ControlBar);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// TODO: strip extra spaces off text entries
+	// TODO: remove periods from ends of sentances
+	// TODO: sort skills and lang by best-> worst
+	// TODO: accent on resume
+	// TODO: make it impossible to expand items that have no highlights
+	// TDOO: improve the look of hovered menu items
+	// TODO: rotate branding font
+	// TODO: Add expand and compact buttons
+
+	var ResumeContainer = function (_Component) {
+	    _inherits(ResumeContainer, _Component);
+
+	    function ResumeContainer() {
+	        _classCallCheck(this, ResumeContainer);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ResumeContainer).apply(this, arguments));
+	    }
+
+	    _createClass(ResumeContainer, [{
+	        key: 'makeTitle',
+	        value: function makeTitle(title, location) {
+	            var modifier = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+
+	            if (modifier == null) {
+	                return title + ', ' + location;
+	            } else {
+	                return '(' + title + ' in ' + modifier + ', ' + location;
+	            }
+	        }
+	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            //console.log('didmount',this.props);
+	            var dispatch = this.props.dispatch;
+	            //console.log('isfunc',dispatch);
+
+	            dispatch((0, _actions.fetchData)());
+	        }
+	    }, {
+	        key: 'getSubheading',
+	        value: function getSubheading(type) {
+	            var textObj = {
+	                skills: "Estimated skill level in parenthesis on a scale of 1 to 10"
+	            };
+
+	            return textObj[type];
+	        }
+	    }, {
+	        key: 'buildCategoryList',
+	        value: function buildCategoryList(posData) {
+	            var _this2 = this;
+
+	            //console.log('bpl postdata=',posData);
+	            //console.log('rc props in build', this.props);
+	            var posList = posData.map(function (item, key) {
+	                return _react2.default.createElement(_CategoryGroup2.default, _extends({}, item, {
+	                    dispatch: _this2.props.dispatch,
+	                    highlightTracker: _this2.props.highlightTracker,
+	                    groupFlag: _this2.props.groupFlag,
+	                    key: key }));
+	            }, this);
+	            //console.log('poslist', posList);
+	            return posList;
+	        }
+	    }, {
+	        key: 'getSubTitle',
+	        value: function getSubTitle(section) {
+	            var subTitles = {
+	                skills: "Self-estimated skill levels are shown in parenthesis"
+	            };
+	            return subTitles[section];
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            //console.log('container props', this.props);
+	            //console.log('render props', this.props)
+	            var datedData = (0, _getResData.getDatedData)(this.props.resumeData, this.props.groupFlag);
+	            console.log('datedlist=', datedData);
+	            var categoryList = this.buildCategoryList(datedData);
+	            // console.log('catlist=',categoryList);
+	            //console.log('container props2', this.props);
+
+
+	            if (categoryList !== 'undefined') {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'resume-body' },
+	                    _react2.default.createElement(_ControlBar2.default, _extends({}, this.props, {
+	                        style: __webpack_require__(213),
+	                        expandable: datedData })),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'resume-heading' },
+	                        'An interactive version of my resume is displayed below.  It loads in a condensed form with expandable items highlighted by a bottom border. The control buttons just above can be used to collapse and expand all items, or change how some of the information is viewed.  For an explanation of how this page was built, please go to the About page.'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'resume-data' },
+	                        _react2.default.createElement(
+	                            'section',
+	                            { id: 'dated-items' },
+	                            categoryList
+	                        ),
+	                        _react2.default.createElement(
+	                            'section',
+	                            { id: 'skilz', className: 'skilz-card' },
+	                            _react2.default.createElement(_NameLevelBlurbList2.default, {
+	                                data: this.props.resumeData.skill,
+	                                heading: 'SKILLS',
+	                                subtitle: this.getSubTitle('skills') })
+	                        ),
+	                        _react2.default.createElement(
+	                            'section',
+	                            { id: 'languages', className: 'lang-card' },
+	                            _react2.default.createElement(_NameLevelBlurbList2.default, { data: this.props.resumeData.language, heading: 'LANGUAGES' })
+	                        )
+	                    )
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    'No Data Found'
+	                );
+	            }
+	        }
+	    }]);
+
+	    return ResumeContainer;
+	}(_react.Component);
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    //console.log('state=',state);
+	    return state;
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ResumeContainer);
+
+/***/ },
+/* 203 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _ResumeItemGroup = __webpack_require__(204);
+
+	var _ResumeItemGroup2 = _interopRequireDefault(_ResumeItemGroup);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CategoryGroup = function (_Component) {
+	    _inherits(CategoryGroup, _Component);
+
+	    function CategoryGroup() {
+	        _classCallCheck(this, CategoryGroup);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(CategoryGroup).apply(this, arguments));
+	    }
+
+	    _createClass(CategoryGroup, [{
+	        key: 'makeRIGItems',
+	        value: function makeRIGItems() {
+	            console.log('catgroup props', this.props);
+	            return this.props.data.map(function (item, key) {
+
+	                return _react2.default.createElement(_ResumeItemGroup2.default, _extends({
+	                    key: key
+	                }, item, {
+	                    dispatch: this.props.dispatch,
+	                    highlightTracker: this.props.highlightTracker,
+	                    className: 'title-card',
+	                    groupFlag: this.props.groupFlag
+	                }));
+	            }, this);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            //console.log('rig props', this.props);
+	            //console.log('catgroup rigitems', this.makeRIGItems())        
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'category-group' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'category-title' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        { className: 'category-title' },
+	                        this.props.category_title.toUpperCase()
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: this.props.groupFlag == false ? "timeline" : null },
+	                    this.makeRIGItems()
+	                )
+	            );
+	        }
+	    }]);
+
+	    return CategoryGroup;
+	}(_react.Component);
+
+	exports.default = CategoryGroup;
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _TitleCard = __webpack_require__(205);
+
+	var _TitleCard2 = _interopRequireDefault(_TitleCard);
+
+	var _HighlightBox = __webpack_require__(207);
+
+	var _HighlightBox2 = _interopRequireDefault(_HighlightBox);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ResumeItemGroup = function (_Component) {
+	    _inherits(ResumeItemGroup, _Component);
+
+	    function ResumeItemGroup() {
+	        _classCallCheck(this, ResumeItemGroup);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ResumeItemGroup).apply(this, arguments));
+	    }
+
+	    _createClass(ResumeItemGroup, [{
+	        key: 'getCircle',
+	        value: function getCircle() {
+	            if (this.props.groupFlag == false) {
+	                return _react2.default.createElement('div', { className: 'timeline-circle ' + this.props.icon });
+	            }
+	        }
+	        //     if(this.props.groupFlag == false) {
+	        //         return(
+	        //             <div key="1" className="position-icon-container">
+	        //                 <img 
+	        //                     className="position-icon"
+	        //                     src={require('../../assets/icons/noun_485413_cc_volunteer.svg')} 
+	        //                 />
+	        //             </div>
+	        //         );
+	        //     }
+	        //     else {
+	        //         return null;
+	        //     }
+
+	        // }
+
+	    }, {
+	        key: 'renderHighlights',
+	        value: function renderHighlights() {
+	            return _react2.default.createElement(_HighlightBox2.default, {
+	                highlights: this.props.highlights,
+	                className: 'highlight-box'
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            //console.log('rig props', this.props);
+	            //console.log('prop=', this.props.highlightTracker)
+	            //console.log('title=', this.title)
+	            var inclHighlights = false;
+	            if (this.props.highlightTracker[this.props.title] && this.props.highlights.length > 0) {
+
+	                inclHighlights = true;
+	            }
+
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'titleRow' },
+	                this.getCircle(),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'res-itemgroup' },
+	                    _react2.default.createElement(_TitleCard2.default, this.props),
+	                    inclHighlights ? this.renderHighlights() : null
+	                )
+	            );
+	        }
+
+	        // render() {
+	        //     //console.log('rig props', this.props);
+	        //     //console.log('prop=', this.props.highlightTracker)
+	        //     //console.log('title=', this.title)
+	        //     if (this.props.highlightTracker[this.props.title]){
+	        //         //console.log('here');
+	        //         return(
+	        //             {this.getIcon()}
+	        //             <div className='res-itemgroup'>
+	        //                 <TitleCard {...this.props} />
+	        //                 <HighlightBox highlights={this.props.highlights} className="highlight-box" />
+	        //             </div>
+	        //         );
+	        //     }
+	        //     else{
+	        //         //console.log('there');
+	        //         return(
+	        //             {this.getIcon()}
+	        //             <div className='res-itemgroup'>
+	        //                 <TitleCard {...this.props} />
+	        //             </div>
+	        //         );  
+	        //     }
+
+	        // }
+
+	    }]);
+
+	    return ResumeItemGroup;
+	}(_react.Component);
+
+	exports.default = ResumeItemGroup;
+
+/***/ },
+/* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _SimpleText = __webpack_require__(206);
+
+	var _SimpleText2 = _interopRequireDefault(_SimpleText);
+
+	var _actions = __webpack_require__(199);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TitleCard = function (_Component) {
+	    _inherits(TitleCard, _Component);
+
+	    function TitleCard() {
+	        _classCallCheck(this, TitleCard);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(TitleCard).apply(this, arguments));
+	    }
+
+	    _createClass(TitleCard, [{
+	        key: 'clickAction',
+	        value: function clickAction() {
+	            //console.log('clicked highlights')
+	            this.props.dispatch({
+	                type: _actions.HIGHLIGHTS,
+	                title: this.props.title
+	            });
+	        }
+	    }, {
+	        key: 'buildElements',
+	        value: function buildElements() {
+	            var hasHighlights = this.props.highlights.length > 0 ? true : false;
+	            var titleSpanClasses = '';
+	            var summarySpanClasses = '';
+	            var titleText = this.props.title;
+	            titleText = _react2.default.createElement(
+	                'span',
+	                null,
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'title-date' },
+	                    this.props.startDate.getUTCFullYear(),
+	                    ' -',
+	                    this.props.endDate.getUTCFullYear()
+	                ),
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'title-text' },
+	                    titleText
+	                )
+	            );
+
+	            if (this.props.groupFlag == false && hasHighlights) {
+	                titleSpanClasses += "has-highlights";
+	            } else if (this.props.summary && hasHighlights) {
+	                summarySpanClasses = "has-highlights";
+	            }
+
+	            var titleComponent = _react2.default.createElement(_SimpleText2.default, {
+	                key: '1', text: titleText,
+	                spanClasses: titleSpanClasses,
+	                divClasses: 'title'
+	            });
+	            var summaryComponent = _react2.default.createElement(_SimpleText2.default, {
+	                key: '2',
+	                text: this.props.summary,
+	                spanClasses: summarySpanClasses,
+	                divClasses: 'summary'
+	            });
+
+	            var returnArray = [];
+	            if (this.props.summary && this.props.groupFlag || this.props.summary && this.props.groupFlag == false && this.props.highlightTracker[this.props.title]) {
+	                returnArray = [titleComponent, summaryComponent];
+	            } else {
+	                returnArray = [titleComponent];
+	            }
+
+	            return returnArray;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            //console.log('tc props', this.props)
+	            var hasHighlights = this.props.highlights.length > 0;
+	            var className = 'title-card';
+	            hasHighlights ? className += ' titlecard-has-highlights' : '';
+	            return _react2.default.createElement(
+	                'div',
+	                {
+	                    className: className,
+	                    onClick: hasHighlights ? this.clickAction.bind(this) : null
+	                },
+	                this.buildElements()
+	            );
+	        }
+	    }]);
+
+	    return TitleCard;
+	}(_react.Component);
+
+	exports.default = TitleCard;
+
+/***/ },
+/* 206 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Summary = function (_Component) {
+	    _inherits(Summary, _Component);
+
+	    function Summary() {
+	        _classCallCheck(this, Summary);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Summary).apply(this, arguments));
+	    }
+
+	    _createClass(Summary, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: this.props.divClasses },
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: this.props.spanClasses },
+	                    this.props.text
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Summary;
+	}(_react.Component);
+
+	exports.default = Summary;
+
+/***/ },
 /* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -24617,7 +24617,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _actions = __webpack_require__(204);
+	var _actions = __webpack_require__(199);
 
 	var _Button = __webpack_require__(212);
 
@@ -24729,7 +24729,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _actions = __webpack_require__(204);
+	var _actions = __webpack_require__(199);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
