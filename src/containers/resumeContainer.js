@@ -7,14 +7,20 @@ import NameLevelBlurbList from '../components/NameLevelBlurbList';
 import ControlBar from '../components/ControlBar';
 
 
-// TODO: strip extra spaces off text entries
-// TODO: remove periods from ends of sentances
-// TODO: sort skills and lang by best-> worst
-// TODO: accent on resume
-// TODO: make it impossible to expand items that have no highlights
-// TDOO: improve the look of hovered menu items
-// TODO: rotate branding font
-// TODO: Add expand and compact buttons
+// TODO: strip extra spaces off text entries (5)
+// TODO: remove periods from ends of sentances (5)
+// TODO: sort skills and lang by best -> worst (3)
+// TODO: accent on resume (3)
+// TODO: rotate branding font (5)
+// TODO: allow user to specify which Linkedin files to import (5)
+// TODO: fix underline hlighting so it only highlights the bottom of the box (6)
+// TODO: make a better readme file for the repositories (3)
+// TODO: need to run is_valid on form submissions (5)
+// TODO: on timeline, when start and end year same, don't print both (2)
+// TODO: make labels on grouping slider clickable
+// TODO: make titles with summaries in timeline clickable (1)
+// TODO: deemphasize location of volunteering (5)
+// TODO: come up with better timeline icons.  Maybe just single letters in the circle? (5)
 
 class ResumeContainer extends Component {
     
@@ -70,14 +76,14 @@ class ResumeContainer extends Component {
 
     render(){
         //console.log('container props', this.props);
-        //console.log('render props', this.props)
+        console.log('rc render props', this.props)
         const datedData = getDatedData(this.props.resumeData, this.props.groupFlag);
         console.log('datedlist=',datedData);
         const categoryList = this.buildCategoryList(datedData);
         // console.log('catlist=',categoryList);
         //console.log('container props2', this.props);
 
-
+        console.log('rc about', window.location)
         if (categoryList !== 'undefined') {
             return(
                 <div className="resume-body">
@@ -87,10 +93,21 @@ class ResumeContainer extends Component {
                         expandable={datedData}/>
                     <div className="resume-heading">
                         An interactive version of my resume is displayed below.  It loads in a 
-                        condensed form with expandable items highlighted by a bottom border. 
-                        The control buttons just above can be used to collapse and expand all items,
-                        or change how some of the information is viewed.  For an explanation of
-                        how this page was built, please go to the About page.
+                        compressed form with expandable items highlighted by a bottom border. 
+                        The control buttons just above can be used to change the layout or
+                        to collapse and expand all items.
+                        My <a href="https://www.linkedin.com/in/sanjurojogdeo" target="_blank">
+                        LinkedIn</a> page provides similar resume info as what is found here.  
+                        I also have a <a href="https://github.com/sanjuroj" target="_blank">
+                        GitHub</a> repository that can be perused.
+                        The <a href={ window.location.origin + "/about"}>About</a> page 
+                        has infomration on how this interactive resume was built.
+                        <br/><br/>
+                        I am currently looking for a software development job in Portland, Oregon.
+                        I enjoy telling stories with data, which has been the consistent thread through 
+                        most of my working and volunteer life.  I would like to be in an environment where 
+                        I can learn from more experienced developers and where my diversity of experience 
+                        will be useful.  
                     </div>
                     <div className="resume-data">
                         <section id="dated-items" >

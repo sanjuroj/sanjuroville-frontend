@@ -1,7 +1,9 @@
 
 /****** Resume Items Styling **********/
 
-
+.resume-heading {
+  padding-top: 30px;
+}
 .category-title {
   margin-left: .5em;
   margin-bottom: 1.5em;
@@ -21,15 +23,16 @@
 }
 
 .job {
-  background-color: red;
+  background-color: #5B903E
+;
 }
 
 .volunteer {
-  background-color: blue;
+  background-color: #C67070;
 }
 
 .education {
-  background-color: green;
+  background-color: #784C83;
 }
 
 .timeline-circle {

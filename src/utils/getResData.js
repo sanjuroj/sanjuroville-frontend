@@ -1,7 +1,7 @@
 export function getDatedData(resumeData, groupFlag){
     
-    //console.log('rc rdata=',this.props);
-    let datedCategories = ['job', 'education'];
+    console.log('getresdata rdata=', resumeData);
+    let datedCategories = ['job', 'education', 'volunteer'];
     
     let returnData = [];
     //groupFlag = false;
@@ -23,6 +23,14 @@ export function getDatedData(resumeData, groupFlag){
                 return (item);
             });
             catObj.category_title = "Education";
+        }
+        if (cat == 'volunteer'){
+            catObj.data = catData.map(function(item){
+                //item.title = this.makeTitle(item.degreeType, item.major, item.institution);
+                item.title = `${item.position}, ${item.organization}`;
+                return (item);
+            });
+            catObj.category_title = "Volunteering";
         }
         catObj.data = catObj.data.map(function(item){
             item.icon = cat;
@@ -49,7 +57,7 @@ export function getDatedData(resumeData, groupFlag){
     }
 
     const sortedData = sortCategoryData(returnData);
-    // console.log('grd sorted', sortedData);
+    console.log('grd sorted', sortedData);
     return sortedData;
 }
 

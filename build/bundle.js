@@ -23723,14 +23723,20 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	// TODO: strip extra spaces off text entries
-	// TODO: remove periods from ends of sentances
-	// TODO: sort skills and lang by best-> worst
-	// TODO: accent on resume
-	// TODO: make it impossible to expand items that have no highlights
-	// TDOO: improve the look of hovered menu items
-	// TODO: rotate branding font
-	// TODO: Add expand and compact buttons
+	// TODO: strip extra spaces off text entries (5)
+	// TODO: remove periods from ends of sentances (5)
+	// TODO: sort skills and lang by best -> worst (3)
+	// TODO: accent on resume (3)
+	// TODO: rotate branding font (5)
+	// TODO: allow user to specify which Linkedin files to import (5)
+	// TODO: fix underline hlighting so it only highlights the bottom of the box (6)
+	// TODO: make a better readme file for the repositories (3)
+	// TODO: need to run is_valid on form submissions (5)
+	// TODO: on timeline, when start and end year same, don't print both (2)
+	// TODO: make labels on grouping slider clickable
+	// TODO: make titles with summaries in timeline clickable (1)
+	// TODO: deemphasize location of volunteering (5)
+	// TODO: come up with better timeline icons.  Maybe just single letters in the circle? (5)
 
 	var ResumeContainer = function (_Component) {
 	    _inherits(ResumeContainer, _Component);
@@ -23799,14 +23805,14 @@
 	        key: 'render',
 	        value: function render() {
 	            //console.log('container props', this.props);
-	            //console.log('render props', this.props)
+	            console.log('rc render props', this.props);
 	            var datedData = (0, _getResData.getDatedData)(this.props.resumeData, this.props.groupFlag);
 	            console.log('datedlist=', datedData);
 	            var categoryList = this.buildCategoryList(datedData);
 	            // console.log('catlist=',categoryList);
 	            //console.log('container props2', this.props);
 
-
+	            console.log('rc about', window.location);
 	            if (categoryList !== 'undefined') {
 	                return _react2.default.createElement(
 	                    'div',
@@ -23817,7 +23823,28 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'resume-heading' },
-	                        'An interactive version of my resume is displayed below.  It loads in a condensed form with expandable items highlighted by a bottom border. The control buttons just above can be used to collapse and expand all items, or change how some of the information is viewed.  For an explanation of how this page was built, please go to the About page.'
+	                        'An interactive version of my resume is displayed below.  It loads in a compressed form with expandable items highlighted by a bottom border. The control buttons just above can be used to change the layout or to collapse and expand all items. My ',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: 'https://www.linkedin.com/in/sanjurojogdeo', target: '_blank' },
+	                            'LinkedIn'
+	                        ),
+	                        ' page provides similar resume info as what is found here. I also have a ',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: 'https://github.com/sanjuroj', target: '_blank' },
+	                            'GitHub'
+	                        ),
+	                        ' repository that can be perused. The ',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: window.location.origin + "/about" },
+	                            'About'
+	                        ),
+	                        ' page has infomration on how this interactive resume was built.',
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement('br', null),
+	                        'I am currently looking for a software development job in Portland, Oregon. I enjoy telling stories with data, which has been the consistent thread through most of my working and volunteer life.  I would like to be in an environment where I can learn from more experienced developers and where my diversity of experience will be useful.'
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
@@ -24132,8 +24159,8 @@
 	            var hasHighlights = this.props.highlights.length > 0 ? true : false;
 	            var titleSpanClasses = '';
 	            var summarySpanClasses = '';
-	            var titleText = this.props.title;
-	            titleText = _react2.default.createElement(
+	            var title = this.props.title;
+	            var titleText = _react2.default.createElement(
 	                'span',
 	                null,
 	                _react2.default.createElement(
@@ -24146,7 +24173,7 @@
 	                _react2.default.createElement(
 	                    'span',
 	                    { className: 'title-text' },
-	                    titleText
+	                    title
 	                )
 	            );
 
@@ -24154,6 +24181,8 @@
 	                titleSpanClasses += "has-highlights";
 	            } else if (this.props.summary && hasHighlights) {
 	                summarySpanClasses = "has-highlights";
+	            } else if (!this.props.summary && hasHighlights) {
+	                titleSpanClasses = "has-highlights";
 	            }
 
 	            var titleComponent = _react2.default.createElement(_SimpleText2.default, {
@@ -24392,8 +24421,8 @@
 	exports.sortCategoryData = sortCategoryData;
 	function getDatedData(resumeData, groupFlag) {
 
-	    //console.log('rc rdata=',this.props);
-	    var datedCategories = ['job', 'education'];
+	    console.log('getresdata rdata=', resumeData);
+	    var datedCategories = ['job', 'education', 'volunteer'];
 
 	    var returnData = [];
 	    //groupFlag = false;
@@ -24423,6 +24452,14 @@
 	                    return item;
 	                });
 	                catObj.category_title = "Education";
+	            }
+	            if (cat == 'volunteer') {
+	                catObj.data = catData.map(function (item) {
+	                    //item.title = this.makeTitle(item.degreeType, item.major, item.institution);
+	                    item.title = item.position + ', ' + item.organization;
+	                    return item;
+	                });
+	                catObj.category_title = "Volunteering";
 	            }
 	            catObj.data = catObj.data.map(function (item) {
 	                item.icon = cat;
@@ -24466,7 +24503,7 @@
 	    }
 
 	    var sortedData = sortCategoryData(returnData);
-	    // console.log('grd sorted', sortedData);
+	    console.log('grd sorted', sortedData);
 	    return sortedData;
 	}
 
@@ -24809,7 +24846,7 @@
 
 
 	// module
-	exports.push([module.id, "\n/****** Resume Items Styling **********/\n\n\n.category-title {\n  margin-left: .5em;\n  margin-bottom: 1.5em;\n  margin-top: 3em;\n  font-weight: bold;\n\n}\n\n.title-card {\n  margin-bottom: 1em;\n  cursor: default;\n  position: relative;\n}\n\n.title-card.titlecard-has-highlights {\n  cursor: pointer;\n}\n\n.job {\n  background-color: red;\n}\n\n.volunteer {\n  background-color: blue;\n}\n\n.education {\n  background-color: green;\n}\n\n.timeline-circle {\n  position: absolute;\n  width: 15px;\n  height: 15px;\n  margin-left: -5px;\n  margin-top: 5px;\n  border-radius: 50%;\n}\n\n\n.title {\n  font-weight: bold;\n}\n\n.title-date {\n  padding-right: .35em;\n}\n.summary {\n  margin-left: .5em;\n}\n\n.highlight-box {\n  background-color: #498292;\n  padding: 10px 10px 10px 0px ;\n}\n\n.highlight-box ul {\n    color: #EDE1DB;\n    font-weight: 300;\n    font-size: .90em;\n}\n\n.highlight {\n  margin-bottom: .5em;\n}\n\n.has-highlights {\n  border-bottom-style: solid;\n  border-bottom-width: 4px;\n  border-bottom-color: #498292;\n}\n.res-itemgroup {\n    margin-left: 2em;\n}\n\n\n/* ============================================================\n  COMMON\n============================================================ */\n#wrapper {\n  min-width: 600px;\n}\n\n.control-bar {\n  display: table;\n  width: 100%;\n}\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n/* ============================================================\n  COMMON\n============================================================ */\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n/* ============================================================\n  Control Bar - Buttons\n============================================================ */\n\n.control-button-group {\n  display: inline-block;\n  margin-left: 20px;\n}\n\n.control-button {\n  margin-left: 10px;\n  display: inline-block;\n}\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n#timeline {\n  position: relative;\n  padding-bottom: 1em;\n  /*margin-top: 2em;*/\n  margin-bottom: 2em;\n}\n\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n", ""]);
+	exports.push([module.id, "\n/****** Resume Items Styling **********/\n\n.resume-heading {\n  padding-top: 30px;\n}\n.category-title {\n  margin-left: .5em;\n  margin-bottom: 1.5em;\n  margin-top: 3em;\n  font-weight: bold;\n\n}\n\n.title-card {\n  margin-bottom: 1em;\n  cursor: default;\n  position: relative;\n}\n\n.title-card.titlecard-has-highlights {\n  cursor: pointer;\n}\n\n.job {\n  background-color: #5B903E\n;\n}\n\n.volunteer {\n  background-color: #C67070;\n}\n\n.education {\n  background-color: #784C83;\n}\n\n.timeline-circle {\n  position: absolute;\n  width: 15px;\n  height: 15px;\n  margin-left: -5px;\n  margin-top: 5px;\n  border-radius: 50%;\n}\n\n\n.title {\n  font-weight: bold;\n}\n\n.title-date {\n  padding-right: .35em;\n}\n.summary {\n  margin-left: .5em;\n}\n\n.highlight-box {\n  background-color: #498292;\n  padding: 10px 10px 10px 0px ;\n}\n\n.highlight-box ul {\n    color: #EDE1DB;\n    font-weight: 300;\n    font-size: .90em;\n}\n\n.highlight {\n  margin-bottom: .5em;\n}\n\n.has-highlights {\n  border-bottom-style: solid;\n  border-bottom-width: 4px;\n  border-bottom-color: #498292;\n}\n.res-itemgroup {\n    margin-left: 2em;\n}\n\n\n/* ============================================================\n  COMMON\n============================================================ */\n#wrapper {\n  min-width: 600px;\n}\n\n.control-bar {\n  display: table;\n  width: 100%;\n}\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n/* ============================================================\n  COMMON\n============================================================ */\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n/* ============================================================\n  Control Bar - Buttons\n============================================================ */\n\n.control-button-group {\n  display: inline-block;\n  margin-left: 20px;\n}\n\n.control-button {\n  margin-left: 10px;\n  display: inline-block;\n}\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n#timeline {\n  position: relative;\n  padding-bottom: 1em;\n  /*margin-top: 2em;*/\n  margin-bottom: 2em;\n}\n\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n", ""]);
 
 	// exports
 

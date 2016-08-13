@@ -17,14 +17,14 @@ export default class TitleCard extends Component {
         const hasHighlights = this.props.highlights.length > 0 ? true : false;
         let titleSpanClasses = '';
         let summarySpanClasses = '';
-        let titleText = this.props.title;
-        titleText = 
+        let title = this.props.title;
+        let titleText = 
             <span>
                 <span className='title-date'>
                     {this.props.startDate.getUTCFullYear()} - 
                     {this.props.endDate.getUTCFullYear()}
                 </span>
-                <span className='title-text'>{titleText}</span>    
+                <span className='title-text'>{title}</span>    
             </span>;
 
         if (this.props.groupFlag == false && hasHighlights) {
@@ -32,6 +32,9 @@ export default class TitleCard extends Component {
         }
         else if (this.props.summary && hasHighlights) {
             summarySpanClasses = "has-highlights";
+        }
+        else if (!this.props.summary && hasHighlights) {
+            titleSpanClasses = "has-highlights";
         }
         
         const titleComponent =  
