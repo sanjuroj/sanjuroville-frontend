@@ -1,5 +1,6 @@
-
-/****** Resume Items Styling **********/
+/* ============================================================
+  Timeline
+============================================================ */
 
 .resume-heading {
   padding-top: 30px;
@@ -12,7 +13,7 @@
 }
 
 .title-card {
-  margin-bottom: 1em;
+  margin-bottom: .5em;
   cursor: default;
   position: relative;
 }
@@ -20,17 +21,6 @@
 .title-card.titlecard-has-highlights {
   cursor: pointer;
 }
-
-
-.timeline-circle {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  margin-left: -5px;
-  margin-top: 5px;
-  border-radius: 50%;
-}
-
 
 .title {
   font-weight: bold;
@@ -45,7 +35,8 @@
 
 .highlight-box {
   background-color: #498292;
-  padding: 10px 10px 10px 0px ;
+  padding: 10px 0px;
+  margin-bottom: 20px;
 }
 
 .highlight-box ul {
@@ -85,6 +76,14 @@
   Timeline
 ============================================================ */
 
+.timeline-circle {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  margin-left: -5px;
+  margin-top: 5px;
+  border-radius: 50%;
+}
 
 .job {
   background-color: #5B903E;
