@@ -5,7 +5,6 @@
   padding-top: 30px;
 }
 .category-title {
-  margin-left: .5em;
   margin-bottom: 1.5em;
   margin-top: 3em;
   font-weight: bold;
@@ -22,18 +21,6 @@
   cursor: pointer;
 }
 
-.job {
-  background-color: #5B903E
-;
-}
-
-.volunteer {
-  background-color: #C67070;
-}
-
-.education {
-  background-color: #784C83;
-}
 
 .timeline-circle {
   position: absolute;
@@ -81,17 +68,10 @@
 }
 
 
-/* ============================================================
-  COMMON
-============================================================ */
 #wrapper {
   min-width: 600px;
 }
 
-.control-bar {
-  display: table;
-  width: 100%;
-}
 
 .grouped-switch,
 .grouped-label {
@@ -99,15 +79,25 @@
 }
 
 
-.switch {
-  display: inline-block;
-  vertical-align: middle;
-  padding: 3px 10px 0px 10px;
-}
+
 
 /* ============================================================
-  COMMON
+  Timeline
 ============================================================ */
+
+
+.job {
+  background-color: #5B903E;
+}
+
+.volunteer {
+  background-color: #C67070;
+}
+
+.education {
+  background-color: #784C83;
+}
+
 .cmn-toggle {
   position: absolute;
   margin-left: -9999px;
@@ -122,6 +112,24 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+
+
+/* ============================================================
+  Control Bar
+============================================================ */
+
+
+.control-bar {
+  display: table;
+  background-color: #033644;
+  padding: 10px;
+  color: white;
+  border-width: 2px;
+  border-color: black;
+  box-shadow: 1px 1px 5px #2D3132;
+  /*#414C4F*/
 }
 
 
@@ -188,18 +196,46 @@ input.cmn-toggle-round:checked + label:after {
   margin-left: 20px;
 }
 
+.switch {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 3px 10px 0px 10px;
+}
+
+
 /* ============================================================
   Control Bar - Buttons
 ============================================================ */
 
-.control-button-group {
+#control-button-group {
   display: inline-block;
-  margin-left: 20px;
+  margin-left: 40px;
 }
 
 .control-button {
   margin-left: 10px;
   display: inline-block;
+}
+
+#control-button-group button{
+  font-weight: 500;
+  font-size: 1em;
+  background-color: #414C4F;
+}
+
+#control-button-group button:active,
+#control-button-group button.active,
+#control-button-group button:focus,
+#control-button-group .btn-primary:active,
+#control-button-group .btn-primary.active,
+#control-button-group .btn:active,
+#control-button-group .btn.active,
+#control-button-group .btn:focus,
+
+{
+  font-weight: 500;
+  font-size: 1em;
+  background-color: #c85e17;
 }
 
 

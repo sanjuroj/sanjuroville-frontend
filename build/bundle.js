@@ -23725,18 +23725,17 @@
 
 	// TODO: strip extra spaces off text entries (5)
 	// TODO: remove periods from ends of sentances (5)
-	// TODO: sort skills and lang by best -> worst (3)
-	// TODO: accent on resume (3)
 	// TODO: rotate branding font (5)
 	// TODO: allow user to specify which Linkedin files to import (5)
 	// TODO: fix underline hlighting so it only highlights the bottom of the box (6)
 	// TODO: make a better readme file for the repositories (3)
 	// TODO: need to run is_valid on form submissions (5)
-	// TODO: on timeline, when start and end year same, don't print both (2)
 	// TODO: make labels on grouping slider clickable
-	// TODO: make titles with summaries in timeline clickable (1)
 	// TODO: deemphasize location of volunteering (5)
 	// TODO: come up with better timeline icons.  Maybe just single letters in the circle? (5)
+	// TODO: add padding at bottom of highlights and reduce at top
+	// TODO: formalize how language skills are sorted (8)
+
 
 	var ResumeContainer = function (_Component) {
 	    _inherits(ResumeContainer, _Component);
@@ -23757,6 +23756,31 @@
 	            } else {
 	                return '(' + title + ' in ' + modifier + ', ' + location;
 	            }
+	        }
+	    }, {
+	        key: 'sortResDataByLevel',
+	        value: function sortResDataByLevel(data) {
+	            var type = arguments.length <= 1 || arguments[1] === undefined ? 'fwd' : arguments[1];
+
+	            var sortedData = data;
+	            if (type == 'fwd') {
+	                sortedData = data.sort(function (a, b) {
+	                    return a.level > b.level;
+	                });
+	            } else if (type == 'rev') {
+	                sortedData = data.sort(function (a, b) {
+	                    return a.level < b.level;
+	                });
+	            } else if (type.constructor === Array) {
+	                sortedData = data.sort(function (a, b) {
+	                    var aIndex = type.indexOf(a.level);
+	                    var bIndex = type.indexOf(b.level);
+	                    return aIndex > bIndex;
+	                });
+	            }
+
+	            console.log('rc sorted', sortedData);
+	            return sortedData;
 	        }
 	    }, {
 	        key: 'componentWillMount',
@@ -23805,14 +23829,11 @@
 	        key: 'render',
 	        value: function render() {
 	            //console.log('container props', this.props);
-	            console.log('rc render props', this.props);
+	            //console.log('rc render props', this.props)
 	            var datedData = (0, _getResData.getDatedData)(this.props.resumeData, this.props.groupFlag);
-	            console.log('datedlist=', datedData);
+	            // console.log('datedlist=',datedData);
 	            var categoryList = this.buildCategoryList(datedData);
-	            // console.log('catlist=',categoryList);
-	            //console.log('container props2', this.props);
-
-	            console.log('rc about', window.location);
+	            var langSort = ['Native', 'Elementary'];
 	            if (categoryList !== 'undefined') {
 	                return _react2.default.createElement(
 	                    'div',
@@ -23823,13 +23844,13 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'resume-heading' },
-	                        'An interactive version of my resume is displayed below.  It loads in a compressed form with expandable items highlighted by a bottom border. The control buttons just above can be used to change the layout or to collapse and expand all items. My ',
+	                        'An interactive version of my resumé is displayed below.  It loads in a compressed form with expandable items highlighted by a bottom border. The control buttons just above can be used to change the layout or to collapse and expand all items. My ',
 	                        _react2.default.createElement(
 	                            'a',
 	                            { href: 'https://www.linkedin.com/in/sanjurojogdeo', target: '_blank' },
 	                            'LinkedIn'
 	                        ),
-	                        ' page provides similar resume info as what is found here. I also have a ',
+	                        ' page provides similar resumé info as what is found here. I also have a ',
 	                        _react2.default.createElement(
 	                            'a',
 	                            { href: 'https://github.com/sanjuroj', target: '_blank' },
@@ -23841,10 +23862,10 @@
 	                            { href: window.location.origin + "/about" },
 	                            'About'
 	                        ),
-	                        ' page has infomration on how this interactive resume was built.',
+	                        ' page has infomration on how this interactive resumé was built.',
 	                        _react2.default.createElement('br', null),
 	                        _react2.default.createElement('br', null),
-	                        'I am currently looking for a software development job in Portland, Oregon. I enjoy telling stories with data, which has been the consistent thread through most of my working and volunteer life.  I would like to be in an environment where I can learn from more experienced developers and where my diversity of experience will be useful.'
+	                        'I am currently looking for a software development job in Portland, Oregon. I enjoy making data useful and digestable, which has been the consistent thread through most of my working and volunteer life.  I would like to be in an environment where I can learn from more experienced developers and where my diversity of experience will be useful.'
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
@@ -23858,14 +23879,16 @@
 	                            'section',
 	                            { id: 'skilz', className: 'skilz-card' },
 	                            _react2.default.createElement(_NameLevelBlurbList2.default, {
-	                                data: this.props.resumeData.skill,
+	                                data: this.sortResDataByLevel(this.props.resumeData.skill, 'rev'),
 	                                heading: 'SKILLS',
 	                                subtitle: this.getSubTitle('skills') })
 	                        ),
 	                        _react2.default.createElement(
 	                            'section',
 	                            { id: 'languages', className: 'lang-card' },
-	                            _react2.default.createElement(_NameLevelBlurbList2.default, { data: this.props.resumeData.language, heading: 'LANGUAGES' })
+	                            _react2.default.createElement(_NameLevelBlurbList2.default, {
+	                                data: this.sortResDataByLevel(this.props.resumeData.language, langSort),
+	                                heading: 'LANGUAGES' })
 	                        )
 	                    )
 	                );
@@ -24023,22 +24046,6 @@
 	                return _react2.default.createElement('div', { className: 'timeline-circle ' + this.props.icon });
 	            }
 	        }
-	        //     if(this.props.groupFlag == false) {
-	        //         return(
-	        //             <div key="1" className="position-icon-container">
-	        //                 <img 
-	        //                     className="position-icon"
-	        //                     src={require('../../assets/icons/noun_485413_cc_volunteer.svg')} 
-	        //                 />
-	        //             </div>
-	        //         );
-	        //     }
-	        //     else {
-	        //         return null;
-	        //     }
-
-	        // }
-
 	    }, {
 	        key: 'renderHighlights',
 	        value: function renderHighlights() {
@@ -24157,6 +24164,8 @@
 	        key: 'buildElements',
 	        value: function buildElements() {
 	            var hasHighlights = this.props.highlights.length > 0 ? true : false;
+	            var start = this.props.startDate.getUTCFullYear();
+	            var end = this.props.endDate.getUTCFullYear();
 	            var titleSpanClasses = '';
 	            var summarySpanClasses = '';
 	            var title = this.props.title;
@@ -24166,9 +24175,7 @@
 	                _react2.default.createElement(
 	                    'span',
 	                    { className: 'title-date' },
-	                    this.props.startDate.getUTCFullYear(),
-	                    ' -',
-	                    this.props.endDate.getUTCFullYear()
+	                    start == end ? start : start + " - " + end
 	                ),
 	                _react2.default.createElement(
 	                    'span',
@@ -24177,7 +24184,7 @@
 	                )
 	            );
 
-	            if (this.props.groupFlag == false && hasHighlights) {
+	            if (this.props.groupFlag == false && (this.props.title || hasHighlights)) {
 	                titleSpanClasses += "has-highlights";
 	            } else if (this.props.summary && hasHighlights) {
 	                summarySpanClasses = "has-highlights";
@@ -24212,12 +24219,17 @@
 	            //console.log('tc props', this.props)
 	            var hasHighlights = this.props.highlights.length > 0;
 	            var className = 'title-card';
-	            hasHighlights ? className += ' titlecard-has-highlights' : '';
+	            var expandable = false;
+	            if (hasHighlights || this.props.groupFlag == false && this.props.title) {
+	                expandable = true;
+	                className += ' titlecard-has-highlights';
+	            }
+
 	            return _react2.default.createElement(
 	                'div',
 	                {
 	                    className: className,
-	                    onClick: hasHighlights ? this.clickAction.bind(this) : null
+	                    onClick: expandable ? this.clickAction.bind(this) : null
 	                },
 	                this.buildElements()
 	            );
@@ -24721,7 +24733,7 @@
 	                ),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'control-button-group' },
+	                    { id: 'control-button-group' },
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'control-button' },
@@ -24846,7 +24858,7 @@
 
 
 	// module
-	exports.push([module.id, "\n/****** Resume Items Styling **********/\n\n.resume-heading {\n  padding-top: 30px;\n}\n.category-title {\n  margin-left: .5em;\n  margin-bottom: 1.5em;\n  margin-top: 3em;\n  font-weight: bold;\n\n}\n\n.title-card {\n  margin-bottom: 1em;\n  cursor: default;\n  position: relative;\n}\n\n.title-card.titlecard-has-highlights {\n  cursor: pointer;\n}\n\n.job {\n  background-color: #5B903E\n;\n}\n\n.volunteer {\n  background-color: #C67070;\n}\n\n.education {\n  background-color: #784C83;\n}\n\n.timeline-circle {\n  position: absolute;\n  width: 15px;\n  height: 15px;\n  margin-left: -5px;\n  margin-top: 5px;\n  border-radius: 50%;\n}\n\n\n.title {\n  font-weight: bold;\n}\n\n.title-date {\n  padding-right: .35em;\n}\n.summary {\n  margin-left: .5em;\n}\n\n.highlight-box {\n  background-color: #498292;\n  padding: 10px 10px 10px 0px ;\n}\n\n.highlight-box ul {\n    color: #EDE1DB;\n    font-weight: 300;\n    font-size: .90em;\n}\n\n.highlight {\n  margin-bottom: .5em;\n}\n\n.has-highlights {\n  border-bottom-style: solid;\n  border-bottom-width: 4px;\n  border-bottom-color: #498292;\n}\n.res-itemgroup {\n    margin-left: 2em;\n}\n\n\n/* ============================================================\n  COMMON\n============================================================ */\n#wrapper {\n  min-width: 600px;\n}\n\n.control-bar {\n  display: table;\n  width: 100%;\n}\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n/* ============================================================\n  COMMON\n============================================================ */\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n/* ============================================================\n  Control Bar - Buttons\n============================================================ */\n\n.control-button-group {\n  display: inline-block;\n  margin-left: 20px;\n}\n\n.control-button {\n  margin-left: 10px;\n  display: inline-block;\n}\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n#timeline {\n  position: relative;\n  padding-bottom: 1em;\n  /*margin-top: 2em;*/\n  margin-bottom: 2em;\n}\n\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n", ""]);
+	exports.push([module.id, "\n/****** Resume Items Styling **********/\n\n.resume-heading {\n  padding-top: 30px;\n}\n.category-title {\n  margin-bottom: 1.5em;\n  margin-top: 3em;\n  font-weight: bold;\n\n}\n\n.title-card {\n  margin-bottom: 1em;\n  cursor: default;\n  position: relative;\n}\n\n.title-card.titlecard-has-highlights {\n  cursor: pointer;\n}\n\n\n.timeline-circle {\n  position: absolute;\n  width: 15px;\n  height: 15px;\n  margin-left: -5px;\n  margin-top: 5px;\n  border-radius: 50%;\n}\n\n\n.title {\n  font-weight: bold;\n}\n\n.title-date {\n  padding-right: .35em;\n}\n.summary {\n  margin-left: .5em;\n}\n\n.highlight-box {\n  background-color: #498292;\n  padding: 10px 10px 10px 0px ;\n}\n\n.highlight-box ul {\n    color: #EDE1DB;\n    font-weight: 300;\n    font-size: .90em;\n}\n\n.highlight {\n  margin-bottom: .5em;\n}\n\n.has-highlights {\n  border-bottom-style: solid;\n  border-bottom-width: 4px;\n  border-bottom-color: #498292;\n}\n.res-itemgroup {\n    margin-left: 2em;\n}\n\n\n#wrapper {\n  min-width: 600px;\n}\n\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n\n.job {\n  background-color: #5B903E;\n}\n\n.volunteer {\n  background-color: #C67070;\n}\n\n.education {\n  background-color: #784C83;\n}\n\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar\n============================================================ */\n\n\n.control-bar {\n  display: table;\n  background-color: #033644;\n  padding: 10px;\n  color: white;\n  border-width: 2px;\n  border-color: black;\n  box-shadow: 1px 1px 5px #2D3132;\n  /*#414C4F*/\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n\n/* ============================================================\n  Control Bar - Buttons\n============================================================ */\n\n#control-button-group {\n  display: inline-block;\n  margin-left: 40px;\n}\n\n.control-button {\n  margin-left: 10px;\n  display: inline-block;\n}\n\n#control-button-group button{\n  font-weight: 500;\n  font-size: 1em;\n  background-color: #414C4F;\n}\n\n#control-button-group button:active,\n#control-button-group button.active,\n#control-button-group button:focus,\n#control-button-group .btn-primary:active,\n#control-button-group .btn-primary.active,\n#control-button-group .btn:active,\n#control-button-group .btn.active,\n#control-button-group .btn:focus,\n\n{\n  font-weight: 500;\n  font-size: 1em;\n  background-color: #c85e17;\n}\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n#timeline {\n  position: relative;\n  padding-bottom: 1em;\n  /*margin-top: 2em;*/\n  margin-bottom: 2em;\n}\n\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n", ""]);
 
 	// exports
 

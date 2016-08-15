@@ -15,19 +15,23 @@ export default class TitleCard extends Component {
 
     buildElements(){
         const hasHighlights = this.props.highlights.length > 0 ? true : false;
+        let start = this.props.startDate.getUTCFullYear();
+        let end = this.props.endDate.getUTCFullYear();
         let titleSpanClasses = '';
         let summarySpanClasses = '';
         let title = this.props.title;
         let titleText = 
             <span>
                 <span className='title-date'>
-                    {this.props.startDate.getUTCFullYear()} - 
-                    {this.props.endDate.getUTCFullYear()}
+                    {start == end ? start : start + " - " + end}
                 </span>
                 <span className='title-text'>{title}</span>    
             </span>;
 
-        if (this.props.groupFlag == false && hasHighlights) {
+        if (
+            this.props.groupFlag == false && 
+            (this.props.title || hasHighlights)
+            ) {
             titleSpanClasses += "has-highlights";
         }
         else if (this.props.summary && hasHighlights) {
@@ -77,11 +81,16 @@ export default class TitleCard extends Component {
         //console.log('tc props', this.props)
         const hasHighlights = this.props.highlights.length > 0;
         let className = 'title-card';
-        hasHighlights ? className+=' titlecard-has-highlights' : '';
+        let expandable = false;
+        if (hasHighlights || (this.props.groupFlag == false && this.props.title)){
+            expandable = true;
+            className += ' titlecard-has-highlights';
+        }
+            
         return (
                 <div 
                     className={className}
-                    onClick={hasHighlights ? this.clickAction.bind(this) : null }
+                    onClick={expandable ? this.clickAction.bind(this) : null }
                 >
                     {this.buildElements()}
                 </div>

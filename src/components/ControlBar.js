@@ -37,7 +37,7 @@ export default class ControlBar extends Component {
                         Grouped
                     </div>
                 </div>
-                <div className="control-button-group">
+                <div id="control-button-group">
                     <div className="control-button">
                         <Button 
                             expandable={this.props.expandable} 

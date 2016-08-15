@@ -12,21 +12,7 @@ export default class ResumeItemGroup extends Component {
             );
         }
     }
-    //     if(this.props.groupFlag == false) {
-    //         return(
-    //             <div key="1" className="position-icon-container">
-    //                 <img 
-    //                     className="position-icon"
-    //                     src={require('../../assets/icons/noun_485413_cc_volunteer.svg')} 
-    //                 />
-    //             </div>
-    //         );
-    //     }
-    //     else {
-    //         return null;
-    //     }
-
-    // }
+    
     
     renderHighlights(){
         return(
