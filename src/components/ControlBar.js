@@ -38,20 +38,16 @@ export default class ControlBar extends Component {
                     </div>
                 </div>
                 <div id="control-button-group">
-                    <div className="control-button">
-                        <Button 
-                            expandable={this.props.expandable} 
-                            action={expand_all} 
-                            text="Expand All" 
-                            dispatch={this.props.dispatch}/>
-                    </div>
-                    <div className="control-button">
-                        <Button 
-                            expandable={this.props.expandable} 
-                            action={compress_all} 
-                            text="Compress All" 
-                            dispatch={this.props.dispatch}/>
-                    </div>
+                    <Button 
+                        expandable={this.props.expandable} 
+                        action={expand_all} 
+                        text="Expand All" 
+                        dispatch={this.props.dispatch}/>
+                    <Button 
+                        expandable={this.props.expandable} 
+                        action={compress_all} 
+                        text="Compress All" 
+                        dispatch={this.props.dispatch}/>
                 </div>
             </div>
           

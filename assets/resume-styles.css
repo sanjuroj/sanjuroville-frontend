@@ -1,5 +1,5 @@
 /* ============================================================
-  Timeline
+  Resume
 ============================================================ */
 
 .resume-heading {
@@ -214,6 +214,20 @@ input.cmn-toggle-round:checked + label:after {
 .control-button {
   margin-left: 10px;
   display: inline-block;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #4e5d6c;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #4e5d6c;
+  transition:background 0s;
+
+}
+
+.control-button:hover {
+  border-color: #c85e17;
+  border-width: 2px;
+  background-color: #4e5d6c;
 }
 
 #control-button-group button{
@@ -222,20 +236,12 @@ input.cmn-toggle-round:checked + label:after {
   background-color: #414C4F;
 }
 
-#control-button-group button:active,
-#control-button-group button.active,
-#control-button-group button:focus,
-#control-button-group .btn-primary:active,
-#control-button-group .btn-primary.active,
-#control-button-group .btn:active,
-#control-button-group .btn.active,
-#control-button-group .btn:focus,
-
-{
-  font-weight: 500;
-  font-size: 1em;
-  background-color: #c85e17;
+.control-button.selected {
+  background-color: #4e5d6c;
+  transition:background 0s;
 }
+
+
 
 
 /* ============================================================
