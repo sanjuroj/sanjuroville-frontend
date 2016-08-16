@@ -24811,9 +24811,9 @@
 	            //let setFunc = this.setButtonState;
 	            this.setButtonState(true);
 	            this.props.dispatch(this.props.action(this.props.expandable));
-	            setTimeout(function () {
-	                this.setButtonState.bind(this)(false);
-	            }, 2000);
+	            // setTimeout(function(){
+	            //     this.setButtonState.bind(this)(false);
+	            // }, 2000);
 	        }
 	    }, {
 	        key: 'render',
