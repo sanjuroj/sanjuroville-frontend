@@ -53,9 +53,9 @@ export function toggle_grouped() {
 }
 
 export function fetchData () {
-    
+    let apiurl = 'http://' + window.location.host + '/resume/api/?format=json';
     return dispatch => {
-        fetch('http://127.0.0.1:8000/resume/api/?format=json')
+        fetch(apiurl)
         .then(
             response => {
                 //console.log('here');

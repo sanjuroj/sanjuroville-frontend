@@ -62,11 +62,11 @@
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _resumeContainer = __webpack_require__(202);
+	var _resumeContainer = __webpack_require__(200);
 
 	var _resumeContainer2 = _interopRequireDefault(_resumeContainer);
 
-	var _reduxThunk = __webpack_require__(217);
+	var _reduxThunk = __webpack_require__(216);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
@@ -23118,7 +23118,7 @@
 	exports.toggle_grouped = toggle_grouped;
 	exports.fetchData = fetchData;
 
-	var _isomorphicFetch = __webpack_require__(200);
+	var _isomorphicFetch = __webpack_require__(217);
 
 	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
@@ -23214,9 +23214,9 @@
 	}
 
 	function fetchData() {
-
+	    var apiurl = 'http://' + window.location.host + '/resume/api/?format=json';
 	    return function (dispatch) {
-	        (0, _isomorphicFetch2.default)('http://127.0.0.1:8000/resume/api/?format=json').then(function (response) {
+	        (0, _isomorphicFetch2.default)(apiurl).then(function (response) {
 	            //console.log('here');
 	            return response.json();
 	        }, function (reject) {
@@ -23232,16 +23232,1604 @@
 /* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _CategoryGroup = __webpack_require__(201);
+
+	var _CategoryGroup2 = _interopRequireDefault(_CategoryGroup);
+
+	var _reactRedux = __webpack_require__(175);
+
+	var _actions = __webpack_require__(199);
+
+	var _getResData = __webpack_require__(207);
+
+	var _NameLevelBlurbList = __webpack_require__(208);
+
+	var _NameLevelBlurbList2 = _interopRequireDefault(_NameLevelBlurbList);
+
+	var _ControlBar = __webpack_require__(209);
+
+	var _ControlBar2 = _interopRequireDefault(_ControlBar);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// TODO: strip extra spaces off text entries (5)
+	// TODO: remove periods from ends of sentances (5)
+	// TODO: rotate branding font (5)
+	// TODO: allow user to specify which Linkedin files to import (5)
+	// TODO: fix underline hlighting so it only highlights the bottom of the box (6)
+	// TODO: make a better readme file for the repositories (3)
+	// TODO: need to run is_valid on form submissions (5)
+	// TODO: make labels on grouping slider clickable
+	// TODO: deemphasize location of volunteering (5)
+	// TODO: come up with better timeline icons.  Maybe just single letters in the circle? (5)
+	// TODO: add padding at bottom of highlights and reduce at top
+	// TODO: formalize how language skills are sorted (8)
+
+
+	var ResumeContainer = function (_Component) {
+	    _inherits(ResumeContainer, _Component);
+
+	    function ResumeContainer() {
+	        _classCallCheck(this, ResumeContainer);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ResumeContainer).apply(this, arguments));
+	    }
+
+	    _createClass(ResumeContainer, [{
+	        key: 'makeTitle',
+	        value: function makeTitle(title, location) {
+	            var modifier = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+
+	            if (modifier == null) {
+	                return title + ', ' + location;
+	            } else {
+	                return '(' + title + ' in ' + modifier + ', ' + location;
+	            }
+	        }
+	    }, {
+	        key: 'sortResDataByLevel',
+	        value: function sortResDataByLevel(data) {
+	            var type = arguments.length <= 1 || arguments[1] === undefined ? 'fwd' : arguments[1];
+
+	            var sortedData = data;
+	            if (type == 'fwd') {
+	                sortedData = data.sort(function (a, b) {
+	                    return a.level > b.level;
+	                });
+	            } else if (type == 'rev') {
+	                sortedData = data.sort(function (a, b) {
+	                    return a.level < b.level;
+	                });
+	            } else if (type.constructor === Array) {
+	                sortedData = data.sort(function (a, b) {
+	                    var aIndex = type.indexOf(a.level);
+	                    var bIndex = type.indexOf(b.level);
+	                    return aIndex > bIndex;
+	                });
+	            }
+
+	            console.log('rc sorted', sortedData);
+	            return sortedData;
+	        }
+	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            //console.log('didmount',this.props);
+	            var dispatch = this.props.dispatch;
+	            //console.log('isfunc',dispatch);
+
+	            dispatch((0, _actions.fetchData)());
+	        }
+	    }, {
+	        key: 'getSubheading',
+	        value: function getSubheading(type) {
+	            var textObj = {
+	                skills: "Estimated skill level in parenthesis on a scale of 1 to 10"
+	            };
+
+	            return textObj[type];
+	        }
+	    }, {
+	        key: 'buildCategoryList',
+	        value: function buildCategoryList(posData) {
+	            var _this2 = this;
+
+	            //console.log('bpl postdata=',posData);
+	            //console.log('rc props in build', this.props);
+	            var posList = posData.map(function (item, key) {
+	                return _react2.default.createElement(_CategoryGroup2.default, _extends({}, item, {
+	                    dispatch: _this2.props.dispatch,
+	                    highlightTracker: _this2.props.highlightTracker,
+	                    groupFlag: _this2.props.groupFlag,
+	                    key: key }));
+	            }, this);
+	            //console.log('poslist', posList);
+	            return posList;
+	        }
+	    }, {
+	        key: 'getSubTitle',
+	        value: function getSubTitle(section) {
+	            var subTitles = {
+	                skills: "Self-estimated skill levels are shown in parenthesis"
+	            };
+	            return subTitles[section];
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            //console.log('container props', this.props);
+	            //console.log('rc render props', this.props)
+	            var datedData = (0, _getResData.getDatedData)(this.props.resumeData, this.props.groupFlag);
+	            // console.log('datedlist=',datedData);
+	            var categoryList = this.buildCategoryList(datedData);
+	            var langSort = ['Native', 'Elementary'];
+	            if (categoryList !== 'undefined') {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'resume-body' },
+	                    _react2.default.createElement(_ControlBar2.default, _extends({}, this.props, {
+	                        style: __webpack_require__(212),
+	                        expandable: datedData })),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'resume-heading' },
+	                        'An interactive version of my resumé is displayed below.  It loads in a compressed form with expandable items highlighted by a bottom border. The control buttons just above can be used to change the layout or to collapse and expand all items. My ',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: 'https://www.linkedin.com/in/sanjurojogdeo', target: '_blank' },
+	                            'LinkedIn'
+	                        ),
+	                        ' page provides similar resumé info as what is found here. I also have a ',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: 'https://github.com/sanjuroj', target: '_blank' },
+	                            'GitHub'
+	                        ),
+	                        ' repository that can be perused. The ',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: window.location.origin + "/about" },
+	                            'About'
+	                        ),
+	                        ' page has infomration on how this interactive resumé was built.',
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement('br', null),
+	                        'I am currently looking for a software development job in Portland, Oregon. I enjoy making data useful and digestable, which has been the consistent thread through most of my working and volunteer life.  I would like to be in an environment where I can learn from more experienced developers and where my diversity of experience will be useful.'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'resume-data' },
+	                        _react2.default.createElement(
+	                            'section',
+	                            { id: 'dated-items' },
+	                            categoryList
+	                        ),
+	                        _react2.default.createElement(
+	                            'section',
+	                            { id: 'skilz', className: 'skilz-card' },
+	                            _react2.default.createElement(_NameLevelBlurbList2.default, {
+	                                data: this.sortResDataByLevel(this.props.resumeData.skill, 'rev'),
+	                                heading: 'SKILLS',
+	                                subtitle: this.getSubTitle('skills') })
+	                        ),
+	                        _react2.default.createElement(
+	                            'section',
+	                            { id: 'languages', className: 'lang-card' },
+	                            _react2.default.createElement(_NameLevelBlurbList2.default, {
+	                                data: this.sortResDataByLevel(this.props.resumeData.language, langSort),
+	                                heading: 'LANGUAGES' })
+	                        )
+	                    )
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    'No Data Found'
+	                );
+	            }
+	        }
+	    }]);
+
+	    return ResumeContainer;
+	}(_react.Component);
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    //console.log('state=',state);
+	    return state;
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ResumeContainer);
+
+/***/ },
+/* 201 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _ResumeItemGroup = __webpack_require__(202);
+
+	var _ResumeItemGroup2 = _interopRequireDefault(_ResumeItemGroup);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CategoryGroup = function (_Component) {
+	    _inherits(CategoryGroup, _Component);
+
+	    function CategoryGroup() {
+	        _classCallCheck(this, CategoryGroup);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(CategoryGroup).apply(this, arguments));
+	    }
+
+	    _createClass(CategoryGroup, [{
+	        key: 'makeRIGItems',
+	        value: function makeRIGItems() {
+	            console.log('catgroup props', this.props);
+	            return this.props.data.map(function (item, key) {
+
+	                return _react2.default.createElement(_ResumeItemGroup2.default, _extends({
+	                    key: key
+	                }, item, {
+	                    dispatch: this.props.dispatch,
+	                    highlightTracker: this.props.highlightTracker,
+	                    className: 'title-card',
+	                    groupFlag: this.props.groupFlag
+	                }));
+	            }, this);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            //console.log('rig props', this.props);
+	            //console.log('catgroup rigitems', this.makeRIGItems())        
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'category-group' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'category-title' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        { className: 'category-title' },
+	                        this.props.category_title.toUpperCase()
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: this.props.groupFlag == false ? "timeline" : null },
+	                    this.makeRIGItems()
+	                )
+	            );
+	        }
+	    }]);
+
+	    return CategoryGroup;
+	}(_react.Component);
+
+	exports.default = CategoryGroup;
+
+/***/ },
+/* 202 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _TitleCard = __webpack_require__(203);
+
+	var _TitleCard2 = _interopRequireDefault(_TitleCard);
+
+	var _HighlightBox = __webpack_require__(205);
+
+	var _HighlightBox2 = _interopRequireDefault(_HighlightBox);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ResumeItemGroup = function (_Component) {
+	    _inherits(ResumeItemGroup, _Component);
+
+	    function ResumeItemGroup() {
+	        _classCallCheck(this, ResumeItemGroup);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ResumeItemGroup).apply(this, arguments));
+	    }
+
+	    _createClass(ResumeItemGroup, [{
+	        key: 'getCircle',
+	        value: function getCircle() {
+	            if (this.props.groupFlag == false) {
+	                return _react2.default.createElement('div', { className: 'timeline-circle ' + this.props.icon });
+	            }
+	        }
+	    }, {
+	        key: 'renderHighlights',
+	        value: function renderHighlights() {
+	            return _react2.default.createElement(_HighlightBox2.default, {
+	                highlights: this.props.highlights,
+	                className: 'highlight-box'
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            //console.log('rig props', this.props);
+	            //console.log('prop=', this.props.highlightTracker)
+	            //console.log('title=', this.title)
+	            var inclHighlights = false;
+	            if (this.props.highlightTracker[this.props.title] && this.props.highlights.length > 0) {
+
+	                inclHighlights = true;
+	            }
+
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'titleRow' },
+	                this.getCircle(),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'res-itemgroup' },
+	                    _react2.default.createElement(_TitleCard2.default, this.props),
+	                    inclHighlights ? this.renderHighlights() : null
+	                )
+	            );
+	        }
+
+	        // render() {
+	        //     //console.log('rig props', this.props);
+	        //     //console.log('prop=', this.props.highlightTracker)
+	        //     //console.log('title=', this.title)
+	        //     if (this.props.highlightTracker[this.props.title]){
+	        //         //console.log('here');
+	        //         return(
+	        //             {this.getIcon()}
+	        //             <div className='res-itemgroup'>
+	        //                 <TitleCard {...this.props} />
+	        //                 <HighlightBox highlights={this.props.highlights} className="highlight-box" />
+	        //             </div>
+	        //         );
+	        //     }
+	        //     else{
+	        //         //console.log('there');
+	        //         return(
+	        //             {this.getIcon()}
+	        //             <div className='res-itemgroup'>
+	        //                 <TitleCard {...this.props} />
+	        //             </div>
+	        //         );  
+	        //     }
+
+	        // }
+
+	    }]);
+
+	    return ResumeItemGroup;
+	}(_react.Component);
+
+	exports.default = ResumeItemGroup;
+
+/***/ },
+/* 203 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _SimpleText = __webpack_require__(204);
+
+	var _SimpleText2 = _interopRequireDefault(_SimpleText);
+
+	var _actions = __webpack_require__(199);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TitleCard = function (_Component) {
+	    _inherits(TitleCard, _Component);
+
+	    function TitleCard() {
+	        _classCallCheck(this, TitleCard);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(TitleCard).apply(this, arguments));
+	    }
+
+	    _createClass(TitleCard, [{
+	        key: 'clickAction',
+	        value: function clickAction() {
+	            //console.log('clicked highlights')
+	            this.props.dispatch({
+	                type: _actions.HIGHLIGHTS,
+	                title: this.props.title
+	            });
+	        }
+	    }, {
+	        key: 'buildElements',
+	        value: function buildElements() {
+	            var hasHighlights = this.props.highlights.length > 0 ? true : false;
+	            var start = this.props.startDate.getUTCFullYear();
+	            var end = this.props.endDate.getUTCFullYear();
+	            var titleSpanClasses = '';
+	            var summarySpanClasses = '';
+	            var title = this.props.title;
+	            var titleText = _react2.default.createElement(
+	                'span',
+	                null,
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'title-date' },
+	                    start == end ? start : start + " - " + end
+	                ),
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'title-text' },
+	                    title
+	                )
+	            );
+
+	            if (this.props.groupFlag == false && (this.props.title || hasHighlights)) {
+	                titleSpanClasses += "has-highlights";
+	            } else if (this.props.summary && hasHighlights) {
+	                summarySpanClasses = "has-highlights";
+	            } else if (!this.props.summary && hasHighlights) {
+	                titleSpanClasses = "has-highlights";
+	            }
+
+	            var titleComponent = _react2.default.createElement(_SimpleText2.default, {
+	                key: '1', text: titleText,
+	                spanClasses: titleSpanClasses,
+	                divClasses: 'title'
+	            });
+	            var summaryComponent = _react2.default.createElement(_SimpleText2.default, {
+	                key: '2',
+	                text: this.props.summary,
+	                spanClasses: summarySpanClasses,
+	                divClasses: 'summary'
+	            });
+
+	            var returnArray = [];
+	            if (this.props.summary && this.props.groupFlag || this.props.summary && this.props.groupFlag == false && this.props.highlightTracker[this.props.title]) {
+	                returnArray = [titleComponent, summaryComponent];
+	            } else {
+	                returnArray = [titleComponent];
+	            }
+
+	            return returnArray;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            //console.log('tc props', this.props)
+	            var hasHighlights = this.props.highlights.length > 0;
+	            var className = 'title-card';
+	            var expandable = false;
+	            if (hasHighlights || this.props.groupFlag == false && this.props.title) {
+	                expandable = true;
+	                className += ' titlecard-has-highlights';
+	            }
+
+	            return _react2.default.createElement(
+	                'div',
+	                {
+	                    className: className,
+	                    onClick: expandable ? this.clickAction.bind(this) : null
+	                },
+	                this.buildElements()
+	            );
+	        }
+	    }]);
+
+	    return TitleCard;
+	}(_react.Component);
+
+	exports.default = TitleCard;
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Summary = function (_Component) {
+	    _inherits(Summary, _Component);
+
+	    function Summary() {
+	        _classCallCheck(this, Summary);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Summary).apply(this, arguments));
+	    }
+
+	    _createClass(Summary, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: this.props.divClasses },
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: this.props.spanClasses },
+	                    this.props.text
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Summary;
+	}(_react.Component);
+
+	exports.default = Summary;
+
+/***/ },
+/* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Highlight = __webpack_require__(206);
+
+	var _Highlight2 = _interopRequireDefault(_Highlight);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var HighlightBox = function (_Component) {
+	    _inherits(HighlightBox, _Component);
+
+	    function HighlightBox() {
+	        _classCallCheck(this, HighlightBox);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(HighlightBox).apply(this, arguments));
+	    }
+
+	    _createClass(HighlightBox, [{
+	        key: 'makeHighlights',
+	        value: function makeHighlights() {
+	            if (this.props.highlights.length > 1) {
+	                var highlightArray = this.props.highlights.map(function (hLight, key) {
+	                    return _react2.default.createElement(
+	                        'li',
+	                        { className: 'highlight', key: key },
+	                        _react2.default.createElement(_Highlight2.default, { highlight: hLight })
+	                    );
+	                });
+	                return highlightArray;
+	            } else {
+	                return _react2.default.createElement(_Highlight2.default, { highlight: this.props.highlights[0] });
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (this.props.highlights !== undefined) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'highlight-box' },
+	                    _react2.default.createElement(
+	                        'ul',
+	                        null,
+	                        this.makeHighlights()
+	                    )
+	                );
+	            } else {
+	                return null;
+	            }
+	        }
+	    }]);
+
+	    return HighlightBox;
+	}(_react.Component);
+
+	exports.default = HighlightBox;
+
+/***/ },
+/* 206 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Highlight = function (_Component) {
+	    _inherits(Highlight, _Component);
+
+	    function Highlight() {
+	        _classCallCheck(this, Highlight);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Highlight).apply(this, arguments));
+	    }
+
+	    _createClass(Highlight, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.props.highlight
+	            );
+	        }
+	    }]);
+
+	    return Highlight;
+	}(_react.Component);
+
+	exports.default = Highlight;
+
+/***/ },
+/* 207 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.getDatedData = getDatedData;
+	exports.sortCategoryData = sortCategoryData;
+	function getDatedData(resumeData, groupFlag) {
+
+	    console.log('getresdata rdata=', resumeData);
+	    var datedCategories = ['job', 'education', 'volunteer'];
+
+	    var returnData = [];
+	    //groupFlag = false;
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+
+	    try {
+	        var _loop = function _loop() {
+	            var cat = _step.value;
+
+	            //console.log('getdated this', this);
+	            var catObj = {};
+	            catData = resumeData[cat];
+
+	            if (cat == 'job') {
+	                catObj.data = catData.map(function (item) {
+	                    item.title = item.position + ', ' + item.company;
+	                    return item;
+	                });
+	                catObj.category_title = "Work Experience";
+	            }
+	            if (cat == 'education') {
+	                catObj.data = catData.map(function (item) {
+	                    //item.title = this.makeTitle(item.degreeType, item.major, item.institution);
+	                    item.title = item.degreeType + ' in ' + item.major + ', ' + item.institution;
+	                    return item;
+	                });
+	                catObj.category_title = "Education";
+	            }
+	            if (cat == 'volunteer') {
+	                catObj.data = catData.map(function (item) {
+	                    //item.title = this.makeTitle(item.degreeType, item.major, item.institution);
+	                    item.title = item.position + ', ' + item.organization;
+	                    return item;
+	                });
+	                catObj.category_title = "Volunteering";
+	            }
+	            catObj.data = catObj.data.map(function (item) {
+	                item.icon = cat;
+	                //console.log('grd endate parse', Date.prototype.toString(Date.parse(item.endDate)));
+	                item.endDate = new Date(item.endDate);
+	                item.startDate = new Date(item.startDate);
+	                return item;
+	            });
+
+	            if (groupFlag == true || groupFlag == null) {
+
+	                returnData.push(catObj);
+	            } else {
+	                catObj.category_title = "Work, Education, and Volunteering";
+	                try {
+	                    returnData[0].data = returnData[0].data.concat(catObj.data);
+	                } catch (err) {
+	                    returnData.push(catObj);
+	                }
+	            }
+	        };
+
+	        for (var _iterator = datedCategories[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var catData;
+
+	            _loop();
+	        }
+	    } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	    } finally {
+	        try {
+	            if (!_iteratorNormalCompletion && _iterator.return) {
+	                _iterator.return();
+	            }
+	        } finally {
+	            if (_didIteratorError) {
+	                throw _iteratorError;
+	            }
+	        }
+	    }
+
+	    var sortedData = sortCategoryData(returnData);
+	    console.log('grd sorted', sortedData);
+	    return sortedData;
+	}
+
+	function sortCategoryData(catData) {
+	    var _iteratorNormalCompletion2 = true;
+	    var _didIteratorError2 = false;
+	    var _iteratorError2 = undefined;
+
+	    try {
+	        for (var _iterator2 = catData[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	            var cat = _step2.value;
+
+	            cat.data.sort(function (a, b) {
+	                return b.endDate - a.endDate;
+	            });
+	        }
+	    } catch (err) {
+	        _didIteratorError2 = true;
+	        _iteratorError2 = err;
+	    } finally {
+	        try {
+	            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                _iterator2.return();
+	            }
+	        } finally {
+	            if (_didIteratorError2) {
+	                throw _iteratorError2;
+	            }
+	        }
+	    }
+
+	    return catData;
+	}
+
+/***/ },
+/* 208 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var NameLevelBlurbList = function (_Component) {
+	    _inherits(NameLevelBlurbList, _Component);
+
+	    function NameLevelBlurbList() {
+	        _classCallCheck(this, NameLevelBlurbList);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(NameLevelBlurbList).apply(this, arguments));
+	    }
+
+	    _createClass(NameLevelBlurbList, [{
+	        key: "makeList",
+	        value: function makeList() {
+	            return this.props.data.map(function (item, key) {
+	                if (item.summary) {
+	                    return _react2.default.createElement(
+	                        "li",
+	                        { key: key },
+	                        " ",
+	                        _react2.default.createElement(
+	                            "span",
+	                            { className: "skill" },
+	                            item.name,
+	                            " (",
+	                            item.level,
+	                            ")"
+	                        ),
+	                        " - ",
+	                        item.summary
+	                    );
+	                } else {
+	                    return _react2.default.createElement(
+	                        "li",
+	                        { key: key },
+	                        _react2.default.createElement(
+	                            "span",
+	                            { className: "skill" },
+	                            item.name,
+	                            " (",
+	                            item.level,
+	                            ")"
+	                        )
+	                    );
+	                }
+	            });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            //console.log('nlbl props', this.props)
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement(
+	                    "p",
+	                    { className: "category-title" },
+	                    this.props.heading
+	                ),
+	                this.props.subtitle !== 'undefined' ? _react2.default.createElement(
+	                    "div",
+	                    { className: "category-subtitle" },
+	                    this.props.subtitle
+	                ) : none,
+	                _react2.default.createElement(
+	                    "ul",
+	                    null,
+	                    this.makeList()
+	                )
+	            );
+	        }
+	    }]);
+
+	    return NameLevelBlurbList;
+	}(_react.Component);
+
+	exports.default = NameLevelBlurbList;
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _actions = __webpack_require__(199);
+
+	var _Button = __webpack_require__(210);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ControlBar = function (_Component) {
+	    _inherits(ControlBar, _Component);
+
+	    function ControlBar(props) {
+	        _classCallCheck(this, ControlBar);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ControlBar).call(this, props));
+
+	        _this.handleChange = _this.handleChange.bind(_this);
+
+	        return _this;
+	    }
+
+	    _createClass(ControlBar, [{
+	        key: 'handleChange',
+	        value: function handleChange() {
+	            this.props.dispatch((0, _actions.toggle_grouped)());
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            console.log('controlbar props', this.props);
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'control-bar' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'grouped-switch' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'grouped-label' },
+	                        'Chronological'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'switch' },
+	                        _react2.default.createElement('input', {
+	                            id: 'cmn-toggle-1',
+	                            className: 'cmn-toggle cmn-toggle-round',
+	                            type: 'checkbox',
+	                            checked: this.props.groupFlag,
+	                            onClick: this.handleChange
+	                        }),
+	                        _react2.default.createElement('label', { htmlFor: 'cmn-toggle-1' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'grouped-label' },
+	                        'Grouped'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'control-button-group' },
+	                    _react2.default.createElement(_Button2.default, {
+	                        expandable: this.props.expandable,
+	                        action: _actions.expand_all,
+	                        text: 'Expand All',
+	                        dispatch: this.props.dispatch }),
+	                    _react2.default.createElement(_Button2.default, {
+	                        expandable: this.props.expandable,
+	                        action: _actions.compress_all,
+	                        text: 'Compress All',
+	                        dispatch: this.props.dispatch })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return ControlBar;
+	}(_react.Component);
+
+	exports.default = ControlBar;
+
+/***/ },
+/* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(211);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Button = function (_Component) {
+	    _inherits(Button, _Component);
+
+	    function Button() {
+	        _classCallCheck(this, Button);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Button).call(this));
+
+	        _this.setButtonState.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(Button, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            this.setState({ clicked: false });
+	        }
+	    }, {
+	        key: 'setButtonState',
+	        value: function setButtonState(newState) {
+	            this.setState({ clicked: newState });
+	        }
+	    }, {
+	        key: 'handleClick',
+	        value: function handleClick() {
+	            //console.log('button props', this.props)
+	            //let setFunc = this.setButtonState;
+	            this.setButtonState(true);
+	            this.props.dispatch(this.props.action(this.props.expandable));
+	            // setTimeout(function(){
+	            //     this.setButtonState.bind(this)(false);
+	            // }, 2000);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var classes = (0, _classnames2.default)('control-button', { 'selected': this.state.clicked });
+	            //className += state.active
+	            return _react2.default.createElement(
+	                'span',
+	                {
+	                    type: 'button',
+	                    className: classes,
+	                    onClick: this.handleClick.bind(this)
+	                },
+	                this.props.text
+	            );
+	        }
+	    }]);
+
+	    return Button;
+	}(_react.Component);
+
+	exports.default = Button;
+
+/***/ },
+/* 211 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ },
+/* 212 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(213);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(215)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./resume-styles.css", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./resume-styles.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 213 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(214)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "/* ============================================================\n  Resume\n============================================================ */\n\n.resume-heading {\n  padding-top: 30px;\n}\n.category-title {\n  margin-bottom: 1.5em;\n  margin-top: 3em;\n  font-weight: bold;\n\n}\n\n.title-card {\n  margin-bottom: .5em;\n  cursor: default;\n  position: relative;\n}\n\n.title-card.titlecard-has-highlights {\n  cursor: pointer;\n}\n\n.title {\n  font-weight: bold;\n}\n\n.title-date {\n  padding-right: .35em;\n}\n.summary {\n  margin-left: .5em;\n}\n\n.highlight-box {\n  background-color: #498292;\n  padding: 10px 0px;\n  margin-bottom: 20px;\n}\n\n.highlight-box ul {\n    color: #EDE1DB;\n    font-weight: 300;\n    font-size: .90em;\n}\n\n.highlight {\n  margin-bottom: .5em;\n}\n\n.has-highlights {\n  border-bottom-style: solid;\n  border-bottom-width: 4px;\n  border-bottom-color: #498292;\n}\n.res-itemgroup {\n    margin-left: 2em;\n}\n\n\n#wrapper {\n  min-width: 600px;\n}\n\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n.timeline-circle {\n  position: absolute;\n  width: 15px;\n  height: 15px;\n  margin-left: -5px;\n  margin-top: 5px;\n  border-radius: 50%;\n}\n\n.job {\n  background-color: #5B903E;\n}\n\n.volunteer {\n  background-color: #C67070;\n}\n\n.education {\n  background-color: #784C83;\n}\n\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar\n============================================================ */\n\n\n.control-bar {\n  display: table;\n  background-color: #033644;\n  padding: 10px;\n  color: white;\n  border-width: 2px;\n  border-color: black;\n  box-shadow: 1px 1px 5px #2D3132;\n  /*#414C4F*/\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n\n/* ============================================================\n  Control Bar - Buttons\n============================================================ */\n\n#control-button-group {\n  display: inline-block;\n  margin-left: 40px;\n}\n\n.control-button {\n  margin-left: 10px;\n  display: inline-block;\n  padding: 10px;\n  cursor: pointer;\n  background-color: #4e5d6c;\n  border-style: solid;\n  border-width: 2px;\n  border-color: #4e5d6c;\n  transition:background 0s;\n\n}\n\n.control-button:hover {\n  border-color: #c85e17;\n  border-width: 2px;\n  background-color: #4e5d6c;\n}\n\n#control-button-group button{\n  font-weight: 500;\n  font-size: 1em;\n  background-color: #414C4F;\n}\n\n.control-button.selected {\n  background-color: #4e5d6c;\n  transition:background 0s;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n#timeline {\n  position: relative;\n  padding-bottom: 1em;\n  /*margin-top: 2em;*/\n  margin-bottom: 2em;\n}\n\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 214 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ },
+/* 215 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+
+		update(obj);
+
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+
+	var replaceText = (function () {
+		var textStore = [];
+
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var sourceMap = obj.sourceMap;
+
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+
+		var blob = new Blob([css], { type: "text/css" });
+
+		var oldSrc = linkElement.href;
+
+		linkElement.href = URL.createObjectURL(blob);
+
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ },
+/* 216 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	function createThunkMiddleware(extraArgument) {
+	  return function (_ref) {
+	    var dispatch = _ref.dispatch;
+	    var getState = _ref.getState;
+	    return function (next) {
+	      return function (action) {
+	        if (typeof action === 'function') {
+	          return action(dispatch, getState, extraArgument);
+	        }
+
+	        return next(action);
+	      };
+	    };
+	  };
+	}
+
+	var thunk = createThunkMiddleware();
+	thunk.withExtraArgument = createThunkMiddleware;
+
+	exports['default'] = thunk;
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// the whatwg-fetch polyfill installs the fetch() function
 	// on the global object (window or self)
 	//
 	// Return that as the export for use in Webpack, Browserify etc.
-	__webpack_require__(201);
+	__webpack_require__(218);
 	module.exports = self.fetch.bind(self);
 
 
 /***/ },
-/* 201 */
+/* 218 */
 /***/ function(module, exports) {
 
 	(function(self) {
@@ -23677,1594 +25265,6 @@
 	  }
 	  self.fetch.polyfill = true
 	})(typeof self !== 'undefined' ? self : this);
-
-
-/***/ },
-/* 202 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _CategoryGroup = __webpack_require__(203);
-
-	var _CategoryGroup2 = _interopRequireDefault(_CategoryGroup);
-
-	var _reactRedux = __webpack_require__(175);
-
-	var _actions = __webpack_require__(199);
-
-	var _getResData = __webpack_require__(209);
-
-	var _NameLevelBlurbList = __webpack_require__(210);
-
-	var _NameLevelBlurbList2 = _interopRequireDefault(_NameLevelBlurbList);
-
-	var _ControlBar = __webpack_require__(211);
-
-	var _ControlBar2 = _interopRequireDefault(_ControlBar);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	// TODO: strip extra spaces off text entries (5)
-	// TODO: remove periods from ends of sentances (5)
-	// TODO: rotate branding font (5)
-	// TODO: allow user to specify which Linkedin files to import (5)
-	// TODO: fix underline hlighting so it only highlights the bottom of the box (6)
-	// TODO: make a better readme file for the repositories (3)
-	// TODO: need to run is_valid on form submissions (5)
-	// TODO: make labels on grouping slider clickable
-	// TODO: deemphasize location of volunteering (5)
-	// TODO: come up with better timeline icons.  Maybe just single letters in the circle? (5)
-	// TODO: add padding at bottom of highlights and reduce at top
-	// TODO: formalize how language skills are sorted (8)
-
-
-	var ResumeContainer = function (_Component) {
-	    _inherits(ResumeContainer, _Component);
-
-	    function ResumeContainer() {
-	        _classCallCheck(this, ResumeContainer);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ResumeContainer).apply(this, arguments));
-	    }
-
-	    _createClass(ResumeContainer, [{
-	        key: 'makeTitle',
-	        value: function makeTitle(title, location) {
-	            var modifier = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
-
-	            if (modifier == null) {
-	                return title + ', ' + location;
-	            } else {
-	                return '(' + title + ' in ' + modifier + ', ' + location;
-	            }
-	        }
-	    }, {
-	        key: 'sortResDataByLevel',
-	        value: function sortResDataByLevel(data) {
-	            var type = arguments.length <= 1 || arguments[1] === undefined ? 'fwd' : arguments[1];
-
-	            var sortedData = data;
-	            if (type == 'fwd') {
-	                sortedData = data.sort(function (a, b) {
-	                    return a.level > b.level;
-	                });
-	            } else if (type == 'rev') {
-	                sortedData = data.sort(function (a, b) {
-	                    return a.level < b.level;
-	                });
-	            } else if (type.constructor === Array) {
-	                sortedData = data.sort(function (a, b) {
-	                    var aIndex = type.indexOf(a.level);
-	                    var bIndex = type.indexOf(b.level);
-	                    return aIndex > bIndex;
-	                });
-	            }
-
-	            console.log('rc sorted', sortedData);
-	            return sortedData;
-	        }
-	    }, {
-	        key: 'componentWillMount',
-	        value: function componentWillMount() {
-	            //console.log('didmount',this.props);
-	            var dispatch = this.props.dispatch;
-	            //console.log('isfunc',dispatch);
-
-	            dispatch((0, _actions.fetchData)());
-	        }
-	    }, {
-	        key: 'getSubheading',
-	        value: function getSubheading(type) {
-	            var textObj = {
-	                skills: "Estimated skill level in parenthesis on a scale of 1 to 10"
-	            };
-
-	            return textObj[type];
-	        }
-	    }, {
-	        key: 'buildCategoryList',
-	        value: function buildCategoryList(posData) {
-	            var _this2 = this;
-
-	            //console.log('bpl postdata=',posData);
-	            //console.log('rc props in build', this.props);
-	            var posList = posData.map(function (item, key) {
-	                return _react2.default.createElement(_CategoryGroup2.default, _extends({}, item, {
-	                    dispatch: _this2.props.dispatch,
-	                    highlightTracker: _this2.props.highlightTracker,
-	                    groupFlag: _this2.props.groupFlag,
-	                    key: key }));
-	            }, this);
-	            //console.log('poslist', posList);
-	            return posList;
-	        }
-	    }, {
-	        key: 'getSubTitle',
-	        value: function getSubTitle(section) {
-	            var subTitles = {
-	                skills: "Self-estimated skill levels are shown in parenthesis"
-	            };
-	            return subTitles[section];
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            //console.log('container props', this.props);
-	            //console.log('rc render props', this.props)
-	            var datedData = (0, _getResData.getDatedData)(this.props.resumeData, this.props.groupFlag);
-	            // console.log('datedlist=',datedData);
-	            var categoryList = this.buildCategoryList(datedData);
-	            var langSort = ['Native', 'Elementary'];
-	            if (categoryList !== 'undefined') {
-	                return _react2.default.createElement(
-	                    'div',
-	                    { className: 'resume-body' },
-	                    _react2.default.createElement(_ControlBar2.default, _extends({}, this.props, {
-	                        style: __webpack_require__(213),
-	                        expandable: datedData })),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'resume-heading' },
-	                        'An interactive version of my resumé is displayed below.  It loads in a compressed form with expandable items highlighted by a bottom border. The control buttons just above can be used to change the layout or to collapse and expand all items. My ',
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: 'https://www.linkedin.com/in/sanjurojogdeo', target: '_blank' },
-	                            'LinkedIn'
-	                        ),
-	                        ' page provides similar resumé info as what is found here. I also have a ',
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: 'https://github.com/sanjuroj', target: '_blank' },
-	                            'GitHub'
-	                        ),
-	                        ' repository that can be perused. The ',
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: window.location.origin + "/about" },
-	                            'About'
-	                        ),
-	                        ' page has infomration on how this interactive resumé was built.',
-	                        _react2.default.createElement('br', null),
-	                        _react2.default.createElement('br', null),
-	                        'I am currently looking for a software development job in Portland, Oregon. I enjoy making data useful and digestable, which has been the consistent thread through most of my working and volunteer life.  I would like to be in an environment where I can learn from more experienced developers and where my diversity of experience will be useful.'
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'resume-data' },
-	                        _react2.default.createElement(
-	                            'section',
-	                            { id: 'dated-items' },
-	                            categoryList
-	                        ),
-	                        _react2.default.createElement(
-	                            'section',
-	                            { id: 'skilz', className: 'skilz-card' },
-	                            _react2.default.createElement(_NameLevelBlurbList2.default, {
-	                                data: this.sortResDataByLevel(this.props.resumeData.skill, 'rev'),
-	                                heading: 'SKILLS',
-	                                subtitle: this.getSubTitle('skills') })
-	                        ),
-	                        _react2.default.createElement(
-	                            'section',
-	                            { id: 'languages', className: 'lang-card' },
-	                            _react2.default.createElement(_NameLevelBlurbList2.default, {
-	                                data: this.sortResDataByLevel(this.props.resumeData.language, langSort),
-	                                heading: 'LANGUAGES' })
-	                        )
-	                    )
-	                );
-	            } else {
-	                return _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    'No Data Found'
-	                );
-	            }
-	        }
-	    }]);
-
-	    return ResumeContainer;
-	}(_react.Component);
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    //console.log('state=',state);
-	    return state;
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ResumeContainer);
-
-/***/ },
-/* 203 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _ResumeItemGroup = __webpack_require__(204);
-
-	var _ResumeItemGroup2 = _interopRequireDefault(_ResumeItemGroup);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var CategoryGroup = function (_Component) {
-	    _inherits(CategoryGroup, _Component);
-
-	    function CategoryGroup() {
-	        _classCallCheck(this, CategoryGroup);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(CategoryGroup).apply(this, arguments));
-	    }
-
-	    _createClass(CategoryGroup, [{
-	        key: 'makeRIGItems',
-	        value: function makeRIGItems() {
-	            console.log('catgroup props', this.props);
-	            return this.props.data.map(function (item, key) {
-
-	                return _react2.default.createElement(_ResumeItemGroup2.default, _extends({
-	                    key: key
-	                }, item, {
-	                    dispatch: this.props.dispatch,
-	                    highlightTracker: this.props.highlightTracker,
-	                    className: 'title-card',
-	                    groupFlag: this.props.groupFlag
-	                }));
-	            }, this);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            //console.log('rig props', this.props);
-	            //console.log('catgroup rigitems', this.makeRIGItems())        
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'category-group' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: 'category-title' },
-	                    _react2.default.createElement(
-	                        'p',
-	                        { className: 'category-title' },
-	                        this.props.category_title.toUpperCase()
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: this.props.groupFlag == false ? "timeline" : null },
-	                    this.makeRIGItems()
-	                )
-	            );
-	        }
-	    }]);
-
-	    return CategoryGroup;
-	}(_react.Component);
-
-	exports.default = CategoryGroup;
-
-/***/ },
-/* 204 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _TitleCard = __webpack_require__(205);
-
-	var _TitleCard2 = _interopRequireDefault(_TitleCard);
-
-	var _HighlightBox = __webpack_require__(207);
-
-	var _HighlightBox2 = _interopRequireDefault(_HighlightBox);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ResumeItemGroup = function (_Component) {
-	    _inherits(ResumeItemGroup, _Component);
-
-	    function ResumeItemGroup() {
-	        _classCallCheck(this, ResumeItemGroup);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ResumeItemGroup).apply(this, arguments));
-	    }
-
-	    _createClass(ResumeItemGroup, [{
-	        key: 'getCircle',
-	        value: function getCircle() {
-	            if (this.props.groupFlag == false) {
-	                return _react2.default.createElement('div', { className: 'timeline-circle ' + this.props.icon });
-	            }
-	        }
-	    }, {
-	        key: 'renderHighlights',
-	        value: function renderHighlights() {
-	            return _react2.default.createElement(_HighlightBox2.default, {
-	                highlights: this.props.highlights,
-	                className: 'highlight-box'
-	            });
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            //console.log('rig props', this.props);
-	            //console.log('prop=', this.props.highlightTracker)
-	            //console.log('title=', this.title)
-	            var inclHighlights = false;
-	            if (this.props.highlightTracker[this.props.title] && this.props.highlights.length > 0) {
-
-	                inclHighlights = true;
-	            }
-
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'titleRow' },
-	                this.getCircle(),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'res-itemgroup' },
-	                    _react2.default.createElement(_TitleCard2.default, this.props),
-	                    inclHighlights ? this.renderHighlights() : null
-	                )
-	            );
-	        }
-
-	        // render() {
-	        //     //console.log('rig props', this.props);
-	        //     //console.log('prop=', this.props.highlightTracker)
-	        //     //console.log('title=', this.title)
-	        //     if (this.props.highlightTracker[this.props.title]){
-	        //         //console.log('here');
-	        //         return(
-	        //             {this.getIcon()}
-	        //             <div className='res-itemgroup'>
-	        //                 <TitleCard {...this.props} />
-	        //                 <HighlightBox highlights={this.props.highlights} className="highlight-box" />
-	        //             </div>
-	        //         );
-	        //     }
-	        //     else{
-	        //         //console.log('there');
-	        //         return(
-	        //             {this.getIcon()}
-	        //             <div className='res-itemgroup'>
-	        //                 <TitleCard {...this.props} />
-	        //             </div>
-	        //         );  
-	        //     }
-
-	        // }
-
-	    }]);
-
-	    return ResumeItemGroup;
-	}(_react.Component);
-
-	exports.default = ResumeItemGroup;
-
-/***/ },
-/* 205 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _SimpleText = __webpack_require__(206);
-
-	var _SimpleText2 = _interopRequireDefault(_SimpleText);
-
-	var _actions = __webpack_require__(199);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var TitleCard = function (_Component) {
-	    _inherits(TitleCard, _Component);
-
-	    function TitleCard() {
-	        _classCallCheck(this, TitleCard);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(TitleCard).apply(this, arguments));
-	    }
-
-	    _createClass(TitleCard, [{
-	        key: 'clickAction',
-	        value: function clickAction() {
-	            //console.log('clicked highlights')
-	            this.props.dispatch({
-	                type: _actions.HIGHLIGHTS,
-	                title: this.props.title
-	            });
-	        }
-	    }, {
-	        key: 'buildElements',
-	        value: function buildElements() {
-	            var hasHighlights = this.props.highlights.length > 0 ? true : false;
-	            var start = this.props.startDate.getUTCFullYear();
-	            var end = this.props.endDate.getUTCFullYear();
-	            var titleSpanClasses = '';
-	            var summarySpanClasses = '';
-	            var title = this.props.title;
-	            var titleText = _react2.default.createElement(
-	                'span',
-	                null,
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'title-date' },
-	                    start == end ? start : start + " - " + end
-	                ),
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'title-text' },
-	                    title
-	                )
-	            );
-
-	            if (this.props.groupFlag == false && (this.props.title || hasHighlights)) {
-	                titleSpanClasses += "has-highlights";
-	            } else if (this.props.summary && hasHighlights) {
-	                summarySpanClasses = "has-highlights";
-	            } else if (!this.props.summary && hasHighlights) {
-	                titleSpanClasses = "has-highlights";
-	            }
-
-	            var titleComponent = _react2.default.createElement(_SimpleText2.default, {
-	                key: '1', text: titleText,
-	                spanClasses: titleSpanClasses,
-	                divClasses: 'title'
-	            });
-	            var summaryComponent = _react2.default.createElement(_SimpleText2.default, {
-	                key: '2',
-	                text: this.props.summary,
-	                spanClasses: summarySpanClasses,
-	                divClasses: 'summary'
-	            });
-
-	            var returnArray = [];
-	            if (this.props.summary && this.props.groupFlag || this.props.summary && this.props.groupFlag == false && this.props.highlightTracker[this.props.title]) {
-	                returnArray = [titleComponent, summaryComponent];
-	            } else {
-	                returnArray = [titleComponent];
-	            }
-
-	            return returnArray;
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            //console.log('tc props', this.props)
-	            var hasHighlights = this.props.highlights.length > 0;
-	            var className = 'title-card';
-	            var expandable = false;
-	            if (hasHighlights || this.props.groupFlag == false && this.props.title) {
-	                expandable = true;
-	                className += ' titlecard-has-highlights';
-	            }
-
-	            return _react2.default.createElement(
-	                'div',
-	                {
-	                    className: className,
-	                    onClick: expandable ? this.clickAction.bind(this) : null
-	                },
-	                this.buildElements()
-	            );
-	        }
-	    }]);
-
-	    return TitleCard;
-	}(_react.Component);
-
-	exports.default = TitleCard;
-
-/***/ },
-/* 206 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Summary = function (_Component) {
-	    _inherits(Summary, _Component);
-
-	    function Summary() {
-	        _classCallCheck(this, Summary);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Summary).apply(this, arguments));
-	    }
-
-	    _createClass(Summary, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: this.props.divClasses },
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: this.props.spanClasses },
-	                    this.props.text
-	                )
-	            );
-	        }
-	    }]);
-
-	    return Summary;
-	}(_react.Component);
-
-	exports.default = Summary;
-
-/***/ },
-/* 207 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Highlight = __webpack_require__(208);
-
-	var _Highlight2 = _interopRequireDefault(_Highlight);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var HighlightBox = function (_Component) {
-	    _inherits(HighlightBox, _Component);
-
-	    function HighlightBox() {
-	        _classCallCheck(this, HighlightBox);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(HighlightBox).apply(this, arguments));
-	    }
-
-	    _createClass(HighlightBox, [{
-	        key: 'makeHighlights',
-	        value: function makeHighlights() {
-	            if (this.props.highlights.length > 1) {
-	                var highlightArray = this.props.highlights.map(function (hLight, key) {
-	                    return _react2.default.createElement(
-	                        'li',
-	                        { className: 'highlight', key: key },
-	                        _react2.default.createElement(_Highlight2.default, { highlight: hLight })
-	                    );
-	                });
-	                return highlightArray;
-	            } else {
-	                return _react2.default.createElement(_Highlight2.default, { highlight: this.props.highlights[0] });
-	            }
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            if (this.props.highlights !== undefined) {
-	                return _react2.default.createElement(
-	                    'div',
-	                    { className: 'highlight-box' },
-	                    _react2.default.createElement(
-	                        'ul',
-	                        null,
-	                        this.makeHighlights()
-	                    )
-	                );
-	            } else {
-	                return null;
-	            }
-	        }
-	    }]);
-
-	    return HighlightBox;
-	}(_react.Component);
-
-	exports.default = HighlightBox;
-
-/***/ },
-/* 208 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Highlight = function (_Component) {
-	    _inherits(Highlight, _Component);
-
-	    function Highlight() {
-	        _classCallCheck(this, Highlight);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Highlight).apply(this, arguments));
-	    }
-
-	    _createClass(Highlight, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                this.props.highlight
-	            );
-	        }
-	    }]);
-
-	    return Highlight;
-	}(_react.Component);
-
-	exports.default = Highlight;
-
-/***/ },
-/* 209 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.getDatedData = getDatedData;
-	exports.sortCategoryData = sortCategoryData;
-	function getDatedData(resumeData, groupFlag) {
-
-	    console.log('getresdata rdata=', resumeData);
-	    var datedCategories = ['job', 'education', 'volunteer'];
-
-	    var returnData = [];
-	    //groupFlag = false;
-	    var _iteratorNormalCompletion = true;
-	    var _didIteratorError = false;
-	    var _iteratorError = undefined;
-
-	    try {
-	        var _loop = function _loop() {
-	            var cat = _step.value;
-
-	            //console.log('getdated this', this);
-	            var catObj = {};
-	            catData = resumeData[cat];
-
-	            if (cat == 'job') {
-	                catObj.data = catData.map(function (item) {
-	                    item.title = item.position + ', ' + item.company;
-	                    return item;
-	                });
-	                catObj.category_title = "Work Experience";
-	            }
-	            if (cat == 'education') {
-	                catObj.data = catData.map(function (item) {
-	                    //item.title = this.makeTitle(item.degreeType, item.major, item.institution);
-	                    item.title = item.degreeType + ' in ' + item.major + ', ' + item.institution;
-	                    return item;
-	                });
-	                catObj.category_title = "Education";
-	            }
-	            if (cat == 'volunteer') {
-	                catObj.data = catData.map(function (item) {
-	                    //item.title = this.makeTitle(item.degreeType, item.major, item.institution);
-	                    item.title = item.position + ', ' + item.organization;
-	                    return item;
-	                });
-	                catObj.category_title = "Volunteering";
-	            }
-	            catObj.data = catObj.data.map(function (item) {
-	                item.icon = cat;
-	                //console.log('grd endate parse', Date.prototype.toString(Date.parse(item.endDate)));
-	                item.endDate = new Date(item.endDate);
-	                item.startDate = new Date(item.startDate);
-	                return item;
-	            });
-
-	            if (groupFlag == true || groupFlag == null) {
-
-	                returnData.push(catObj);
-	            } else {
-	                catObj.category_title = "Work, Education, and Volunteering";
-	                try {
-	                    returnData[0].data = returnData[0].data.concat(catObj.data);
-	                } catch (err) {
-	                    returnData.push(catObj);
-	                }
-	            }
-	        };
-
-	        for (var _iterator = datedCategories[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	            var catData;
-
-	            _loop();
-	        }
-	    } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	    } finally {
-	        try {
-	            if (!_iteratorNormalCompletion && _iterator.return) {
-	                _iterator.return();
-	            }
-	        } finally {
-	            if (_didIteratorError) {
-	                throw _iteratorError;
-	            }
-	        }
-	    }
-
-	    var sortedData = sortCategoryData(returnData);
-	    console.log('grd sorted', sortedData);
-	    return sortedData;
-	}
-
-	function sortCategoryData(catData) {
-	    var _iteratorNormalCompletion2 = true;
-	    var _didIteratorError2 = false;
-	    var _iteratorError2 = undefined;
-
-	    try {
-	        for (var _iterator2 = catData[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	            var cat = _step2.value;
-
-	            cat.data.sort(function (a, b) {
-	                return b.endDate - a.endDate;
-	            });
-	        }
-	    } catch (err) {
-	        _didIteratorError2 = true;
-	        _iteratorError2 = err;
-	    } finally {
-	        try {
-	            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                _iterator2.return();
-	            }
-	        } finally {
-	            if (_didIteratorError2) {
-	                throw _iteratorError2;
-	            }
-	        }
-	    }
-
-	    return catData;
-	}
-
-/***/ },
-/* 210 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var NameLevelBlurbList = function (_Component) {
-	    _inherits(NameLevelBlurbList, _Component);
-
-	    function NameLevelBlurbList() {
-	        _classCallCheck(this, NameLevelBlurbList);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(NameLevelBlurbList).apply(this, arguments));
-	    }
-
-	    _createClass(NameLevelBlurbList, [{
-	        key: "makeList",
-	        value: function makeList() {
-	            return this.props.data.map(function (item, key) {
-	                if (item.summary) {
-	                    return _react2.default.createElement(
-	                        "li",
-	                        { key: key },
-	                        " ",
-	                        _react2.default.createElement(
-	                            "span",
-	                            { className: "skill" },
-	                            item.name,
-	                            " (",
-	                            item.level,
-	                            ")"
-	                        ),
-	                        " - ",
-	                        item.summary
-	                    );
-	                } else {
-	                    return _react2.default.createElement(
-	                        "li",
-	                        { key: key },
-	                        _react2.default.createElement(
-	                            "span",
-	                            { className: "skill" },
-	                            item.name,
-	                            " (",
-	                            item.level,
-	                            ")"
-	                        )
-	                    );
-	                }
-	            });
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            //console.log('nlbl props', this.props)
-	            return _react2.default.createElement(
-	                "div",
-	                null,
-	                _react2.default.createElement(
-	                    "p",
-	                    { className: "category-title" },
-	                    this.props.heading
-	                ),
-	                this.props.subtitle !== 'undefined' ? _react2.default.createElement(
-	                    "div",
-	                    { className: "category-subtitle" },
-	                    this.props.subtitle
-	                ) : none,
-	                _react2.default.createElement(
-	                    "ul",
-	                    null,
-	                    this.makeList()
-	                )
-	            );
-	        }
-	    }]);
-
-	    return NameLevelBlurbList;
-	}(_react.Component);
-
-	exports.default = NameLevelBlurbList;
-
-/***/ },
-/* 211 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _actions = __webpack_require__(199);
-
-	var _Button = __webpack_require__(212);
-
-	var _Button2 = _interopRequireDefault(_Button);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ControlBar = function (_Component) {
-	    _inherits(ControlBar, _Component);
-
-	    function ControlBar(props) {
-	        _classCallCheck(this, ControlBar);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ControlBar).call(this, props));
-
-	        _this.handleChange = _this.handleChange.bind(_this);
-
-	        return _this;
-	    }
-
-	    _createClass(ControlBar, [{
-	        key: 'handleChange',
-	        value: function handleChange() {
-	            this.props.dispatch((0, _actions.toggle_grouped)());
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            console.log('controlbar props', this.props);
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'control-bar' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'grouped-switch' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'grouped-label' },
-	                        'Chronological'
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'switch' },
-	                        _react2.default.createElement('input', {
-	                            id: 'cmn-toggle-1',
-	                            className: 'cmn-toggle cmn-toggle-round',
-	                            type: 'checkbox',
-	                            checked: this.props.groupFlag,
-	                            onClick: this.handleChange
-	                        }),
-	                        _react2.default.createElement('label', { htmlFor: 'cmn-toggle-1' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'grouped-label' },
-	                        'Grouped'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: 'control-button-group' },
-	                    _react2.default.createElement(_Button2.default, {
-	                        expandable: this.props.expandable,
-	                        action: _actions.expand_all,
-	                        text: 'Expand All',
-	                        dispatch: this.props.dispatch }),
-	                    _react2.default.createElement(_Button2.default, {
-	                        expandable: this.props.expandable,
-	                        action: _actions.compress_all,
-	                        text: 'Compress All',
-	                        dispatch: this.props.dispatch })
-	                )
-	            );
-	        }
-	    }]);
-
-	    return ControlBar;
-	}(_react.Component);
-
-	exports.default = ControlBar;
-
-/***/ },
-/* 212 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _classnames = __webpack_require__(218);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Button = function (_Component) {
-	    _inherits(Button, _Component);
-
-	    function Button() {
-	        _classCallCheck(this, Button);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Button).call(this));
-
-	        _this.setButtonState.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(Button, [{
-	        key: 'componentWillMount',
-	        value: function componentWillMount() {
-	            this.setState({ clicked: false });
-	        }
-	    }, {
-	        key: 'setButtonState',
-	        value: function setButtonState(newState) {
-	            this.setState({ clicked: newState });
-	        }
-	    }, {
-	        key: 'handleClick',
-	        value: function handleClick() {
-	            //console.log('button props', this.props)
-	            //let setFunc = this.setButtonState;
-	            this.setButtonState(true);
-	            this.props.dispatch(this.props.action(this.props.expandable));
-	            // setTimeout(function(){
-	            //     this.setButtonState.bind(this)(false);
-	            // }, 2000);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var classes = (0, _classnames2.default)('control-button', { 'selected': this.state.clicked });
-	            //className += state.active
-	            return _react2.default.createElement(
-	                'span',
-	                {
-	                    type: 'button',
-	                    className: classes,
-	                    onClick: this.handleClick.bind(this)
-	                },
-	                this.props.text
-	            );
-	        }
-	    }]);
-
-	    return Button;
-	}(_react.Component);
-
-	exports.default = Button;
-
-/***/ },
-/* 213 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(214);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(216)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./resume-styles.css", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./resume-styles.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 214 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(215)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "/* ============================================================\n  Resume\n============================================================ */\n\n.resume-heading {\n  padding-top: 30px;\n}\n.category-title {\n  margin-bottom: 1.5em;\n  margin-top: 3em;\n  font-weight: bold;\n\n}\n\n.title-card {\n  margin-bottom: .5em;\n  cursor: default;\n  position: relative;\n}\n\n.title-card.titlecard-has-highlights {\n  cursor: pointer;\n}\n\n.title {\n  font-weight: bold;\n}\n\n.title-date {\n  padding-right: .35em;\n}\n.summary {\n  margin-left: .5em;\n}\n\n.highlight-box {\n  background-color: #498292;\n  padding: 10px 0px;\n  margin-bottom: 20px;\n}\n\n.highlight-box ul {\n    color: #EDE1DB;\n    font-weight: 300;\n    font-size: .90em;\n}\n\n.highlight {\n  margin-bottom: .5em;\n}\n\n.has-highlights {\n  border-bottom-style: solid;\n  border-bottom-width: 4px;\n  border-bottom-color: #498292;\n}\n.res-itemgroup {\n    margin-left: 2em;\n}\n\n\n#wrapper {\n  min-width: 600px;\n}\n\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n.timeline-circle {\n  position: absolute;\n  width: 15px;\n  height: 15px;\n  margin-left: -5px;\n  margin-top: 5px;\n  border-radius: 50%;\n}\n\n.job {\n  background-color: #5B903E;\n}\n\n.volunteer {\n  background-color: #C67070;\n}\n\n.education {\n  background-color: #784C83;\n}\n\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar\n============================================================ */\n\n\n.control-bar {\n  display: table;\n  background-color: #033644;\n  padding: 10px;\n  color: white;\n  border-width: 2px;\n  border-color: black;\n  box-shadow: 1px 1px 5px #2D3132;\n  /*#414C4F*/\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n\n/* ============================================================\n  Control Bar - Buttons\n============================================================ */\n\n#control-button-group {\n  display: inline-block;\n  margin-left: 40px;\n}\n\n.control-button {\n  margin-left: 10px;\n  display: inline-block;\n  padding: 10px;\n  cursor: pointer;\n  background-color: #4e5d6c;\n  border-style: solid;\n  border-width: 2px;\n  border-color: #4e5d6c;\n  transition:background 0s;\n\n}\n\n.control-button:hover {\n  border-color: #c85e17;\n  border-width: 2px;\n  background-color: #4e5d6c;\n}\n\n#control-button-group button{\n  font-weight: 500;\n  font-size: 1em;\n  background-color: #414C4F;\n}\n\n.control-button.selected {\n  background-color: #4e5d6c;\n  transition:background 0s;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n#timeline {\n  position: relative;\n  padding-bottom: 1em;\n  /*margin-top: 2em;*/\n  margin-bottom: 2em;\n}\n\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 215 */
-/***/ function(module, exports) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	// css base code, injected by the css-loader
-	module.exports = function() {
-		var list = [];
-
-		// return the list of modules as css string
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-
-		// import a list of modules into the list
-		list.i = function(modules, mediaQuery) {
-			if(typeof modules === "string")
-				modules = [[null, modules, ""]];
-			var alreadyImportedModules = {};
-			for(var i = 0; i < this.length; i++) {
-				var id = this[i][0];
-				if(typeof id === "number")
-					alreadyImportedModules[id] = true;
-			}
-			for(i = 0; i < modules.length; i++) {
-				var item = modules[i];
-				// skip already imported module
-				// this implementation is not 100% perfect for weird media query combinations
-				//  when a module is imported multiple times with different media queries.
-				//  I hope this will never occur (Hey this way we have smaller bundles)
-				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-					if(mediaQuery && !item[2]) {
-						item[2] = mediaQuery;
-					} else if(mediaQuery) {
-						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-					}
-					list.push(item);
-				}
-			}
-		};
-		return list;
-	};
-
-
-/***/ },
-/* 216 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	var stylesInDom = {},
-		memoize = function(fn) {
-			var memo;
-			return function () {
-				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-				return memo;
-			};
-		},
-		isOldIE = memoize(function() {
-			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
-		}),
-		getHeadElement = memoize(function () {
-			return document.head || document.getElementsByTagName("head")[0];
-		}),
-		singletonElement = null,
-		singletonCounter = 0,
-		styleElementsInsertedAtTop = [];
-
-	module.exports = function(list, options) {
-		if(false) {
-			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-		}
-
-		options = options || {};
-		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-		// tags it will allow on a page
-		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
-
-		// By default, add <style> tags to the bottom of <head>.
-		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
-
-		var styles = listToStyles(list);
-		addStylesToDom(styles, options);
-
-		return function update(newList) {
-			var mayRemove = [];
-			for(var i = 0; i < styles.length; i++) {
-				var item = styles[i];
-				var domStyle = stylesInDom[item.id];
-				domStyle.refs--;
-				mayRemove.push(domStyle);
-			}
-			if(newList) {
-				var newStyles = listToStyles(newList);
-				addStylesToDom(newStyles, options);
-			}
-			for(var i = 0; i < mayRemove.length; i++) {
-				var domStyle = mayRemove[i];
-				if(domStyle.refs === 0) {
-					for(var j = 0; j < domStyle.parts.length; j++)
-						domStyle.parts[j]();
-					delete stylesInDom[domStyle.id];
-				}
-			}
-		};
-	}
-
-	function addStylesToDom(styles, options) {
-		for(var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-			if(domStyle) {
-				domStyle.refs++;
-				for(var j = 0; j < domStyle.parts.length; j++) {
-					domStyle.parts[j](item.parts[j]);
-				}
-				for(; j < item.parts.length; j++) {
-					domStyle.parts.push(addStyle(item.parts[j], options));
-				}
-			} else {
-				var parts = [];
-				for(var j = 0; j < item.parts.length; j++) {
-					parts.push(addStyle(item.parts[j], options));
-				}
-				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-			}
-		}
-	}
-
-	function listToStyles(list) {
-		var styles = [];
-		var newStyles = {};
-		for(var i = 0; i < list.length; i++) {
-			var item = list[i];
-			var id = item[0];
-			var css = item[1];
-			var media = item[2];
-			var sourceMap = item[3];
-			var part = {css: css, media: media, sourceMap: sourceMap};
-			if(!newStyles[id])
-				styles.push(newStyles[id] = {id: id, parts: [part]});
-			else
-				newStyles[id].parts.push(part);
-		}
-		return styles;
-	}
-
-	function insertStyleElement(options, styleElement) {
-		var head = getHeadElement();
-		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
-		if (options.insertAt === "top") {
-			if(!lastStyleElementInsertedAtTop) {
-				head.insertBefore(styleElement, head.firstChild);
-			} else if(lastStyleElementInsertedAtTop.nextSibling) {
-				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
-			} else {
-				head.appendChild(styleElement);
-			}
-			styleElementsInsertedAtTop.push(styleElement);
-		} else if (options.insertAt === "bottom") {
-			head.appendChild(styleElement);
-		} else {
-			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
-		}
-	}
-
-	function removeStyleElement(styleElement) {
-		styleElement.parentNode.removeChild(styleElement);
-		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
-		if(idx >= 0) {
-			styleElementsInsertedAtTop.splice(idx, 1);
-		}
-	}
-
-	function createStyleElement(options) {
-		var styleElement = document.createElement("style");
-		styleElement.type = "text/css";
-		insertStyleElement(options, styleElement);
-		return styleElement;
-	}
-
-	function createLinkElement(options) {
-		var linkElement = document.createElement("link");
-		linkElement.rel = "stylesheet";
-		insertStyleElement(options, linkElement);
-		return linkElement;
-	}
-
-	function addStyle(obj, options) {
-		var styleElement, update, remove;
-
-		if (options.singleton) {
-			var styleIndex = singletonCounter++;
-			styleElement = singletonElement || (singletonElement = createStyleElement(options));
-			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
-			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
-		} else if(obj.sourceMap &&
-			typeof URL === "function" &&
-			typeof URL.createObjectURL === "function" &&
-			typeof URL.revokeObjectURL === "function" &&
-			typeof Blob === "function" &&
-			typeof btoa === "function") {
-			styleElement = createLinkElement(options);
-			update = updateLink.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-				if(styleElement.href)
-					URL.revokeObjectURL(styleElement.href);
-			};
-		} else {
-			styleElement = createStyleElement(options);
-			update = applyToTag.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-			};
-		}
-
-		update(obj);
-
-		return function updateStyle(newObj) {
-			if(newObj) {
-				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
-					return;
-				update(obj = newObj);
-			} else {
-				remove();
-			}
-		};
-	}
-
-	var replaceText = (function () {
-		var textStore = [];
-
-		return function (index, replacement) {
-			textStore[index] = replacement;
-			return textStore.filter(Boolean).join('\n');
-		};
-	})();
-
-	function applyToSingletonTag(styleElement, index, remove, obj) {
-		var css = remove ? "" : obj.css;
-
-		if (styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = replaceText(index, css);
-		} else {
-			var cssNode = document.createTextNode(css);
-			var childNodes = styleElement.childNodes;
-			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
-			if (childNodes.length) {
-				styleElement.insertBefore(cssNode, childNodes[index]);
-			} else {
-				styleElement.appendChild(cssNode);
-			}
-		}
-	}
-
-	function applyToTag(styleElement, obj) {
-		var css = obj.css;
-		var media = obj.media;
-
-		if(media) {
-			styleElement.setAttribute("media", media)
-		}
-
-		if(styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = css;
-		} else {
-			while(styleElement.firstChild) {
-				styleElement.removeChild(styleElement.firstChild);
-			}
-			styleElement.appendChild(document.createTextNode(css));
-		}
-	}
-
-	function updateLink(linkElement, obj) {
-		var css = obj.css;
-		var sourceMap = obj.sourceMap;
-
-		if(sourceMap) {
-			// http://stackoverflow.com/a/26603875
-			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-		}
-
-		var blob = new Blob([css], { type: "text/css" });
-
-		var oldSrc = linkElement.href;
-
-		linkElement.href = URL.createObjectURL(blob);
-
-		if(oldSrc)
-			URL.revokeObjectURL(oldSrc);
-	}
-
-
-/***/ },
-/* 217 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	exports.__esModule = true;
-	function createThunkMiddleware(extraArgument) {
-	  return function (_ref) {
-	    var dispatch = _ref.dispatch;
-	    var getState = _ref.getState;
-	    return function (next) {
-	      return function (action) {
-	        if (typeof action === 'function') {
-	          return action(dispatch, getState, extraArgument);
-	        }
-
-	        return next(action);
-	      };
-	    };
-	  };
-	}
-
-	var thunk = createThunkMiddleware();
-	thunk.withExtraArgument = createThunkMiddleware;
-
-	exports['default'] = thunk;
-
-/***/ },
-/* 218 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2016 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	/* global define */
-
-	(function () {
-		'use strict';
-
-		var hasOwn = {}.hasOwnProperty;
-
-		function classNames () {
-			var classes = [];
-
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-
-				var argType = typeof arg;
-
-				if (argType === 'string' || argType === 'number') {
-					classes.push(arg);
-				} else if (Array.isArray(arg)) {
-					classes.push(classNames.apply(null, arg));
-				} else if (argType === 'object') {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes.push(key);
-						}
-					}
-				}
-			}
-
-			return classes.join(' ');
-		}
-
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true) {
-			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	}());
 
 
 /***/ }
