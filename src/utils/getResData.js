@@ -1,6 +1,6 @@
 export function getDatedData(resumeData, groupFlag){
     
-    console.log('getresdata rdata=', resumeData);
+    //console.log('getresdata rdata=', resumeData);
     let datedCategories = ['job', 'education', 'volunteer'];
     
     let returnData = [];
@@ -57,7 +57,7 @@ export function getDatedData(resumeData, groupFlag){
     }
 
     const sortedData = sortCategoryData(returnData);
-    console.log('grd sorted', sortedData);
+    //console.log('grd sorted', sortedData);
     return sortedData;
 }
 

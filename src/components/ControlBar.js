@@ -16,7 +16,7 @@ export default class ControlBar extends Component {
     }
 
     render() {
-        console.log('controlbar props', this.props);
+        //console.log('controlbar props', this.props);
         return (
             <div className="control-bar">
                 <div className="grouped-switch">

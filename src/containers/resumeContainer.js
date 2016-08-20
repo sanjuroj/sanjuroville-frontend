@@ -53,7 +53,7 @@ class ResumeContainer extends Component {
 
         }
 
-        console.log('rc sorted', sortedData);
+        //console.log('rc sorted', sortedData);
         return sortedData;
     }
    
@@ -120,10 +120,10 @@ class ResumeContainer extends Component {
                         I also have a <a href="https://github.com/sanjuroj" target="_blank">
                         GitHub</a> repository that can be perused.
                         The <a href={ window.location.origin + "/about"}>About</a> page 
-                        has infomration on how this interactive resum&#233; was built.
+                        has information on how this interactive resum&#233; was built.
                         <br/><br/>
                         I am currently looking for a software development job in Portland, Oregon.
-                        I enjoy making data useful and digestable, which has been the consistent thread through 
+                        I enjoy making data useful and digestible, which has been the consistent thread through 
                         most of my working and volunteer life.  I would like to be in an environment where 
                         I can learn from more experienced developers and where my diversity of experience 
                         will be useful.  
