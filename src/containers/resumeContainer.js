@@ -5,6 +5,7 @@ import { fetchData } from '../actions/';
 import { getDatedData } from '../utils/getResData';
 import NameLevelBlurbList from '../components/NameLevelBlurbList';
 import ControlBar from '../components/ControlBar';
+import ContactBox from '../components/ContactBox';
 
 
 // TODO: strip extra spaces off text entries (5)
@@ -106,6 +107,7 @@ class ResumeContainer extends Component {
         if (categoryList !== 'undefined') {
             return(
                 <div className="resume-body">
+                    <ContactBox />
                     <ControlBar 
                         {...this.props} 
                         style={require('../../assets/resume-styles.css')} 

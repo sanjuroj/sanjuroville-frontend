@@ -16,12 +16,18 @@ module.exports = {
         new BundleTracker({filename: './webpack-stats.json'})
     ],
 
+    resolve: {
+        alias: {
+            contactImg: path.resolve(__dirname, 'assets/icons')
+        }
+    },
+
 
     module: {
         loaders: [
             { test: /\.css$/, loader: "style!css" },
             { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
-            { test: /\.(jpg|svg)$/, exclude: /node_modules/, loader: "url-loader" }
+            { test: /\.(jpg|svg|png)$/, exclude: /node_modules/, loader: "url-loader" }
         ]
     }
 

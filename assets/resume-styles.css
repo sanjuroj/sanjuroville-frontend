@@ -2,9 +2,14 @@
   Resume
 ============================================================ */
 
+.resume-body {
+  padding-right: 120px;
+}
+
 .resume-heading {
   padding-top: 30px;
 }
+
 .category-title {
   margin-bottom: 1.5em;
   margin-top: 3em;
@@ -29,6 +34,7 @@
 .title-date {
   padding-right: .35em;
 }
+
 .summary {
   margin-left: .5em;
 }
@@ -43,6 +49,11 @@
     color: #EDE1DB;
     font-weight: 300;
     font-size: .90em;
+}
+
+.highlight-box li {
+  padding-left: 5px;
+  padding-right: 10px;
 }
 
 .highlight {
@@ -266,5 +277,70 @@ input.cmn-toggle-round:checked + label:after {
   height: 100%;
   width: 5px;
   background: #d7e4ed;
+}
+
+
+/* ============================================================
+  ContactBox
+============================================================ */
+
+#contact-div {
+  float: right;
+  height: 0px;
+  width: 0px;
+}
+
+@media (max-width: 767px){
+  .resume-body {
+    padding-right: 80px;
+  }
+
+
+  #contact-links {
+    visibility: hidden;
+  }
+
+  #contact-icons {
+    right: 50px;
+    top: 100px;
+    position: fixed;
+    /*background-color: #033644;*/
+    
+  }
+
+  #contact-icons img {
+    height: 25px;
+    margin-bottom: 10px;
+
+  }
+/*
+  .mailto-ico {
+    background: url('/static/email.svg');
+    background-repeat: no-repeat;
+    height: 5px;
+    width: 10px;
+  }
+  */
+}
+
+@media (min-width: 768px) {
+  #contact-icons {
+    visibility: hidden;
+  }
+
+  #contact-links {
+    width: 90px;
+    height: 100px;
+    right: 10px;
+    top: 100px;
+    position: fixed;
+    background-color: #033644;
+    float: right;
+    padding: 10px;
+  }
+
+  #contact-links a{
+    color: #df691a;
+  }
 }
 
