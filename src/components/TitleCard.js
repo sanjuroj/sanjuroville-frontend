@@ -30,7 +30,7 @@ export default class TitleCard extends Component {
 
         if (
             this.props.groupFlag == false && 
-            (this.props.title || hasHighlights)
+            (this.props.summary || hasHighlights)
             ) {
             titleSpanClasses += "has-highlights";
         }
