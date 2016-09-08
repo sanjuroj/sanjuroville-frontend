@@ -82,7 +82,7 @@ export default class TitleCard extends Component {
         const hasHighlights = this.props.highlights.length > 0;
         let className = 'title-card';
         let expandable = false;
-        if (hasHighlights || (this.props.groupFlag == false && this.props.title)){
+        if (hasHighlights || (this.props.groupFlag == false && this.props.summary)){
             expandable = true;
             className += ' titlecard-has-highlights';
         }

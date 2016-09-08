@@ -24225,7 +24225,7 @@
 	            var hasHighlights = this.props.highlights.length > 0;
 	            var className = 'title-card';
 	            var expandable = false;
-	            if (hasHighlights || this.props.groupFlag == false && this.props.title) {
+	            if (hasHighlights || this.props.groupFlag == false && this.props.summary) {
 	                expandable = true;
 	                className += ' titlecard-has-highlights';
 	            }
