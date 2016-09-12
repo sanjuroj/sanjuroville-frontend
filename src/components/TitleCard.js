@@ -17,45 +17,70 @@ export default class TitleCard extends Component {
         const hasHighlights = this.props.highlights.length > 0 ? true : false;
         let start = this.props.startDate.getUTCFullYear();
         let end = this.props.endDate.getUTCFullYear();
-        let titleSpanClasses = '';
+        let titleSpanClasses = 'title ilb';
         let summarySpanClasses = '';
-        let title = this.props.title;
-        let titleText = 
+        
+        /*let titleText = 
             <span>
                 <span className='title-date'>
                     {start == end ? start : start + " - " + end}
                 </span>
                 <span className='title-text'>{title}</span>    
             </span>;
+        */
 
         if (
             this.props.groupFlag == false && 
             (this.props.summary || hasHighlights)
             ) {
-            titleSpanClasses += "has-highlights";
+            titleSpanClasses += " has-highlights";
         }
         else if (this.props.summary && hasHighlights) {
-            summarySpanClasses = "has-highlights";
+            summarySpanClasses += " has-highlights";
         }
         else if (!this.props.summary && hasHighlights) {
-            titleSpanClasses = "has-highlights";
+            titleSpanClasses += " has-highlights";
         }
         
-        const titleComponent =  
+        const dateComponent =  
             <SimpleText 
-                key="1" text={titleText} 
-                spanClasses={titleSpanClasses} 
-                divClasses="title"
-            />;
+                key="1" 
+                text={start == end ? start : start + " - " + end}
+                spanClasses="title-date" 
+                divClasses="title-element"
+            />
+
+        const titleComponent =  
+            <div 
+                key="2" 
+                className={titleSpanClasses}
+            >
+
+                <SimpleText 
+                    text={this.props.title} 
+                    spanClasses="title-text ilb"
+                    divClasses="title-element"
+                />
+            
+                <SimpleText 
+                    text={" \u2013 " + this.props.organization} 
+                    spanClasses="title-org ilb"
+                    divClasses="title-element"
+                />
+            </div>
+
         const summaryComponent = 
             <SimpleText 
-                key="2" 
+                key="4" 
                 text={this.props.summary} 
                 spanClasses={summarySpanClasses} 
                 divClasses="summary"
             />;
 
-        let returnArray = [];
+        let returnArray = [
+            dateComponent,
+            titleComponent
+        ];
         if ((this.props.summary && this.props.groupFlag) || 
             (
             this.props.summary &&
@@ -64,13 +89,7 @@ export default class TitleCard extends Component {
             )
             )
         {
-            returnArray = [
-                titleComponent,
-                summaryComponent
-            ];
-        }
-        else {
-            returnArray = [titleComponent];
+            returnArray.push(summaryComponent);
         }
         
         return returnArray;

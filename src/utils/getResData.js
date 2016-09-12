@@ -11,23 +11,24 @@ export function getDatedData(resumeData, groupFlag){
         var catData = resumeData[cat];
         if (cat == 'job'){
             catObj.data = catData.map(function(item){
-                item.title = `${item.position}, ${item.company}`;
+                item.title = item.position;
+                item.organization = item.company;
                 return (item);
             });
             catObj.category_title = "Work Experience";
         }
         if (cat == 'education'){
             catObj.data = catData.map(function(item){
-                //item.title = this.makeTitle(item.degreeType, item.major, item.institution);
-                item.title = `${item.degreeType} in ${item.major}, ${item.institution}`;
+                item.title = `${item.degreeType} in ${item.major}`;
+                item.organization = item.institution;
                 return (item);
             });
             catObj.category_title = "Education";
         }
         if (cat == 'volunteer'){
             catObj.data = catData.map(function(item){
-                //item.title = this.makeTitle(item.degreeType, item.major, item.institution);
-                item.title = `${item.position}, ${item.organization}`;
+                item.title = item.position;
+                item.organization = item.organization;
                 return (item);
             });
             catObj.category_title = "Volunteering";

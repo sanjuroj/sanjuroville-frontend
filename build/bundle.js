@@ -24171,49 +24171,61 @@
 	            var hasHighlights = this.props.highlights.length > 0 ? true : false;
 	            var start = this.props.startDate.getUTCFullYear();
 	            var end = this.props.endDate.getUTCFullYear();
-	            var titleSpanClasses = '';
+	            var titleSpanClasses = 'title ilb';
 	            var summarySpanClasses = '';
-	            var title = this.props.title;
-	            var titleText = _react2.default.createElement(
-	                'span',
-	                null,
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'title-date' },
-	                    start == end ? start : start + " - " + end
-	                ),
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'title-text' },
-	                    title
-	                )
-	            );
+
+	            /*let titleText = 
+	                <span>
+	                    <span className='title-date'>
+	                        {start == end ? start : start + " - " + end}
+	                    </span>
+	                    <span className='title-text'>{title}</span>    
+	                </span>;
+	            */
 
 	            if (this.props.groupFlag == false && (this.props.summary || hasHighlights)) {
-	                titleSpanClasses += "has-highlights";
+	                titleSpanClasses += " has-highlights";
 	            } else if (this.props.summary && hasHighlights) {
-	                summarySpanClasses = "has-highlights";
+	                summarySpanClasses += " has-highlights";
 	            } else if (!this.props.summary && hasHighlights) {
-	                titleSpanClasses = "has-highlights";
+	                titleSpanClasses += " has-highlights";
 	            }
 
-	            var titleComponent = _react2.default.createElement(_SimpleText2.default, {
-	                key: '1', text: titleText,
-	                spanClasses: titleSpanClasses,
-	                divClasses: 'title'
+	            var dateComponent = _react2.default.createElement(_SimpleText2.default, {
+	                key: '1',
+	                text: start == end ? start : start + " - " + end,
+	                spanClasses: 'title-date',
+	                divClasses: 'title-element'
 	            });
+
+	            var titleComponent = _react2.default.createElement(
+	                'div',
+	                {
+	                    key: '2',
+	                    className: titleSpanClasses
+	                },
+	                _react2.default.createElement(_SimpleText2.default, {
+	                    text: this.props.title,
+	                    spanClasses: 'title-text ilb',
+	                    divClasses: 'title-element'
+	                }),
+	                _react2.default.createElement(_SimpleText2.default, {
+	                    text: ' – ' + this.props.organization,
+	                    spanClasses: 'title-org ilb',
+	                    divClasses: 'title-element'
+	                })
+	            );
+
 	            var summaryComponent = _react2.default.createElement(_SimpleText2.default, {
-	                key: '2',
+	                key: '4',
 	                text: this.props.summary,
 	                spanClasses: summarySpanClasses,
 	                divClasses: 'summary'
 	            });
 
-	            var returnArray = [];
+	            var returnArray = [dateComponent, titleComponent];
 	            if (this.props.summary && this.props.groupFlag || this.props.summary && this.props.groupFlag == false && this.props.highlightTracker[this.props.title]) {
-	                returnArray = [titleComponent, summaryComponent];
-	            } else {
-	                returnArray = [titleComponent];
+	                returnArray.push(summaryComponent);
 	            }
 
 	            return returnArray;
@@ -24457,23 +24469,24 @@
 
 	            if (cat == 'job') {
 	                catObj.data = catData.map(function (item) {
-	                    item.title = item.position + ', ' + item.company;
+	                    item.title = item.position;
+	                    item.organization = item.company;
 	                    return item;
 	                });
 	                catObj.category_title = "Work Experience";
 	            }
 	            if (cat == 'education') {
 	                catObj.data = catData.map(function (item) {
-	                    //item.title = this.makeTitle(item.degreeType, item.major, item.institution);
-	                    item.title = item.degreeType + ' in ' + item.major + ', ' + item.institution;
+	                    item.title = item.degreeType + ' in ' + item.major;
+	                    item.organization = item.institution;
 	                    return item;
 	                });
 	                catObj.category_title = "Education";
 	            }
 	            if (cat == 'volunteer') {
 	                catObj.data = catData.map(function (item) {
-	                    //item.title = this.makeTitle(item.degreeType, item.major, item.institution);
-	                    item.title = item.position + ', ' + item.organization;
+	                    item.title = item.position;
+	                    item.organization = item.organization;
 	                    return item;
 	                });
 	                catObj.category_title = "Volunteering";
@@ -25040,7 +25053,7 @@
 
 
 	// module
-	exports.push([module.id, "/* ============================================================\n  Resume\n============================================================ */\n\n.resume-body {\n  padding-right: 120px;\n}\n\n.resume-heading {\n  padding-top: 30px;\n}\n\n.category-title {\n  margin-bottom: 1.5em;\n  margin-top: 3em;\n  font-weight: bold;\n\n}\n\n.title-card {\n  margin-bottom: .5em;\n  cursor: default;\n  position: relative;\n}\n\n.title-card.titlecard-has-highlights {\n  cursor: pointer;\n}\n\n.title {\n  font-weight: bold;\n}\n\n.title-date {\n  padding-right: .35em;\n}\n\n.summary {\n  margin-left: .5em;\n}\n\n.highlight-box {\n  background-color: #498292;\n  padding: 10px 0px;\n  margin-bottom: 20px;\n}\n\n.highlight-box ul {\n    color: #EDE1DB;\n    font-weight: 300;\n    font-size: .90em;\n}\n\n.highlight-box li {\n  padding-left: 5px;\n  padding-right: 10px;\n}\n\n.highlight {\n  margin-bottom: .5em;\n}\n\n.has-highlights {\n  border-bottom-style: solid;\n  border-bottom-width: 4px;\n  border-bottom-color: #498292;\n}\n.res-itemgroup {\n    margin-left: 2em;\n}\n\n\n#wrapper {\n  min-width: 600px;\n}\n\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n.timeline-circle {\n  position: absolute;\n  width: 15px;\n  height: 15px;\n  margin-left: -5px;\n  margin-top: 5px;\n  border-radius: 50%;\n}\n\n.job {\n  background-color: #5B903E;\n}\n\n.volunteer {\n  background-color: #C67070;\n}\n\n.education {\n  background-color: #784C83;\n}\n\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar\n============================================================ */\n\n\n.control-bar {\n  display: table;\n  background-color: #033644;\n  padding: 10px;\n  color: white;\n  border-width: 2px;\n  border-color: black;\n  box-shadow: 1px 1px 5px #2D3132;\n  /*#414C4F*/\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n\n/* ============================================================\n  Control Bar - Buttons\n============================================================ */\n\n#control-button-group {\n  display: inline-block;\n  margin-left: 40px;\n}\n\n.control-button {\n  margin-left: 10px;\n  display: inline-block;\n  padding: 10px;\n  cursor: pointer;\n  background-color: #4e5d6c;\n  border-style: solid;\n  border-width: 2px;\n  border-color: #4e5d6c;\n  transition:background 0s;\n\n}\n\n.control-button:hover {\n  border-color: #c85e17;\n  border-width: 2px;\n  background-color: #4e5d6c;\n}\n\n#control-button-group button{\n  font-weight: 500;\n  font-size: 1em;\n  background-color: #414C4F;\n}\n\n.control-button.selected {\n  background-color: #4e5d6c;\n  transition:background 0s;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n#timeline {\n  position: relative;\n  padding-bottom: 1em;\n  /*margin-top: 2em;*/\n  margin-bottom: 2em;\n}\n\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n\n/* ============================================================\n  ContactBox\n============================================================ */\n\n#contact-div {\n  float: right;\n  height: 0px;\n  width: 0px;\n}\n\n@media (max-width: 767px){\n  .resume-body {\n    padding-right: 80px;\n  }\n\n\n  #contact-links {\n    visibility: hidden;\n  }\n\n  #contact-icons {\n    right: 50px;\n    top: 100px;\n    position: fixed;\n    /*background-color: #033644;*/\n    \n  }\n\n  #contact-icons img {\n    height: 25px;\n    margin-bottom: 10px;\n\n  }\n/*\n  .mailto-ico {\n    background: url('/static/email.svg');\n    background-repeat: no-repeat;\n    height: 5px;\n    width: 10px;\n  }\n  */\n}\n\n@media (min-width: 768px) {\n  #contact-icons {\n    visibility: hidden;\n  }\n\n  #contact-links {\n    width: 90px;\n    height: 100px;\n    right: 10px;\n    top: 100px;\n    position: fixed;\n    background-color: #033644;\n    float: right;\n    padding: 10px;\n  }\n\n  #contact-links a{\n    color: #df691a;\n  }\n}\n\n", ""]);
+	exports.push([module.id, "/* ============================================================\n  Resume\n============================================================ */\n\n.resume-body {\n  padding-right: 120px;\n}\n\n.resume-heading {\n  padding-top: 30px;\n}\n\n.category-title {\n  margin-bottom: 1.5em;\n  margin-top: 3em;\n  font-weight: bold;\n\n}\n\n.ilb {\n  display: inline-block;\n}\n\n.title-card {\n  margin-bottom: .5em;\n  cursor: default;\n  position: relative;\n  display: inline-block;\n}\n\n.title-element {\n  display: inline-block;\n}\n\n.title-card.titlecard-has-highlights {\n  cursor: pointer;\n}\n\n.title {\n  display: inline-block;\n}\n\n.title-text {\n  font-weight: bold;\n}\n\n.title-date {\n  width: 120px;\n  padding-right: .35em;\n  text-align: left;\n  display: inline-block;\n}\n\n.title-org {\n  font-style: italic;\n}\n\n.summary {\n  margin-left: .5em;\n}\n\n.highlight-box {\n  background-color: #498292;\n  padding: 10px 0px;\n  margin-bottom: 20px;\n}\n\n.highlight-box ul {\n    color: #EDE1DB;\n    font-weight: 300;\n    font-size: .90em;\n}\n\n.highlight-box li {\n  padding-left: 5px;\n  padding-right: 10px;\n}\n\n.highlight {\n  margin-bottom: .5em;\n}\n\n.has-highlights {\n  border-bottom-style: solid;\n  border-bottom-width: 4px;\n  border-bottom-color: #498292;\n}\n.res-itemgroup {\n    margin-left: 2em;\n}\n\n\n#wrapper {\n  min-width: 600px;\n}\n\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n.timeline-circle {\n  position: absolute;\n  width: 15px;\n  height: 15px;\n  margin-left: -5px;\n  margin-top: 5px;\n  border-radius: 50%;\n}\n\n.job {\n  background-color: #5B903E;\n}\n\n.volunteer {\n  background-color: #C67070;\n}\n\n.education {\n  background-color: #784C83;\n}\n\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar\n============================================================ */\n\n\n.control-bar {\n  display: table;\n  background-color: #033644;\n  padding: 10px;\n  color: white;\n  border-width: 2px;\n  border-color: black;\n  box-shadow: 1px 1px 5px #2D3132;\n  /*#414C4F*/\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n\n/* ============================================================\n  Control Bar - Buttons\n============================================================ */\n\n#control-button-group {\n  display: inline-block;\n  margin-left: 40px;\n}\n\n.control-button {\n  margin-left: 10px;\n  display: inline-block;\n  padding: 10px;\n  cursor: pointer;\n  background-color: #4e5d6c;\n  border-style: solid;\n  border-width: 2px;\n  border-color: #4e5d6c;\n  transition:background 0s;\n\n}\n\n.control-button:hover {\n  border-color: #c85e17;\n  border-width: 2px;\n  background-color: #4e5d6c;\n}\n\n#control-button-group button{\n  font-weight: 500;\n  font-size: 1em;\n  background-color: #414C4F;\n}\n\n.control-button.selected {\n  background-color: #4e5d6c;\n  transition:background 0s;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n#timeline {\n  position: relative;\n  padding-bottom: 1em;\n  /*margin-top: 2em;*/\n  margin-bottom: 2em;\n}\n\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n\n/* ============================================================\n  ContactBox\n============================================================ */\n\n#contact-div {\n  float: right;\n  height: 0px;\n  width: 0px;\n}\n\n@media (max-width: 767px){\n  .resume-body {\n    padding-right: 80px;\n  }\n\n\n  #contact-links {\n    visibility: hidden;\n  }\n\n  #contact-icons {\n    right: 50px;\n    top: 100px;\n    position: fixed;\n    /*background-color: #033644;*/\n    \n  }\n\n  #contact-icons img {\n    height: 25px;\n    margin-bottom: 10px;\n\n  }\n/*\n  .mailto-ico {\n    background: url('/static/email.svg');\n    background-repeat: no-repeat;\n    height: 5px;\n    width: 10px;\n  }\n  */\n}\n\n@media (min-width: 768px) {\n  #contact-icons {\n    visibility: hidden;\n  }\n\n  #contact-links {\n    width: 90px;\n    height: 100px;\n    right: 10px;\n    top: 100px;\n    position: fixed;\n    background-color: #033644;\n    float: right;\n    padding: 10px;\n  }\n\n  #contact-links a{\n    color: #df691a;\n  }\n}\n\n", ""]);
 
 	// exports
 
