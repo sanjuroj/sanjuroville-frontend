@@ -28,7 +28,7 @@ export default class ResumeItemGroup extends Component {
         //console.log('prop=', this.props.highlightTracker)
         //console.log('title=', this.title)
         let inclHighlights = false;
-        if (this.props.highlightTracker[this.props.title] &&
+        if (this.props.highlightTracker[this.props.title+this.props.organization] &&
             this.props.highlights.length > 0){
 
             inclHighlights = true;

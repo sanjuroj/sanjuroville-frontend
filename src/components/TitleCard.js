@@ -6,9 +6,10 @@ export default class TitleCard extends Component {
 
     clickAction() {
         //console.log('clicked highlights')
+
         this.props.dispatch({
             type: HIGHLIGHTS,
-            title: this.props.title
+            title: this.props.title + this.props.organization
         });
     }
 
@@ -41,7 +42,13 @@ export default class TitleCard extends Component {
         else if (!this.props.summary && hasHighlights) {
             titleSpanClasses += " has-highlights";
         }
-        
+
+        let loc = ''
+        if (this.props.location != null){
+            loc = ", " + this.props.location;
+        }
+        const org_loc = `\u2013 ${this.props.organization} ${loc}`;
+
         const dateComponent =  
             <SimpleText 
                 key="1" 
@@ -63,7 +70,7 @@ export default class TitleCard extends Component {
                 />
             
                 <SimpleText 
-                    text={" \u2013 " + this.props.organization} 
+                    text={org_loc} 
                     spanClasses="title-org ilb"
                     divClasses="title-element"
                 />
@@ -85,7 +92,7 @@ export default class TitleCard extends Component {
             (
             this.props.summary &&
             this.props.groupFlag == false &&
-            this.props.highlightTracker[this.props.title]
+            this.props.highlightTracker[this.props.title+this.props.organization]
             )
             )
         {

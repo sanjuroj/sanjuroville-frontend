@@ -29,7 +29,7 @@ export function expand_all(expandable){
     let expandList = [];
     for (let cat of expandable){
         for (let item of cat.data) {
-            expandList[item.title] = true;
+            expandList[item.title+item.organization] = true;
         }
     }
     console.log('actions expandable',expandList);

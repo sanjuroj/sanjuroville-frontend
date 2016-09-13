@@ -23162,7 +23162,7 @@
 	                for (var _iterator2 = cat.data[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	                    var item = _step2.value;
 
-	                    expandList[item.title] = true;
+	                    expandList[item.title + item.organization] = true;
 	                }
 	            } catch (err) {
 	                _didIteratorError2 = true;
@@ -24066,7 +24066,7 @@
 	            //console.log('prop=', this.props.highlightTracker)
 	            //console.log('title=', this.title)
 	            var inclHighlights = false;
-	            if (this.props.highlightTracker[this.props.title] && this.props.highlights.length > 0) {
+	            if (this.props.highlightTracker[this.props.title + this.props.organization] && this.props.highlights.length > 0) {
 
 	                inclHighlights = true;
 	            }
@@ -24160,9 +24160,10 @@
 	        key: 'clickAction',
 	        value: function clickAction() {
 	            //console.log('clicked highlights')
+
 	            this.props.dispatch({
 	                type: _actions.HIGHLIGHTS,
-	                title: this.props.title
+	                title: this.props.title + this.props.organization
 	            });
 	        }
 	    }, {
@@ -24191,6 +24192,12 @@
 	                titleSpanClasses += " has-highlights";
 	            }
 
+	            var loc = '';
+	            if (this.props.location != null) {
+	                loc = ", " + this.props.location;
+	            }
+	            var org_loc = '– ' + this.props.organization + ' ' + loc;
+
 	            var dateComponent = _react2.default.createElement(_SimpleText2.default, {
 	                key: '1',
 	                text: start == end ? start : start + " - " + end,
@@ -24210,7 +24217,7 @@
 	                    divClasses: 'title-element'
 	                }),
 	                _react2.default.createElement(_SimpleText2.default, {
-	                    text: ' – ' + this.props.organization,
+	                    text: org_loc,
 	                    spanClasses: 'title-org ilb',
 	                    divClasses: 'title-element'
 	                })
@@ -24224,7 +24231,7 @@
 	            });
 
 	            var returnArray = [dateComponent, titleComponent];
-	            if (this.props.summary && this.props.groupFlag || this.props.summary && this.props.groupFlag == false && this.props.highlightTracker[this.props.title]) {
+	            if (this.props.summary && this.props.groupFlag || this.props.summary && this.props.groupFlag == false && this.props.highlightTracker[this.props.title + this.props.organization]) {
 	                returnArray.push(summaryComponent);
 	            }
 
