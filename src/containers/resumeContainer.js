@@ -123,7 +123,9 @@ class ResumeContainer extends Component {
                         experienced professional developers.
                         <br/><br/>
                         An interactive version of my resum&#233; is displayed below.  
-                        Item detail can be viewed by clicking on underlined items.
+                        Underlined items contain additional details that can viewed by 
+                        clicking on the title. 
+                        The control bar buttons can be used to change item layout.
                         
                         <br/><br/>
                     </div>
