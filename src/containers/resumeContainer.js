@@ -108,28 +108,29 @@ class ResumeContainer extends Component {
             return(
                 <div className="resume-body">
                     <ContactBox />
+                    <div className="resume-heading">
+                        I love making data useful and digestible.  Whether that involves 
+                        financial data or DNA sequences, I have enjoyed telling stories with data.  
+                        My work so far has required ever increasing amounts of programming, 
+                        but usually as a peripheral skill in a setting without other programmers.
+                        I would like to improve my software development skills more directly 
+                        and am now seeking a position as a junior software developer in 
+                        Portland, Oregon. I believe the diversity of my experience is an asset 
+                        that, among other things, can help me anticipate client needs and 
+                        tackle problems with a scientific mindset. 
+                        I would like to be in an environment where these skills are 
+                        useful but where I can also work with, and learn from, 
+                        experienced professional developers.
+                        <br/><br/>
+                        An interactive version of my resum&#233; is displayed below.  
+                        Item detail can be viewed by clicking on underlined items.
+                        
+                        <br/><br/>
+                    </div>
                     <ControlBar 
                         {...this.props} 
                         style={require('../../assets/resume-styles.css')} 
                         expandable={datedData}/>
-                    <div className="resume-heading">
-                        An interactive version of my resum&#233; is displayed below.  It loads in a 
-                        compressed form with expandable items highlighted by a bottom border. 
-                        The control buttons just above can be used to change the layout or
-                        to collapse and expand all items.
-                        My <a href="https://www.linkedin.com/in/sanjurojogdeo" target="_blank">
-                        LinkedIn</a> page provides similar resum&#233; info as what is found here.  
-                        I also have a <a href="https://github.com/sanjuroj" target="_blank">
-                        GitHub</a> repository that can be perused.
-                        The <a href={ window.location.origin + "/about"}>About</a> page 
-                        has information on how this interactive resum&#233; was built.
-                        <br/><br/>
-                        I am currently looking for a software development job in Portland, Oregon.
-                        I enjoy making data useful and digestible, which has been the consistent thread through 
-                        most of my working and volunteer life.  I would like to be in an environment where 
-                        I can learn from more experienced developers and where my diversity of experience 
-                        will be useful.  
-                    </div>
                     <div className="resume-data">
                         <section id="dated-items" >
                             {categoryList}

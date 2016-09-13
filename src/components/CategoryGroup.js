@@ -26,13 +26,17 @@ export default class CategoryGroup extends Component {
     render() {
         //console.log('rig props', this.props);
         //console.log('catgroup rigitems', this.makeRIGItems())        
+
         return (
             <div className={'category-group'}>
                 <div id="category-title">
                     <p className={'category-title'}>{this.props.category_title.toUpperCase()}</p>
                 </div>
-                <div id={this.props.groupFlag == false ? "timeline" : null }> 
-                    {this.makeRIGItems()}
+                <div 
+                    id={this.props.groupFlag == false ? "timeline" : null }
+                    className="category-container"
+                > 
+                        {this.makeRIGItems()}
                 </div>
             </div>
         );

@@ -23843,35 +23843,19 @@
 	                    'div',
 	                    { className: 'resume-body' },
 	                    _react2.default.createElement(_ContactBox2.default, null),
-	                    _react2.default.createElement(_ControlBar2.default, _extends({}, this.props, {
-	                        style: __webpack_require__(218),
-	                        expandable: datedData })),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'resume-heading' },
-	                        'An interactive version of my resumé is displayed below.  It loads in a compressed form with expandable items highlighted by a bottom border. The control buttons just above can be used to change the layout or to collapse and expand all items. My ',
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: 'https://www.linkedin.com/in/sanjurojogdeo', target: '_blank' },
-	                            'LinkedIn'
-	                        ),
-	                        ' page provides similar resumé info as what is found here. I also have a ',
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: 'https://github.com/sanjuroj', target: '_blank' },
-	                            'GitHub'
-	                        ),
-	                        ' repository that can be perused. The ',
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: window.location.origin + "/about" },
-	                            'About'
-	                        ),
-	                        ' page has information on how this interactive resumé was built.',
+	                        'I love making data useful and digestible.  Whether that involves financial data or DNA sequences, I have enjoyed telling stories with data. My work so far has required ever increasing amounts of programming, but usually as a peripheral skill in a setting without other programmers. I would like to improve my software development skills more directly and am now seeking a position as a junior software developer in Portland, Oregon. I believe the diversity of my experience is an asset that, among other things, can help me anticipate client needs and tackle problems with a scientific mindset. I would like to be in an environment where these skills are useful but where I can also work with, and learn from, experienced professional developers.',
 	                        _react2.default.createElement('br', null),
 	                        _react2.default.createElement('br', null),
-	                        'I am currently looking for a software development job in Portland, Oregon. I enjoy making data useful and digestible, which has been the consistent thread through most of my working and volunteer life.  I would like to be in an environment where I can learn from more experienced developers and where my diversity of experience will be useful.'
+	                        'An interactive version of my resumé is displayed below. Item detail can be viewed by clicking on underlined items.',
+	                        _react2.default.createElement('br', null),
+	                        _react2.default.createElement('br', null)
 	                    ),
+	                    _react2.default.createElement(_ControlBar2.default, _extends({}, this.props, {
+	                        style: __webpack_require__(218),
+	                        expandable: datedData })),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'resume-data' },
@@ -23977,6 +23961,7 @@
 	        value: function render() {
 	            //console.log('rig props', this.props);
 	            //console.log('catgroup rigitems', this.makeRIGItems())        
+
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'category-group' },
@@ -23991,7 +23976,10 @@
 	                ),
 	                _react2.default.createElement(
 	                    'div',
-	                    { id: this.props.groupFlag == false ? "timeline" : null },
+	                    {
+	                        id: this.props.groupFlag == false ? "timeline" : null,
+	                        className: 'category-container'
+	                    },
 	                    this.makeRIGItems()
 	                )
 	            );
@@ -24579,7 +24567,7 @@
 /* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -24609,62 +24597,56 @@
 	    }
 
 	    _createClass(NameLevelBlurbList, [{
-	        key: "makeList",
+	        key: 'makeList',
 	        value: function makeList() {
 	            return this.props.data.map(function (item, key) {
+
+	                var summary = '';
 	                if (item.summary) {
-	                    return _react2.default.createElement(
-	                        "li",
-	                        { key: key },
-	                        " ",
-	                        _react2.default.createElement(
-	                            "span",
-	                            { className: "skill" },
-	                            item.name,
-	                            " (",
-	                            item.level,
-	                            ")"
-	                        ),
-	                        " - ",
-	                        item.summary
-	                    );
-	                } else {
-	                    return _react2.default.createElement(
-	                        "li",
-	                        { key: key },
-	                        _react2.default.createElement(
-	                            "span",
-	                            { className: "skill" },
-	                            item.name,
-	                            " (",
-	                            item.level,
-	                            ")"
-	                        )
-	                    );
+	                    summary = " - " + item.summary;
 	                }
+
+	                return _react2.default.createElement(
+	                    'li',
+	                    { key: key },
+	                    _react2.default.createElement(
+	                        'span',
+	                        { className: 'nlb-name' },
+	                        item.name,
+	                        ' '
+	                    ),
+	                    '(',
+	                    item.level,
+	                    ')',
+	                    summary
+	                );
 	            });
 	        }
 	    }, {
-	        key: "render",
+	        key: 'render',
 	        value: function render() {
 	            //console.log('nlbl props', this.props)
 	            return _react2.default.createElement(
-	                "div",
+	                'div',
 	                null,
 	                _react2.default.createElement(
-	                    "p",
-	                    { className: "category-title" },
+	                    'p',
+	                    { className: 'category-title' },
 	                    this.props.heading
 	                ),
 	                this.props.subtitle !== 'undefined' ? _react2.default.createElement(
-	                    "div",
-	                    { className: "category-subtitle" },
+	                    'div',
+	                    { className: 'category-subtitle' },
 	                    this.props.subtitle
 	                ) : none,
 	                _react2.default.createElement(
-	                    "ul",
-	                    null,
-	                    this.makeList()
+	                    'div',
+	                    { className: 'category-container' },
+	                    _react2.default.createElement(
+	                        'ul',
+	                        null,
+	                        this.makeList()
+	                    )
 	                )
 	            );
 	        }
@@ -25060,7 +25042,7 @@
 
 
 	// module
-	exports.push([module.id, "/* ============================================================\n  Resume\n============================================================ */\n\n.resume-body {\n  padding-right: 120px;\n}\n\n.resume-heading {\n  padding-top: 30px;\n}\n\n.category-title {\n  margin-bottom: 1.5em;\n  margin-top: 3em;\n  font-weight: bold;\n\n}\n\n.ilb {\n  display: inline-block;\n}\n\n.title-card {\n  margin-bottom: .5em;\n  cursor: default;\n  position: relative;\n  display: inline-block;\n}\n\n.title-element {\n  display: inline-block;\n}\n\n.title-card.titlecard-has-highlights {\n  cursor: pointer;\n}\n\n.title {\n  display: inline-block;\n}\n\n.title-text {\n  font-weight: bold;\n}\n\n.title-date {\n  width: 120px;\n  padding-right: .35em;\n  text-align: left;\n  display: inline-block;\n}\n\n.title-org {\n  font-style: italic;\n}\n\n.summary {\n  margin-left: .5em;\n}\n\n.highlight-box {\n  background-color: #498292;\n  padding: 10px 0px;\n  margin-bottom: 20px;\n}\n\n.highlight-box ul {\n    color: #EDE1DB;\n    font-weight: 300;\n    font-size: .90em;\n}\n\n.highlight-box li {\n  padding-left: 5px;\n  padding-right: 10px;\n}\n\n.highlight {\n  margin-bottom: .5em;\n}\n\n.has-highlights {\n  border-bottom-style: solid;\n  border-bottom-width: 4px;\n  border-bottom-color: #498292;\n}\n.res-itemgroup {\n    margin-left: 2em;\n}\n\n\n#wrapper {\n  min-width: 600px;\n}\n\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n.timeline-circle {\n  position: absolute;\n  width: 15px;\n  height: 15px;\n  margin-left: -5px;\n  margin-top: 5px;\n  border-radius: 50%;\n}\n\n.job {\n  background-color: #5B903E;\n}\n\n.volunteer {\n  background-color: #C67070;\n}\n\n.education {\n  background-color: #784C83;\n}\n\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar\n============================================================ */\n\n\n.control-bar {\n  display: table;\n  background-color: #033644;\n  padding: 10px;\n  color: white;\n  border-width: 2px;\n  border-color: black;\n  box-shadow: 1px 1px 5px #2D3132;\n  /*#414C4F*/\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n\n/* ============================================================\n  Control Bar - Buttons\n============================================================ */\n\n#control-button-group {\n  display: inline-block;\n  margin-left: 40px;\n}\n\n.control-button {\n  margin-left: 10px;\n  display: inline-block;\n  padding: 10px;\n  cursor: pointer;\n  background-color: #4e5d6c;\n  border-style: solid;\n  border-width: 2px;\n  border-color: #4e5d6c;\n  transition:background 0s;\n\n}\n\n.control-button:hover {\n  border-color: #c85e17;\n  border-width: 2px;\n  background-color: #4e5d6c;\n}\n\n#control-button-group button{\n  font-weight: 500;\n  font-size: 1em;\n  background-color: #414C4F;\n}\n\n.control-button.selected {\n  background-color: #4e5d6c;\n  transition:background 0s;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n#timeline {\n  position: relative;\n  padding-bottom: 1em;\n  /*margin-top: 2em;*/\n  margin-bottom: 2em;\n}\n\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n\n/* ============================================================\n  ContactBox\n============================================================ */\n\n#contact-div {\n  float: right;\n  height: 0px;\n  width: 0px;\n}\n\n@media (max-width: 767px){\n  .resume-body {\n    padding-right: 80px;\n  }\n\n\n  #contact-links {\n    visibility: hidden;\n  }\n\n  #contact-icons {\n    right: 50px;\n    top: 100px;\n    position: fixed;\n    /*background-color: #033644;*/\n    \n  }\n\n  #contact-icons img {\n    height: 25px;\n    margin-bottom: 10px;\n\n  }\n/*\n  .mailto-ico {\n    background: url('/static/email.svg');\n    background-repeat: no-repeat;\n    height: 5px;\n    width: 10px;\n  }\n  */\n}\n\n@media (min-width: 768px) {\n  #contact-icons {\n    visibility: hidden;\n  }\n\n  #contact-links {\n    width: 90px;\n    height: 100px;\n    right: 10px;\n    top: 100px;\n    position: fixed;\n    background-color: #033644;\n    float: right;\n    padding: 10px;\n  }\n\n  #contact-links a{\n    color: #df691a;\n  }\n}\n\n", ""]);
+	exports.push([module.id, "/* ============================================================\n  Resume\n============================================================ */\n\n.resume-body {\n  padding-right: 120px;\n}\n\n.category-title {\n  margin-bottom: .2em;\n  margin-top: 3em;\n  font-weight: bold;\n}\n\n.category-container {\n  margin-top: 1em;\n}\n\n.ilb {\n  display: inline-block;\n}\n\n.title-card {\n  margin-bottom: .5em;\n  cursor: default;\n  position: relative;\n  display: inline-block;\n}\n\n.title-element {\n  display: inline-block;\n}\n\n.title-card.titlecard-has-highlights {\n  cursor: pointer;\n}\n\n.title {\n  display: inline-block;\n}\n\n.title-text {\n  font-weight: bold;\n}\n\n.title-date {\n  width: 120px;\n  padding-right: .35em;\n  text-align: left;\n  display: inline-block;\n}\n\n.title-org {\n  font-style: italic;\n}\n\n.summary {\n  margin-left: .5em;\n}\n\n.highlight-box {\n  background-color: #498292;\n  padding: 10px 0px;\n  margin-bottom: 20px;\n}\n\n.highlight-box ul {\n    color: #EDE1DB;\n    font-weight: 300;\n    font-size: .90em;\n}\n\n.highlight-box li {\n  padding-left: 5px;\n  padding-right: 10px;\n}\n\n.highlight {\n  margin-bottom: .5em;\n}\n\n.has-highlights {\n  border-bottom-style: solid;\n  border-bottom-width: 4px;\n  border-bottom-color: #498292;\n}\n.res-itemgroup {\n    margin-left: 2em;\n}\n\n\n#wrapper {\n  min-width: 600px;\n}\n\n\n.grouped-switch,\n.grouped-label {\n  display: inline-block;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n.timeline-circle {\n  position: absolute;\n  width: 15px;\n  height: 15px;\n  margin-left: -5px;\n  margin-top: 5px;\n  border-radius: 50%;\n}\n\n.job {\n  background-color: #5B903E;\n}\n\n.volunteer {\n  background-color: #C67070;\n}\n\n.education {\n  background-color: #784C83;\n}\n\n.cmn-toggle {\n  position: absolute;\n  margin-left: -9999px;\n  visibility: hidden;\n}\n.cmn-toggle + label {\n  display: block;\n  position: relative;\n  cursor: pointer;\n  outline: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n\n\n/* ============================================================\n  Control Bar\n============================================================ */\n\n\n.control-bar {\n  display: table;\n  background-color: #033644;\n  padding: 10px;\n  color: white;\n  border-width: 2px;\n  border-color: black;\n  box-shadow: 1px 1px 5px #2D3132;\n  /*#414C4F*/\n}\n\n\n\n/* ============================================================\n  Control Bar - Slider\n============================================================ */\n\ninput.cmn-toggle-round + label {\n  padding: 1px;\n  width: 40px;\n  height: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n}\ninput.cmn-toggle-round + label:before, \ninput.cmn-toggle-round + label:after {\n  display: block;\n  position: absolute;\n  top: 1px;\n  left: 1px;\n  bottom: 1px;\n  content: \"\";\n}\ninput.cmn-toggle-round + label:before {\n  right: 1px;\n  background-color: #c85e17;\n  -webkit-border-radius: 20px;\n  -moz-border-radius: 20px;\n  -ms-border-radius: 20px;\n  -o-border-radius: 20px;\n  border-radius: 20px;\n  -webkit-transition: background 0.1s;\n  -moz-transition: background 0.1s;\n  -o-transition: background 0.1s;\n  transition: background 0.1s;\n  \n}\ninput.cmn-toggle-round + label:after {\n  width: 20px;\n  background-color: #eeeeee;\n  -webkit-border-radius: 100%;\n  -moz-border-radius: 100%;\n  -ms-border-radius: 100%;\n  -o-border-radius: 100%;\n  border-radius: 100%;\n  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);\n  -webkit-transition: margin 0.1s;\n  -moz-transition: margin 0.1s;\n  -o-transition: margin 0.1s;\n  transition: margin 0.1s;\n  \n}\ninput.cmn-toggle-round:checked + label:before {\n  background-color: #c85e17;\n}\ninput.cmn-toggle-round:checked + label:after {\n  margin-left: 20px;\n}\n\n.switch {\n  display: inline-block;\n  vertical-align: middle;\n  padding: 3px 10px 0px 10px;\n}\n\n\n/* ============================================================\n  Control Bar - Buttons\n============================================================ */\n\n#control-button-group {\n  display: inline-block;\n  margin-left: 40px;\n}\n\n.control-button {\n  margin-left: 10px;\n  display: inline-block;\n  padding: 10px;\n  cursor: pointer;\n  background-color: #4e5d6c;\n  border-style: solid;\n  border-width: 2px;\n  border-color: #4e5d6c;\n  transition:background 0s;\n\n}\n\n.control-button:hover {\n  border-color: #c85e17;\n  border-width: 2px;\n  background-color: #4e5d6c;\n}\n\n#control-button-group button{\n  font-weight: 500;\n  font-size: 1em;\n  background-color: #414C4F;\n}\n\n.control-button.selected {\n  background-color: #4e5d6c;\n  transition:background 0s;\n}\n\n\n\n\n/* ============================================================\n  Timeline\n============================================================ */\n\n#timeline {\n  position: relative;\n  padding-bottom: 1em;\n  /*margin-top: 2em;*/\n  margin-bottom: 2em;\n}\n\n\n /* this is the vertical line */\n \n#timeline::before {\n \n  content: '';\n  position: absolute;\n  top: 0;\n  height: 100%;\n  width: 5px;\n  background: #d7e4ed;\n}\n\n\n/* ============================================================\n  ContactBox\n============================================================ */\n\n#contact-div {\n  float: right;\n  height: 0px;\n  width: 0px;\n}\n\n@media (max-width: 767px){\n  .resume-body {\n    padding-right: 80px;\n  }\n\n\n  #contact-links {\n    visibility: hidden;\n  }\n\n  #contact-icons {\n    right: 50px;\n    top: 145px;\n    position: fixed;\n    /*background-color: #033644;*/\n    \n  }\n\n  #contact-icons img {\n    height: 25px;\n    margin-bottom: 10px;\n\n  }\n/*\n  .mailto-ico {\n    background: url('/static/email.svg');\n    background-repeat: no-repeat;\n    height: 5px;\n    width: 10px;\n  }\n  */\n}\n\n@media (min-width: 768px) {\n  #contact-icons {\n    visibility: hidden;\n  }\n\n  #contact-links {\n    width: 90px;\n    height: 100px;\n    right: 10px;\n    top: 145px;\n    position: fixed;\n    background-color: #033644;\n    float: right;\n    padding: 10px;\n  }\n\n  #contact-links a{\n    color: #df691a;\n  }\n}\n\n/* ============================================================\n  NameLevelBlurb\n============================================================ */\n\n.nlb-name {\n  font-weight: bold;\n}", ""]);
 
 	// exports
 

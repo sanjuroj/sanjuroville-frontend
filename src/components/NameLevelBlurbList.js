@@ -4,12 +4,19 @@ export default class NameLevelBlurbList extends Component {
     
     makeList(){
         return(this.props.data.map( (item, key) => {
-            if (item.summary){
-                return(<li key={key}> <span className="skill">{item.name} ({item.level})</span> - {item.summary}</li>);
+            
+            let summary = '';
+            if (item.summary) {
+                summary = " - " + item.summary;
             }
-            else {
-                return(<li key={key}><span className="skill">{item.name} ({item.level})</span></li>);
-            }
+
+            return (
+                <li key={key}> 
+                    <span className="nlb-name">{item.name} </span>
+                    ({item.level}){summary}
+                </li>
+            );
+
         }));
     }
 
@@ -23,10 +30,11 @@ export default class NameLevelBlurbList extends Component {
                         <div className="category-subtitle">{this.props.subtitle}</div>
                     ) : none
                 }
-                
-                <ul>
-                    {this.makeList()}
-                </ul>
+                <div className="category-container">
+                    <ul>
+                        {this.makeList()}
+                    </ul>
+                </div>
             </div>
         );
     

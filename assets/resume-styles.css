@@ -6,15 +6,14 @@
   padding-right: 120px;
 }
 
-.resume-heading {
-  padding-top: 30px;
-}
-
 .category-title {
-  margin-bottom: 1.5em;
+  margin-bottom: .2em;
   margin-top: 3em;
   font-weight: bold;
+}
 
+.category-container {
+  margin-top: 1em;
 }
 
 .ilb {
@@ -322,7 +321,7 @@ input.cmn-toggle-round:checked + label:after {
 
   #contact-icons {
     right: 50px;
-    top: 100px;
+    top: 145px;
     position: fixed;
     /*background-color: #033644;*/
     
@@ -352,7 +351,7 @@ input.cmn-toggle-round:checked + label:after {
     width: 90px;
     height: 100px;
     right: 10px;
-    top: 100px;
+    top: 145px;
     position: fixed;
     background-color: #033644;
     float: right;
@@ -364,3 +363,10 @@ input.cmn-toggle-round:checked + label:after {
   }
 }
 
+/* ============================================================
+  NameLevelBlurb
+============================================================ */
+
+.nlb-name {
+  font-weight: bold;
+}
