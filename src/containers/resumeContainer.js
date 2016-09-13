@@ -8,20 +8,6 @@ import ControlBar from '../components/ControlBar';
 import ContactBox from '../components/ContactBox';
 
 
-// TODO: strip extra spaces off text entries (5)
-// TODO: remove periods from ends of sentances (5)
-// TODO: rotate branding font (5)
-// TODO: allow user to specify which Linkedin files to import (5)
-// TODO: fix underline hlighting so it only highlights the bottom of the box (6)
-// TODO: make a better readme file for the repositories (3)
-// TODO: need to run is_valid on form submissions (5)
-// TODO: make labels on grouping slider clickable
-// TODO: deemphasize location of volunteering (5)
-// TODO: come up with better timeline icons.  Maybe just single letters in the circle? (5)
-// TODO: add padding at bottom of highlights and reduce at top
-// TODO: formalize how language skills are sorted (8)
-
-
 class ResumeContainer extends Component {
     
     makeTitle(title, location, modifier=null){
