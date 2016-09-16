@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import SimpleText from './SimpleText';
 import { HIGHLIGHTS } from '../actions/';
+import ReactMarkdown from 'react-markdown';
 
 export default class TitleCard extends Component {
 
-    clickAction() {
+    clickAction(e) {
         //console.log('clicked highlights')
-
-        this.props.dispatch({
-            type: HIGHLIGHTS,
-            title: this.props.title + this.props.organization
-        });
+        e.stopPropagation();
+        console.log('tc click action', e);
+        // this.props.dispatch({
+        //     type: HIGHLIGHTS,
+        //     title: this.props.title + this.props.organization
+        // });
     }
 
 
@@ -76,13 +78,15 @@ export default class TitleCard extends Component {
                 />
             </div>
 
-        const summaryComponent = 
-            <SimpleText 
-                key="4" 
-                text={this.props.summary} 
-                spanClasses={summarySpanClasses} 
-                divClasses="summary"
-            />;
+
+        // const summaryComponent = 
+        //     <ReactMarkdown 
+        //         source={this.props.summary} 
+        //         key="4" 
+        //         className={summarySpanClasses} 
+        //         containerTagName="div"
+        //         containerProps={{className: "summary"}}
+        //     />;
 
         let returnArray = [
             dateComponent,
@@ -96,7 +100,15 @@ export default class TitleCard extends Component {
             )
             )
         {
-            returnArray.push(summaryComponent);
+            returnArray.push(
+                <ReactMarkdown 
+                    source={this.props.summary} 
+                    key="4" 
+                    className={summarySpanClasses} 
+                    containerTagName="div"
+                    containerProps={{className: "summary"}}
+                />
+            );
         }
         
         return returnArray;
