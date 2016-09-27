@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Highlight from './Highlight';
+import SimpleText from './SimpleText';
 
 export default class HighlightBox extends Component {
     
@@ -8,7 +8,7 @@ export default class HighlightBox extends Component {
             const highlightArray = this.props.highlights.map( (hLight, key) => {
                 return (
                     <li className={'highlight'} key={key}>
-                        <Highlight highlight={hLight} />
+                        <SimpleText text={hLight} />
                     </li>
                 );
 
@@ -16,7 +16,7 @@ export default class HighlightBox extends Component {
             return highlightArray;
         }
         else {
-            return(<Highlight highlight={this.props.highlights[0]} />);
+            return(<SimpleText text={this.props.highlights[0]} />);
         }
     }
     

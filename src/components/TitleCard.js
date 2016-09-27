@@ -7,12 +7,13 @@ export default class TitleCard extends Component {
 
     clickAction(e) {
         //console.log('clicked highlights')
-        e.stopPropagation();
-        console.log('tc click action', e);
-        // this.props.dispatch({
-        //     type: HIGHLIGHTS,
-        //     title: this.props.title + this.props.organization
-        // });
+        let re = new RegExp("http");
+        if (!re.test(e.target)) {
+            this.props.dispatch({
+                type: HIGHLIGHTS,
+                title: this.props.title + this.props.organization
+            });
+        }
     }
 
 
