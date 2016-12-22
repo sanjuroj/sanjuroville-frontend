@@ -58,7 +58,7 @@ export default function getRData(store, action) {
     
 
     case EXPAND_ALL:
-        console.log('reducer expandable', action.expandList) 
+        //console.log('reducer expandable', action.expandList) 
         return Object.assign({}, store, {highlightTracker: action.expandList});   
 
     case COMPRESS_ALL: 

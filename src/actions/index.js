@@ -32,7 +32,6 @@ export function expand_all(expandable){
             expandList[item.title+item.organization] = true;
         }
     }
-    console.log('actions expandable',expandList);
     return {
         type: EXPAND_ALL,
         expandList
@@ -53,7 +52,7 @@ export function toggle_grouped() {
 }
 
 export function fetchData () {
-    let apiurl = 'http://' + window.location.host + '/resume/api/?format=json';
+    let apiurl = '//' + window.location.host + '/resume/api/?format=json';
     return dispatch => {
         fetch(apiurl)
         .then(

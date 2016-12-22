@@ -23092,7 +23092,7 @@
 	            }
 
 	        case _actions.EXPAND_ALL:
-	            console.log('reducer expandable', action.expandList);
+	            //console.log('reducer expandable', action.expandList) 
 	            return Object.assign({}, store, { highlightTracker: action.expandList });
 
 	        case _actions.COMPRESS_ALL:
@@ -23194,7 +23194,6 @@
 	        }
 	    }
 
-	    console.log('actions expandable', expandList);
 	    return {
 	        type: EXPAND_ALL,
 	        expandList: expandList
@@ -23214,7 +23213,7 @@
 	}
 
 	function fetchData() {
-	    var apiurl = 'http://' + window.location.host + '/resume/api/?format=json';
+	    var apiurl = '//' + window.location.host + '/resume/api/?format=json';
 	    return function (dispatch) {
 	        (0, _isomorphicFetch2.default)(apiurl).then(function (response) {
 	            //console.log('here');
