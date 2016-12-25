@@ -18,21 +18,26 @@ export default class TitleCard extends Component {
 
 
     buildElements(){
+
+        /****************
+        Many elements to a Title Card:
+        -date
+        -location
+        -organization
+        -underlining for summary and/or highlights
+
+        *****************/
+        
         const hasHighlights = this.props.highlights.length > 0 ? true : false;
         let start = this.props.startDate.getUTCFullYear();
         let end = this.props.endDate.getUTCFullYear();
         let titleSpanClasses = 'title ilb';
         let summarySpanClasses = '';
         
-        /*let titleText = 
-            <span>
-                <span className='title-date'>
-                    {start == end ? start : start + " - " + end}
-                </span>
-                <span className='title-text'>{title}</span>    
-            </span>;
-        */
-
+        
+        // Underlining will depend on the dispay type.  Timeline display is compact, 
+        // so presence of summary or highlights will trigger underlining.  Position 
+        // of underling will depend on if summary is visible or not.
         if (
             this.props.groupFlag == false && 
             (this.props.summary || hasHighlights)
@@ -46,11 +51,13 @@ export default class TitleCard extends Component {
             titleSpanClasses += " has-highlights";
         }
 
-        let loc = ''
+        // combine organization and location
+        let loc = '';
         if (this.props.location != null){
             loc = ", " + this.props.location;
         }
         const org_loc = `\u2013 ${this.props.organization} ${loc}`;
+
 
         const dateComponent =  
             <SimpleText 
@@ -59,6 +66,7 @@ export default class TitleCard extends Component {
                 spanClasses="title-date" 
                 divClasses="title-element"
             />
+
 
         const titleComponent =  
             <div 
@@ -80,14 +88,6 @@ export default class TitleCard extends Component {
             </div>
 
 
-        // const summaryComponent = 
-        //     <ReactMarkdown 
-        //         source={this.props.summary} 
-        //         key="4" 
-        //         className={summarySpanClasses} 
-        //         containerTagName="div"
-        //         containerProps={{className: "summary"}}
-        //     />;
 
         let returnArray = [
             dateComponent,
