@@ -299,69 +299,6 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 
-/* ============================================================
-  ContactBox
-============================================================ */
-
-#contact-div {
-  float: right;
-  height: 0px;
-  width: 0px;
-}
-
-@media (max-width: 767px){
-  .resume-body {
-    padding-right: 80px;
-  }
-
-
-  #contact-links {
-    visibility: hidden;
-  }
-
-  #contact-icons {
-    right: 50px;
-    top: 100px;
-    position: fixed;
-    /*background-color: #033644;*/
-    
-  }
-
-  #contact-icons img {
-    height: 25px;
-    margin-bottom: 10px;
-
-  }
-/*
-  .mailto-ico {
-    background: url('/static/email.svg');
-    background-repeat: no-repeat;
-    height: 5px;
-    width: 10px;
-  }
-  */
-}
-
-@media (min-width: 768px) {
-  #contact-icons {
-    visibility: hidden;
-  }
-
-  #contact-links {
-    width: 90px;
-    height: 100px;
-    right: 10px;
-    top: 100px;
-    position: fixed;
-    background-color: #033644;
-    float: right;
-    padding: 10px;
-  }
-
-  #contact-links a{
-    color: #df691a;
-  }
-}
 
 /* ============================================================
   NameLevelBlurb

@@ -117,7 +117,7 @@ class ResumeContainer extends Component {
                     </div>
                     <ControlBar 
                         {...this.props} 
-                        style={require('../../assets/resume-styles.css')} 
+                        
                         expandable={datedData}/>
                     <div className="resume-data">
                         <section id="dated-items" >
