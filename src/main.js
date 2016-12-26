@@ -17,6 +17,7 @@ let store = createStore(
         thunk
     ));
 
+
 // document.getElementById('target').innerHTML = "Zip";
 
 ReactDOM.render(
