@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import getRData from './reducers';
-import ResumeContainer from './containers/resumeContainer.js';
 import thunk from 'redux-thunk';
+import { browserHistory } from 'react-router';
+import routes from './routes';
+
 
 require("../assets/stylesheets/main.scss");
 
@@ -19,7 +21,7 @@ let store = createStore(
 
 ReactDOM.render(
     <Provider store={store}>
-        <ResumeContainer/>
+        {routes(browserHistory)}
     </Provider>,
     document.getElementById('target')
 );

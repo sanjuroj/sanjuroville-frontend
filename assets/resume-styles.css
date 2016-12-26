@@ -4,84 +4,14 @@
 
 
 
-.title-card {
-  margin-bottom: .5em;
-  cursor: default;
-  position: relative;
-  display: inline-block;
-}
 
-.title-element {
-  display: inline-block;
-}
 
-.title-card.titlecard-has-highlights {
-  cursor: pointer;
-}
-
-.title {
-  display: inline-block;
-}
-
-.title-text {
-  font-weight: bold;
-}
-
-.title-date {
-  width: 120px;
-  padding-right: .35em;
-  text-align: left;
-  display: inline-block;
-}
-
-.title-org {
-  font-style: italic;
-}
-
-.summary {
-  margin-left: .5em;
-}
-
-.highlight-box {
-  background-color: #498292;
-  padding: 10px 0px;
-  margin-bottom: 20px;
-}
-
-.highlight-box ul {
-    color: #EDE1DB;
-    font-weight: 300;
-    font-size: .90em;
-}
-
-.highlight-box li {
-  padding-left: 5px;
-  padding-right: 10px;
-}
-
-.highlight {
-  margin-bottom: .5em;
-}
-
-.has-highlights {
-  border-bottom-style: solid;
-  border-bottom-width: 4px;
-  border-bottom-color: #498292;
-}
-.res-itemgroup {
-    margin-left: 2em;
-}
 
 
 #wrapper {
   min-width: 600px;
 }
 
-
-.grouped-switch,
-.grouped-label {
-  display: inline-block;
-}
 
 
 

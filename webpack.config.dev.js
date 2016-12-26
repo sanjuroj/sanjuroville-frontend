@@ -26,7 +26,12 @@ module.exports = {
             { test: /\.(jpg|svg|png)$/, exclude: /node_modules/, loader: "url-loader" },
             { test: /\.json$/, loader: "json" }
         ]
+    },
+
+    devServer: {
+        historyApiFallback: true
     }
+
 
     
 };

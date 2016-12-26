@@ -8,7 +8,7 @@ import ControlBar from '../components/ControlBar';
 import ContactBox from '../components/ContactBox';
 
 
-class ResumeContainer extends Component {
+class Resume extends Component {
     
     makeTitle(title, location, modifier=null){
         if (modifier==null){
@@ -154,4 +154,4 @@ const mapStateToProps = (state) => {
     return(state);
 };
 
-export default connect(mapStateToProps)(ResumeContainer);
+export default connect(mapStateToProps)(Resume);
