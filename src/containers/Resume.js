@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import CategoryGroup from '../components/CategoryGroup.js';
 import { connect } from 'react-redux';
 import { fetchData } from '../actions/';
 import { getDatedData } from '../utils/getResData';
-import NameLevelBlurbList from '../components/NameLevelBlurbList';
-import ControlBar from '../components/ControlBar';
-import ContactBox from '../components/ContactBox';
-
+import NavBar from '../components/NavBar';
+import NameLevelBlurbList from '../components/resume/NameLevelBlurbList';
+import ControlBar from '../components/resume/ControlBar';
+import ContactBox from '../components/resume/ContactBox';
+import CategoryGroup from '../components/resume/CategoryGroup.js';
 
 class Resume extends Component {
     
@@ -92,51 +92,54 @@ class Resume extends Component {
         let langSort = ['Native', 'Elementary'];
         if (categoryList !== 'undefined') {
             return(
-                <div className="resume-body">
-                    <ContactBox />
-                    <div className="resume-heading">
-                        I love making data useful and digestible.  Whether that involves 
-                        financial data or DNA sequences, I have enjoyed telling stories with data.  
-                        My work so far has required ever increasing amounts of programming, 
-                        but usually as a peripheral skill in a setting without other programmers.
-                        I would like to improve my software development skills more directly 
-                        and am now seeking a position as a junior software developer in 
-                        Portland, Oregon. I believe the diversity of my experience is an asset 
-                        that, among other things, can help me anticipate client needs and 
-                        tackle problems with a scientific mindset. 
-                        I would like to be in an environment where these skills are 
-                        useful but where I can also work with, and learn from, 
-                        experienced professional developers.
-                        <br/><br/>
-                        An interactive version of my resum&#233; is displayed below.  
-                        Underlined items contain additional details that can viewed by 
-                        clicking on the title. 
-                        The control bar buttons can be used to change item layout.
-                        
-                        <br/><br/>
+                <div>
+                    <NavBar />
+                    <div className="resume-body">
+                        <ContactBox />
+                        <div className="resume-heading">
+                            I love making data useful and digestible.  Whether that involves 
+                            financial data or DNA sequences, I have enjoyed telling stories with data.  
+                            My work so far has required ever increasing amounts of programming, 
+                            but usually as a peripheral skill in a setting without other programmers.
+                            I would like to improve my software development skills more directly 
+                            and am now seeking a position as a junior software developer in 
+                            Portland, Oregon. I believe the diversity of my experience is an asset 
+                            that, among other things, can help me anticipate client needs and 
+                            tackle problems with a scientific mindset. 
+                            I would like to be in an environment where these skills are 
+                            useful but where I can also work with, and learn from, 
+                            experienced professional developers.
+                            <br/><br/>
+                            An interactive version of my resum&#233; is displayed below.  
+                            Underlined items contain additional details that can viewed by 
+                            clicking on the title. 
+                            The control bar buttons can be used to change item layout.
+                            
+                            <br/><br/>
+                        </div>
+                        <ControlBar 
+                            {...this.props} 
+                            
+                            expandable={datedData}/>
+                        <div className="resume-data">
+                            <section id="dated-items" >
+                                {categoryList}
+                            </section>
+                            <section id="skilz" className="skilz-card" >
+                                <NameLevelBlurbList 
+                                    data={this.sortResDataByLevel(this.props.resumeData.skill, 'rev')} 
+                                    heading="SKILLS" 
+                                    subtitle={this.getSubTitle('skills')}/>
+                            </section>
+                            <section id="languages" className="lang-card" >
+                                <NameLevelBlurbList 
+                                    data={this.sortResDataByLevel(this.props.resumeData.language, langSort)} 
+                                    heading="LANGUAGES" />
+                            </section>
+                            
+                        </div>
+                    
                     </div>
-                    <ControlBar 
-                        {...this.props} 
-                        
-                        expandable={datedData}/>
-                    <div className="resume-data">
-                        <section id="dated-items" >
-                            {categoryList}
-                        </section>
-                        <section id="skilz" className="skilz-card" >
-                            <NameLevelBlurbList 
-                                data={this.sortResDataByLevel(this.props.resumeData.skill, 'rev')} 
-                                heading="SKILLS" 
-                                subtitle={this.getSubTitle('skills')}/>
-                        </section>
-                        <section id="languages" className="lang-card" >
-                            <NameLevelBlurbList 
-                                data={this.sortResDataByLevel(this.props.resumeData.language, langSort)} 
-                                heading="LANGUAGES" />
-                        </section>
-                        
-                    </div>
-                
                 </div>
             );
         }

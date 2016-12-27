@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SimpleText from './SimpleText';
+import SimpleText from '../SimpleText';
 
 export default class HighlightBox extends Component {
     

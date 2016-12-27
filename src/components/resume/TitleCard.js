@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import SimpleText from './SimpleText';
-import { HIGHLIGHTS } from '../actions/';
+import SimpleText from '../SimpleText';
+import { HIGHLIGHTS } from '../../actions/';
 import ReactMarkdown from 'react-markdown';
 
 export default class TitleCard extends Component {

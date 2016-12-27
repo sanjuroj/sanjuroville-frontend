@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { toggle_grouped, expand_all, compress_all } from '../actions/';
-import Button from './Button';
+import { toggle_grouped, expand_all, compress_all } from '../../actions/';
+import Button from '../Button';
 
 
 export default class ControlBar extends Component {

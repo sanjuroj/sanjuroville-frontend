@@ -18,13 +18,13 @@ export default class Button extends Component {
                 
                 <div id="contact-icons">
                     <a href="mailto:rosebud@sanjuro.net" target="_blank">
-                        <img src={require('../../assets/icons/email-envelope-outline.svg')} />
+                        <img src={require('../../../assets/icons/email-envelope-outline.svg')} />
                     </a><br/>
                     <a href="https://github.com/sanjuroj" target="_blank">
-                        <img src={require('../../assets/icons/github-fit.svg')} />
+                        <img src={require('../../../assets/icons/github-fit.svg')} />
                     </a><br/>
                     <a href="https://www.linkedin.com/in/sanjurojogdeo" target="_blank">
-                        <img src={require('../../assets/icons/linkedin-logo.svg')} />
+                        <img src={require('../../../assets/icons/linkedin-logo.svg')} />
                     </a><br/>
                 </div>
                 
