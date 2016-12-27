@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
+// TODO: fix accent
 
 
 export default class About extends Component {
@@ -11,7 +13,7 @@ export default class About extends Component {
                 If you're curious about how this site was created, read on.  
                 <br/><br/>
 
-                The main delivery system is Django.  All of the relatively simple pages, like this one, are created using Django templates.  At the moment, the only exception is the ?????????????????????Resum&#233 page????, which was created using React.  It's sort of like using a shotgun to kill a fly but I get to practice with the shotgun that way.  Django is still serving up the raw resum&#233 data through an API, but React is fetching this, processing it, and creating the display.  Styling is customized <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> and <a href="http://bootswatch.com/" target="_blank">Bootswatch</a> themes.
+                The main delivery system is Django.  All of the relatively simple pages, like this one, are created using Django templates.  At the moment, the only exception is the <Link to="/resume">Resumé page</Link>, which was created using React.  It's sort of like using a shotgun to kill a fly but I get to practice with the shotgun that way.  Django is still serving up the raw resumé data through an API, but React is fetching this, processing it, and creating the display.  Styling is customized <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> and <a href="http://bootswatch.com/" target="_blank">Bootswatch</a> themes.
                 <br/><br/>
                 There are two separate repositories for the resum&#233 app.  One is for the <a href="https://github.com/sanjuroj/resumeApp-django" target="_blank">Django side of the app</a>, which includes the API, the skeleton Django template, and a good portion of the customized styling.  The <a href="https://github.com/sanjuroj/resumeApp-frontend" target="_blank">other repository</a> includes the React components for the frontend build.
 

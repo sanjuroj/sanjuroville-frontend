@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Router, Route, IndexRoute, browserHistory} from 'react-router';
+import { Router, Route, IndexRedirect, browserHistory} from 'react-router';
 import Resume from './containers/Resume';
 import Home from './components/Home';
 import About from './components/About';
@@ -24,7 +24,7 @@ export default function routes(history){
     return (
         <Router history={browserHistory}>
             <Route path='/' component={App}>
-                <IndexRoute component={Home} />
+                <IndexRedirect to="/home" />
                 <Route path='home' component={Home} />
                 <Route path='resume' component={Resume} />
                 <Route path='about' component={About} />

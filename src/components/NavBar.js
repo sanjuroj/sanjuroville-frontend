@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router';
+
+// TODO: fix accent
 
 export default class NavBar extends Component {
 
@@ -13,13 +16,13 @@ export default class NavBar extends Component {
                         <span className="icon-bar"></span>
                         <span className="icon-bar"></span>
                       </button>
-                      <a className="navbar-brand" href="http://">?????Sanjuroville</a>
+                      <Link to="/" className="navbar-brand">Sanjuroville</Link>
                     </div>
                     <div id="navbar" className="collapse navbar-collapse">
                       <ul className="nav navbar-nav navbar-right">
-                        <li>Home</li>
-                        <li>Resum&eacute</li>
-                        <li>About</li>
+                        <li><Link to="/home">Home</Link></li>
+                        <li><Link to="/resume">Resumé</Link></li>
+                        <li><Link to="/about">About</Link></li>
                       </ul>
                     </div>
                 </div>  
