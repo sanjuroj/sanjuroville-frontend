@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import getRData from './reducers';
 import thunk from 'redux-thunk';
-import { browserHistory } from 'react-router';
 import routes from './routes';
 
 
@@ -22,7 +21,7 @@ let store = createStore(
 
 ReactDOM.render(
     <Provider store={store}>
-        {routes(browserHistory)}
+        {routes()}
     </Provider>,
     document.getElementById('target')
 );
