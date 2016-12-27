@@ -11,10 +11,12 @@ class App extends Component {
         return (
             <div>
                 <NavBar />
-                {this.props.children}
+                <div id="main-body">
+                    {this.props.children}
+                </div>
             </div>
 
-        )
+        );
     }
 }
 

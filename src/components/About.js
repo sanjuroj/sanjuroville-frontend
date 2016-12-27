@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 export default class About extends Component {
     render(){
         return(
-            <div>
+            <div className="container">
                 I'm currently looking for a job in the Portland area.  If you're interested in checking out some of my most recent work, feel free to browse my <a href="https://github.com/sanjuroj" target="_blank">GitHub</a> page.  If you'd like to get in touch, you can reach me on <a href="mailto:rosebud@sanjuro.net" target="_blank">rosebud@sanjuro.net</a> or through <a href="https://www.linkedin.com/in/sanjurojogdeo">LinkedIn</a>. 
                 <br/><br/>
 

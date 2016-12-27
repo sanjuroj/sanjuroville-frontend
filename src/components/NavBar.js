@@ -13,7 +13,7 @@ export default class NavBar extends Component {
                         <span className="icon-bar"></span>
                         <span className="icon-bar"></span>
                       </button>
-                      Sanjuroville
+                      <a className="navbar-brand" href="http://">?????Sanjuroville</a>
                     </div>
                     <div id="navbar" className="collapse navbar-collapse">
                       <ul className="nav navbar-nav navbar-right">
