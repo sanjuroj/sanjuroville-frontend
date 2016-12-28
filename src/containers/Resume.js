@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchData } from '../actions/';
 import { getDatedData } from '../utils/getResData';
-import NavBar from '../components/NavBar';
 import NameLevelBlurbList from '../components/resume/NameLevelBlurbList';
 import ControlBar from '../components/resume/ControlBar';
 import ContactBox from '../components/resume/ContactBox';

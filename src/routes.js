@@ -4,13 +4,13 @@ import Resume from './containers/Resume';
 import Home from './components/Home';
 import About from './components/About';
 import OldHomepage from './components/OldHomepage';
-import NavBar from './components/NavBar';
+import Header from './components/Header';
 
 class App extends Component {
     render() {
         return (
             <div>
-                <NavBar />
+                <Header />
                 <div id="main-body">
                     {this.props.children}
                 </div>
@@ -20,7 +20,7 @@ class App extends Component {
     }
 }
 
-export default function routes(history){
+export default function routes(){
     return (
         <Router history={browserHistory}>
             <Route path='/' component={App}>
