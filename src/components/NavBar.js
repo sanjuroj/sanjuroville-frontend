@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
+import { LinkContainer } from 'react-router-bootstrap';
+import { Nav, NavItem, Navbar } from 'react-bootstrap';
 
-// TODO: fix accent
+// TODO: collapsed navbar not working
 
 export default class NavBar extends Component {
-
+    
     render() {
         return(
             <nav className="navbar navbar-inverse navbar-fixed-top">
@@ -19,11 +21,19 @@ export default class NavBar extends Component {
                       <Link to="/" className="navbar-brand">Sanjuroville</Link>
                     </div>
                     <div id="navbar" className="collapse navbar-collapse">
-                      <ul className="nav navbar-nav navbar-right">
-                        <li><Link to="/home">Home</Link></li>
-                        <li><Link to="/resume">Resumé</Link></li>
-                        <li><Link to="/about">About</Link></li>
-                      </ul>
+                    <Navbar.Collapse>
+                      <Nav bsStyle="pills" className="navbar-nav navbar-right">
+                        <LinkContainer to={{pathname: "/home"}} >
+                          <NavItem>Home</NavItem>
+                        </LinkContainer>
+                        <LinkContainer to={{pathname: "/resume"}} >
+                          <NavItem>Resumé</NavItem>
+                        </LinkContainer>
+                        <LinkContainer to={{pathname: "/about"}} >
+                          <NavItem>About</NavItem>
+                        </LinkContainer>
+                      </Nav>
+                    </Navbar.Collapse>
                     </div>
                 </div>  
             </nav>
