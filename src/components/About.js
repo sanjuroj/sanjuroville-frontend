@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-// TODO: fix accent
-
 
 export default class About extends Component {
     render(){
@@ -13,9 +11,9 @@ export default class About extends Component {
                 If you're curious about how this site was created, read on.  
                 <br/><br/>
 
-                The main delivery system is Django.  All of the relatively simple pages, like this one, are created using Django templates.  At the moment, the only exception is the <Link to="/resume">Resumé page</Link>, which was created using React.  It's sort of like using a shotgun to kill a fly but I get to practice with the shotgun that way.  Django is still serving up the raw resumé data through an API, but React is fetching this, processing it, and creating the display.  Styling is customized <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> and <a href="http://bootswatch.com/" target="_blank">Bootswatch</a> themes.
+                Originally the site was made mostly with Django with the exception of the <Link to="/resume">resumé page</Link>, which was done in React.  I then switched to a completely React-Redux front-end using react-router for navigation.  Django is now used for data ingestion, ORM, and APIs.  It's sort of like using a shotgun to kill a fly but I get to practice with the shotgun that way.  Styling is customized <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> and <a href="http://bootswatch.com/" target="_blank">Bootswatch</a> themes.
                 <br/><br/>
-                There are two separate repositories for the resum&#233 app.  One is for the <a href="https://github.com/sanjuroj/resumeApp-django" target="_blank">Django side of the app</a>, which includes the API, the skeleton Django template, and a good portion of the customized styling.  The <a href="https://github.com/sanjuroj/resumeApp-frontend" target="_blank">other repository</a> includes the React components for the frontend build.
+                Both <a href="https://github.com/sanjuroj/resumeApp-django" target="_blank">back-end</a> and <a href="https://github.com/sanjuroj/resumeApp-django" target="_blank">front-end</a> repositories are on GitHub if you would like to look at them.  
 
 
 
@@ -26,7 +24,7 @@ export default class About extends Component {
                     <li>The official, and particularly excellent, <a href="http://redux.js.org/docs/basics/ExampleTodoList.html" target="_blank">Redux tutorial</a></li>
                     <li>Sebastiano Guerriero wrote a nice <a href="https://codyhouse.co/gem/vertical-timeline/" target="_blank">guide</a> to creating timelines</li>
                     <li>I used Nick Salloum's <a href="http://callmenick.com/post/css-toggle-switch-examples" target="_blank">tutorial</a> on toggle switches
-                    for the resum&#233 page control bar, since I couldn't find anything in Bootstrap that quite did what I wanted.</li>
+                    for the resumé page control bar, since I couldn't find anything in Bootstrap that quite did what I wanted.</li>
                 </ul>
 
                 <br/><br/>

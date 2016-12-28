@@ -3,7 +3,6 @@ import {Link} from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Nav, NavItem, Navbar } from 'react-bootstrap';
 
-// TODO: collapsed navbar not working
 
 export default class Header extends Component {
     
