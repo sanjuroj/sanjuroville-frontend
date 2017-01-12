@@ -1,6 +1,8 @@
-##Interactive Resume
+##Sanjuroville Frontend
 
-This repository contains the frontend portion of the resume app, built in React, that I'm currently using on my [website](http://sanjuro.net/resume/).  It currently lists work experience, volunteer experience, education, skills, and languages.  The first three (work, volunteering, and experience) are initially lumped together in a chronological order and in a compressed format.  A small set of controls can be used to split the three categories up and to show or hide all of the details of each position/degree.  
+This repository contains the front end of my [website](www.sanjuro.net).  I had originally thought to create separate repos for each "app" that I was building but that was becoming a hassle.  If any single app becomes something that makes sense to publish as a standalone package, I'll split it out at that time.  
 
-This frontend app relies on the data being available through an API.  The API format is still very much in flux, so I probably won't document it until it stabilizes.  However, the format of the API can be found by perusing the [backend repository](https://github.com/sanjuroj/resumeApp-django).
+For now, the only page that required any consequential coding was the resume page.  By default it shows my experience chronologically in a compact format.  The display can be reconfigured using a set of control buttons at the top of the page.  
+
+This front-end app relies on the data being available through a Django API, which is in a different [github repository](https://github.com/sanjuroj/sanjuroville-backend).
 
