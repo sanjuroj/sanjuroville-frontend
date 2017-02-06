@@ -32,7 +32,7 @@ export default class TitleCard extends Component {
         let start = this.props.startDate.getUTCFullYear();
         let end = this.props.endDate.getUTCFullYear();
         let titleSpanClasses = 'title ilb';
-        let summarySpanClasses = '';
+        let summarySpanClasses = 'summary';
         
         
         // Underlining will depend on the dispay type.  Timeline display is compact, 
@@ -93,6 +93,8 @@ export default class TitleCard extends Component {
             dateComponent,
             titleComponent
         ];
+
+        // If there is a summary, add it to the return array.
         if ((this.props.summary && this.props.groupFlag) || 
             (
             this.props.summary &&
@@ -103,11 +105,9 @@ export default class TitleCard extends Component {
         {
             returnArray.push(
                 <ReactMarkdown 
-                    source={this.props.summary} 
-                    key="4" 
-                    className={summarySpanClasses} 
-                    containerTagName="div"
-                    containerProps={{className: "summary"}}
+                    source={this.props.summary}
+                    key="4"
+                    className={summarySpanClasses}
                 />
             );
         }
