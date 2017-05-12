@@ -5,9 +5,9 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --content-base build/ --config webpack.config.dev.js --color --watch",
+    "start": "webpack-dev-server --config webpack.config.dev.js --color --watch",
     "watch": "webpack --content-base build/ --config webpack.config.dev.js --watch",
-    "build": "webpack --config webpack.config.dev.js"
+    "build": "webpack --config webpack.config.js"
   },
   "keywords": [],
   "author": "",

@@ -4,4 +4,4 @@ node_modules
 *.pyc
 
 TODO.txt
-
+npm-debug.log 
