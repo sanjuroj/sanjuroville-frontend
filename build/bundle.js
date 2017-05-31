@@ -24030,12 +24030,12 @@
 	        _react2.default.createElement(
 	            _reactRouter.Route,
 	            { path: '/', component: PageWithHeader },
-	            _react2.default.createElement(_reactRouter.IndexRedirect, { to: '/home' }),
+	            _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'home' }),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'home', component: _Home2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'resume', component: _Resume2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _About2.default })
 	        ),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'old-homepage', component: _OldHomepage2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/old-homepage', component: _OldHomepage2.default }),
 	        _react2.default.createElement(
 	            _reactRouter.Route,
 	            { path: '/*', component: PageWithHeader },

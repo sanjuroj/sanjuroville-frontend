@@ -25,12 +25,12 @@ export default function routes(){
     return (
         <Router history={browserHistory}>
             <Route path='/' component={PageWithHeader}>
-                <IndexRedirect to="/home" />
+                <IndexRedirect to="home" />
                 <Route path='home' component={Home} />
                 <Route path='resume' component={Resume} />
                 <Route path='about' component={About} />
             </Route>
-            <Route path='old-homepage' component={OldHomepage} />
+            <Route path='/old-homepage' component={OldHomepage} />
             <Route path='/*' component={PageWithHeader}>
                 <IndexRoute component={PageNotFound} />
             </Route>
